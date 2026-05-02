@@ -16,7 +16,7 @@ Untuk tahap awal, sistem harus dipersempit agar implementasi aman dan tidak gaga
 
 Keputusan desain paling penting adalah memisahkan domain organisasi dan domain lokasi fisik. `tbl_unit_kerja` tetap dipakai sebagai tabel referensi Unit/Fakultas/Unit Kerja yang bersifat read-only. `ylpi_karyawan` tetap dipakai sebagai tabel referensi Penanggung Jawab yang juga read-only. Tabel aplikasi lain dibuat di database `uir_aset` dengan foreign key dan index yang jelas, tetapi relasi ke dua tabel referensi tersebut perlu dirancang hati-hati karena pada production keduanya akan dipindah ke server berbeda.
 
-AI Agent Programmer harus membangun aplikasi secara bertahap. Urutan paling aman adalah auth/login, struktur role-permission, master data lookup, Sub Unit, Gedung, Lantai, Ruangan, relasi penanggung jawab ruang, output/listing, lalu persiapan tabel aset non-bangunan. Modul transaksi besar seperti mutasi, opname, perawatan, penghapusan, dan laporan manajerial belum menjadi fokus coding awal, tetapi struktur database harus disiapkan agar tidak perlu redesign besar.
+Programmer harus membangun aplikasi secara bertahap. Urutan paling aman adalah auth/login, struktur role-permission, master data lookup, Sub Unit, Gedung, Lantai, Ruangan, relasi penanggung jawab ruang, output/listing, lalu persiapan tabel aset non-bangunan. Modul transaksi besar seperti mutasi, opname, perawatan, penghapusan, dan laporan manajerial belum menjadi fokus coding awal, tetapi struktur database harus disiapkan agar tidak perlu redesign besar.
 
 ## 2. Ruang Lingkup Sistem Tahap Awal
 
@@ -1903,7 +1903,7 @@ Rekomendasi utama: Tabler atau AdminLTE 4. Tabler lebih modern dan bersih, sedan
 7. Gunakan status dan badge yang konsisten.
 8. Buat halaman exception, misalnya Ruangan tanpa PJ, Sub Unit tanpa Ruangan, Gedung tanpa Lantai.
 
-## 13. Rekomendasi Dokumen Lanjutan untuk AI Agent Programmer
+## 13. Rekomendasi Dokumen Lanjutan untuk Programmer
 
 ### 13.1 Daftar Dokumen Pendukung Ideal
 
@@ -1913,12 +1913,12 @@ Rekomendasi utama: Tabler atau AdminLTE 4. Tabler lebih modern dan bersih, sedan
 | SRS | Menjelaskan kebutuhan fungsional dan nonfungsional rinci | System Analyst | Sebelum desain teknis | Menjadi kontrak requirement |
 | SDD/Technical Spec | Menjelaskan arsitektur, modul, service, struktur CI4 | Solution Architect/Senior Developer | Sebelum coding | Menjadi panduan implementasi |
 | ERD | Menggambarkan relasi tabel | Database Designer | Sebelum migration | Mencegah salah desain relasi |
-| Data Dictionary | Menjelaskan kolom, tipe, validasi, index | Database Designer | Sebelum migration dan coding model | Membantu AI Agent membuat migration/model |
+| Data Dictionary | Menjelaskan kolom, tipe, validasi, index | Database Designer | Sebelum migration dan coding model | Membantu Programmer membuat migration/model |
 | Use Case | Menjelaskan interaksi aktor dengan sistem | System Analyst | Sebelum coding controller | Membantu desain flow |
 | User Flow | Menggambarkan alur layar dan proses | UI/UX Analyst | Sebelum UI coding | Membantu navigasi dan form |
 | Wireframe | Sketsa halaman login, dashboard, master, detail | UI/UX Analyst | Sebelum frontend | Mencegah UI tidak konsisten |
 | API Spec | Daftar endpoint, request, response | Backend Developer/Architect | Jika memakai AJAX/API | Membantu integrasi frontend |
-| Coding Guide | Standar folder, naming, service, validation, auth | Senior Developer | Sebelum coding | Menjaga konsistensi AI Agent |
+| Coding Guide | Standar folder, naming, service, validation, auth | Senior Developer | Sebelum coding | Menjaga konsistensi Programmer |
 | Migration Plan | Urutan migration dan seeder | Database Designer/Developer | Awal coding | Membuat database reproducible |
 | Testing Plan | Unit, integration, security, UAT | QA Engineer | Sebelum testing | Menjamin fitur sesuai requirement |
 | SOP Master Data | Tata cara input/ubah/nonaktif master | Admin Aset/System Analyst | Sebelum go-live | Mengurangi data ganda |
@@ -1955,9 +1955,9 @@ Untuk proyek Sistem Aset UIR tahap awal, dokumen yang paling wajib sebelum codin
 5. Coding Guide CodeIgniter 4.
 6. Migration dan Seeder Plan.
 
-### 13.3 Paket Instruksi untuk AI Agent Programmer
+### 13.3 Paket Instruksi untuk Programmer
 
-AI Agent Programmer sebaiknya diberi instruksi ringkas berikut:
+Programmer sebaiknya diberi instruksi ringkas berikut:
 
 ```text
 Bangun aplikasi CodeIgniter 4 untuk Sistem Informasi Aset UIR.
@@ -1993,4 +1993,4 @@ Beberapa hal masih perlu dikonfirmasi sebelum coding penuh:
 
 Desain paling aman untuk Sistem Informasi Aset UIR adalah memulai dari fondasi data yang benar. Tahap awal tidak perlu langsung membangun seluruh siklus hidup aset, tetapi harus memastikan auth, permission, master organisasi-lokasi, master klasifikasi, dan referensi read-only berjalan benar.
 
-Dengan struktur `tbl_unit_kerja` dan `ylpi_karyawan` sebagai referensi read-only, serta tabel baru untuk Sub Unit, Gedung, Lantai, Ruangan, dan lookup aset, aplikasi akan siap dikembangkan secara bertahap ke registrasi aset, mutasi, opname, QR publik, histori lokasi, dan pelaporan. Pendekatan ini mengurangi risiko salah desain sejak awal, menjaga kesiapan integrasi production lintas server, dan memberikan fondasi kuat bagi AI Agent Programmer untuk mulai coding CodeIgniter 4 secara terarah.
+Dengan struktur `tbl_unit_kerja` dan `ylpi_karyawan` sebagai referensi read-only, serta tabel baru untuk Sub Unit, Gedung, Lantai, Ruangan, dan lookup aset, aplikasi akan siap dikembangkan secara bertahap ke registrasi aset, mutasi, opname, QR publik, histori lokasi, dan pelaporan. Pendekatan ini mengurangi risiko salah desain sejak awal, menjaga kesiapan integrasi production lintas server, dan memberikan fondasi kuat bagi Programmer untuk mulai coding CodeIgniter 4 secara terarah.
