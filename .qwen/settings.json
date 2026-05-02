@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mysql *)",
+      "Bash(php *)",
+      "Bash(d:\\xampp\\mysql\\bin\\mysql.exe *)",
+      "Bash(mkdir *)",
+      "Bash(composer *)",
+      "Bash(ren *)",
+      "Bash(findstr *)",
+      "Bash(curl *)",
+      "Bash(type *)",
+      "Bash(else)",
+      "Bash(del *)",
+      "Bash(sc *)",
+      "Bash(tasklist)"
+    ]
+  },
+  "$version": 3
+}

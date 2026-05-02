@@ -1,0 +1,28 @@
+# Folders to exclude
+sampah/
+doc/
+
+# Environment
+.env
+.env.*
+.env.example
+
+# Dependencies
+vendor/
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+writable/
+temp/
