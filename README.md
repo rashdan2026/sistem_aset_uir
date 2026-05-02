@@ -1,6 +1,6 @@
 # Analisa Teknis Sistem Informasi Aset Universitas Islam Riau (UIR)
 
-Dokumen acuan untuk AI Agent Programmer, System Analyst, Solution Architect, Database Designer, UI/UX Analyst, dan Developer CodeIgniter 4.
+Dokumen acuan untuk Programmer, System Analyst, Solution Architect, Database Designer, UI/UX Analyst, dan Developer CodeIgniter 4.
 
 Versi: 1.5
 Tanggal penyusunan: 29 April 2026
