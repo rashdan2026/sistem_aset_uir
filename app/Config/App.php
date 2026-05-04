@@ -16,7 +16,7 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost/asetUIR/public/';
+    public string $baseURL = getenv('BASEURL') ?: 'http://localhost/asetUIR/public/';
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.
