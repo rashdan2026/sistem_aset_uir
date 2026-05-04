@@ -1,4 +1,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/siaset2/public_html/
-    - /bin/cp index.html $DEPLOYPATH
+    - /bin/cp -R app $DEPLOYPATH
+    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp -R writable $DEPLOYPATH
+    - /bin/cp spark $DEPLOYPATH
