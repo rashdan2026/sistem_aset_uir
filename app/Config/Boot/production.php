@@ -9,8 +9,10 @@
  |
  | If you set 'display_errors' to '1', CI4's detailed error report will show.
  */
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
+error_reporting(E_ALL & ~E_DEPRECATED);
+// If you want to suppress more types of errors.
+// error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+ini_set('display_errors', '0');
 
 /*
  |--------------------------------------------------------------------------
@@ -21,8 +23,3 @@ ini_set('display_errors', '1');
  | release of the framework.
  */
 defined('CI_DEBUG') || define('CI_DEBUG', false);
-
-if (getenv('BASEURL') !== false && getenv('BASEURL') !== '') {
-    $appConfig = config(App::class);
-    $appConfig->baseURL = getenv('BASEURL');
-}
