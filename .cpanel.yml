@@ -8,3 +8,4 @@ deployment:
     - /bin/cp -R writable $DEPLOYPATH
     - /bin/cp spark $DEPLOYPATH
     - /bin/cp .env.production $DEPLOYPATH/.env
+    - /bin/chmod -R 755 $DEPLOYPATH/writable
