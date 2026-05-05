@@ -2,6 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/siaset2/public_html/
+    - /bin/rm -f $DEPLOYPATH/.env
     - /bin/cp -R app $DEPLOYPATH
     - /bin/cp -R public $DEPLOYPATH
     - /bin/cp -R system $DEPLOYPATH
