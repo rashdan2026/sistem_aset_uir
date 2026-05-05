@@ -2,11 +2,10 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/siaset2/public_html/
-    - /bin/rm -f $DEPLOYPATH/.env
-    - /bin/cp -R app $DEPLOYPATH
-    - /bin/cp -R public $DEPLOYPATH
-    - /bin/cp -R system $DEPLOYPATH
-    - /bin/cp -R writable $DEPLOYPATH
-    - /bin/cp spark $DEPLOYPATH
-    - /bin/cp .env.production $DEPLOYPATH/.env
+    - /bin/cp -Rf app $DEPLOYPATH
+    - /bin/cp -Rf public $DEPLOYPATH
+    - /bin/cp -Rf system $DEPLOYPATH
+    - /bin/cp -Rf writable $DEPLOYPATH
+    - /bin/cp -f spark $DEPLOYPATH
+    - /bin/cp -f .env.production $DEPLOYPATH/.env
     - /bin/chmod -R 755 $DEPLOYPATH/writable
