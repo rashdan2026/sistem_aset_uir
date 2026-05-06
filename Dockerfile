@@ -9,15 +9,19 @@ WORKDIR /app
 
 COPY composer.json composer.lock* ./
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --ignore-platform-reqs
 
 # ------------------------------------------------------------------------------
 # Stage 2: Production image
 # ------------------------------------------------------------------------------
 FROM php:8.2-apache-bookworm
 
-# Install PHP extensions
-RUN docker-php-ext-install intl mbstring mysqli
+# Install system dependencies and PHP extensions
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libicu-dev \
+    && docker-php-ext-install intl mbstring mysqli \
+    && apt-get purge -y --auto-remove libicu-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache modules
 RUN a2enmod rewrite headers
@@ -31,6 +35,9 @@ COPY app /var/www/html/app
 COPY public /var/www/html/public
 COPY system /var/www/html/system
 COPY writable /var/www/html/writable
+
+# Copy production environment config
+COPY .env.production /var/www/html/.env
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/writable \

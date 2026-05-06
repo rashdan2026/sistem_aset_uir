@@ -5,7 +5,7 @@
 # Development files
 /.env
 /.env.*
-/.env.production
+!/.env.production
  
 # Git
 /.git/
