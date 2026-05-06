@@ -11,7 +11,7 @@ RUN apk add --no-cache \
     git \
     curl
 
-RUN docker-php-ext-install pdo pdo_mysql intl mbstring zip opcache
+RUN docker-php-ext-install pdo pdo_mysql mysqli intl mbstring zip opcache
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
