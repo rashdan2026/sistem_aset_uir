@@ -1,0 +1,1311 @@
+ERROR - 2026-04-29 13:29:01 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in D:\xampp\htdocs\asetUIR\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 D:\xampp\htdocs\asetUIR\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), '', 3306, '', 0)
+#1 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 D:\xampp\htdocs\asetUIR\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 D:\xampp\htdocs\asetUIR\system\Database\MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 D:\xampp\htdocs\asetUIR\system\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\xampp\htdocs\asetUIR\system\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 D:\xampp\htdocs\asetUIR\system\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+#10 D:\xampp\htdocs\asetUIR\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#11 D:\xampp\htdocs\asetUIR\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#12 D:\xampp\htdocs\asetUIR\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 D:\xampp\htdocs\asetUIR\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 D:\xampp\htdocs\asetUIR\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in D:\xampp\htdocs\asetUIR\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#4 D:\xampp\htdocs\asetUIR\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 D:\xampp\htdocs\asetUIR\system\Database\MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 D:\xampp\htdocs\asetUIR\system\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#7 D:\xampp\htdocs\asetUIR\system\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#8 D:\xampp\htdocs\asetUIR\system\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+#9 D:\xampp\htdocs\asetUIR\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#10 D:\xampp\htdocs\asetUIR\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#11 D:\xampp\htdocs\asetUIR\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#12 D:\xampp\htdocs\asetUIR\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#13 D:\xampp\htdocs\asetUIR\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-04-29 13:29:44 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in D:\xampp\htdocs\asetUIR\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 D:\xampp\htdocs\asetUIR\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), '', 3306, '', 0)
+#1 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#3 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#4 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#5 D:\xampp\htdocs\asetUIR\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#6 D:\xampp\htdocs\asetUIR\system\Database\MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#7 D:\xampp\htdocs\asetUIR\system\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#8 D:\xampp\htdocs\asetUIR\system\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#9 D:\xampp\htdocs\asetUIR\system\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+#10 D:\xampp\htdocs\asetUIR\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#11 D:\xampp\htdocs\asetUIR\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#12 D:\xampp\htdocs\asetUIR\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#13 D:\xampp\htdocs\asetUIR\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#14 D:\xampp\htdocs\asetUIR\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#15 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in D:\xampp\htdocs\asetUIR\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(555): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(795): CodeIgniter\Database\BaseConnection->initialize()
+#2 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(1706): CodeIgniter\Database\BaseConnection->query('SHOW TABLES FRO...')
+#3 D:\xampp\htdocs\asetUIR\system\Database\BaseConnection.php(1726): CodeIgniter\Database\BaseConnection->listTables()
+#4 D:\xampp\htdocs\asetUIR\system\Database\MigrationRunner.php(821): CodeIgniter\Database\BaseConnection->tableExists('migrations')
+#5 D:\xampp\htdocs\asetUIR\system\Database\MigrationRunner.php(173): CodeIgniter\Database\MigrationRunner->ensureTable()
+#6 D:\xampp\htdocs\asetUIR\system\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(NULL)
+#7 D:\xampp\htdocs\asetUIR\system\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+#8 D:\xampp\htdocs\asetUIR\system\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+#9 D:\xampp\htdocs\asetUIR\system\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run(Array)
+#10 D:\xampp\htdocs\asetUIR\system\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', Array)
+#11 D:\xampp\htdocs\asetUIR\system\Boot.php(442): CodeIgniter\CLI\Console->run()
+#12 D:\xampp\htdocs\asetUIR\system\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+#13 D:\xampp\htdocs\asetUIR\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-04-29 14:12:04 --> Unknown column 'permission_key' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_permissions`
+WHERE `permission_key` = \'dashboard.view\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_permissions`
+WHERE `permission_key` = \'dashboard.view\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_permissions`
+WHERE `permission_key` = \'dashboard.view\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_permissions`
+WHERE `permission_key` = :permission_key:', [...], false)
+ 5 APPPATH\Database\Seeds\SystemSeeder.php(72): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\SystemSeeder->run()
+ 7 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\SystemSeeder')
+ 8 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+ 9 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+10 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+11 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+12 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 14:22:51 --> Unknown column 'is_active' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `sys_permissions` (`module_code`, `action_code`, `description`, `permission_code`, `is_active`, `created_at`, `updated_at`) VALUES (\'dashboard\', \'view\', \'View admin dashboard\', \'dashboard.view\', 1, \'2026-04-29 14:22:51\', \'2026-04-29 14:22:51\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `sys_permissions` (`module_code`, `action_code`, `description`, `permission_code`, `is_active`, `created_at`, `updated_at`) VALUES (\'dashboard\', \'view\', \'View admin dashboard\', \'dashboard.view\', 1, \'2026-04-29 14:22:51\', \'2026-04-29 14:22:51\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `sys_permissions` (`module_code`, `action_code`, `description`, `permission_code`, `is_active`, `created_at`, `updated_at`) VALUES (\'dashboard\', \'view\', \'View admin dashboard\', \'dashboard.view\', 1, \'2026-04-29 14:22:51\', \'2026-04-29 14:22:51\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `sys_permissions` (`module_code`, `action_code`, `description`, `permission_code`, `is_active`, `created_at`, `updated_at`) VALUES (:module_code:, :action_code:, :description:, :permission_code:, :is_active:, :created_at:, :updated_at:)', [...], false)
+ 5 APPPATH\Database\Seeds\SystemSeeder.php(94): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\SystemSeeder->run()
+ 7 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\SystemSeeder')
+ 8 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+ 9 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+10 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+11 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+12 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:06:50 --> Unknown column 'is_active' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:06:50\', \'2026-04-29 16:06:50\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:06:50\', \'2026-04-29 16:06:50\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:06:50\', \'2026-04-29 16:06:50\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (:role_id:, :permission_id:, :is_active:, :created_at:, :updated_at:)', [...], false)
+ 5 APPPATH\Database\Seeds\SystemSeeder.php(114): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\SystemSeeder->run()
+ 7 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\SystemSeeder')
+ 8 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+ 9 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+10 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+11 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+12 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:06:58 --> Unknown column 'is_active' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:06:58\', \'2026-04-29 16:06:58\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:06:58\', \'2026-04-29 16:06:58\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:06:58\', \'2026-04-29 16:06:58\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (:role_id:, :permission_id:, :is_active:, :created_at:, :updated_at:)', [...], false)
+ 5 APPPATH\Database\Seeds\SystemSeeder.php(114): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\SystemSeeder->run()
+ 7 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\SystemSeeder')
+ 8 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+ 9 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+10 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+11 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+12 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:08:24 --> Unknown column 'is_active' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:08:24\', \'2026-04-29 16:08:24\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:08:24\', \'2026-04-29 16:08:24\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:08:24\', \'2026-04-29 16:08:24\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (:role_id:, :permission_id:, :is_active:, :created_at:, :updated_at:)', [...], false)
+ 5 APPPATH\Database\Seeds\SystemSeeder.php(114): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\SystemSeeder->run()
+ 7 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\SystemSeeder')
+ 8 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+ 9 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+10 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+11 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+12 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:08:41 --> Unknown column 'is_active' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:08:41\', \'2026-04-29 16:08:41\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:08:41\', \'2026-04-29 16:08:41\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:08:41\', \'2026-04-29 16:08:41\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (:role_id:, :permission_id:, :is_active:, :created_at:, :updated_at:)', [...], false)
+ 5 APPPATH\Database\Seeds\SystemSeeder.php(114): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\SystemSeeder->run()
+ 7 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\SystemSeeder')
+ 8 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+ 9 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+10 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+11 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+12 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:16:55 --> Unknown column 'is_active' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:16:55\', \'2026-04-29 16:16:55\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:16:55\', \'2026-04-29 16:16:55\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:16:55\', \'2026-04-29 16:16:55\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (:role_id:, :permission_id:, :is_active:, :created_at:, :updated_at:)', [...], false)
+ 5 APPPATH\Database\Seeds\SystemSeeder.php(114): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\SystemSeeder->run()
+ 7 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\SystemSeeder')
+ 8 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+ 9 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+10 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+11 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+12 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:17:11 --> Unknown column 'is_active' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:17:11\', \'2026-04-29 16:17:11\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:17:11\', \'2026-04-29 16:17:11\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (\'1\', \'1\', 1, \'2026-04-29 16:17:11\', \'2026-04-29 16:17:11\')')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2345): CodeIgniter\Database\BaseConnection->query('INSERT INTO `sys_role_permissions` (`role_id`, `permission_id`, `is_active`, `created_at`, `updated_at`) VALUES (:role_id:, :permission_id:, :is_active:, :created_at:, :updated_at:)', [...], false)
+ 5 APPPATH\Database\Seeds\SystemSeeder.php(114): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 SYSTEMPATH\Database\Seeder.php(155): App\Database\Seeds\SystemSeeder->run()
+ 7 SYSTEMPATH\Commands\Database\Seed.php(79): CodeIgniter\Database\Seeder->call('App\\Database\\Seeds\\SystemSeeder')
+ 8 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Seed->run([])
+ 9 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('db:seed', [...])
+10 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+11 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+12 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:20:18 --> Table 'sys_users' already exists
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 4 SYSTEMPATH\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 5 APPPATH\Database\Migrations\2026-01-01-000001_CreateSysUsersTable.php(76): CodeIgniter\Database\Forge->createTable('sys_users')
+ 6 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\CreateSysUsersTable->up()
+ 7 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 8 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+ 9 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+10 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+11 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([...])
+12 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [...])
+13 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+14 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+15 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:20:34 --> Table 'sys_users' already exists
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 4 SYSTEMPATH\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 5 APPPATH\Database\Migrations\2026-01-01-000001_CreateSysUsersTable.php(76): CodeIgniter\Database\Forge->createTable('sys_users')
+ 6 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\CreateSysUsersTable->up()
+ 7 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 8 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+ 9 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+10 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+11 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([...])
+12 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [...])
+13 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+14 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+15 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:21:14 --> Table 'sys_users' already exists
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 4 SYSTEMPATH\Database\Forge.php(570): CodeIgniter\Database\BaseConnection->query('CREATE TABLE `sys_users` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`username` VARCHAR(50) NOT NULL UNIQUE,
+	`password_hash` VARCHAR(255) NOT NULL,
+	`full_name` VARCHAR(150) NOT NULL,
+	`email` VARCHAR(150) NOT NULL,
+	`id_kpe` BIGINT UNSIGNED NULL,
+	`default_unit_kerja_id` BIGINT UNSIGNED NULL,
+	`is_active` TINYINT(2) NOT NULL DEFAULT 1,
+	`force_password_change` TINYINT(2) NOT NULL DEFAULT 0,
+	`last_login_at` DATETIME NULL,
+	`created_at` DATETIME NOT NULL,
+	`updated_at` DATETIME NOT NULL,
+	`deleted_at` DATETIME NULL,
+	CONSTRAINT `pk_sys_users` PRIMARY KEY(`id`)
+) DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci')
+ 5 APPPATH\Database\Migrations\2026-01-01-000001_CreateSysUsersTable.php(76): CodeIgniter\Database\Forge->createTable('sys_users')
+ 6 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\CreateSysUsersTable->up()
+ 7 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 8 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+ 9 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+10 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+11 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([...])
+12 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [...])
+13 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+14 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+15 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 16:21:31 --> Table 'uir_aset.ylpi_karyawan' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('CREATE VIEW vw_penanggung_jawab AS
+            SELECT
+                k.id_kpe,
+                k.npk,
+                k.nama_gelar,
+                k.jenkel,
+                k.kategori,
+                k.no_hp1,
+                k.no_wa,
+                k.email,
+                k.unit_kerja AS unit_kerja_id,
+                u.nama_unit
+            FROM ylpi_karyawan k
+            LEFT JOIN tbl_unit_kerja u
+                ON u.id_unit_kerja = k.unit_kerja
+                AND u.flag_aktif = 1
+            WHERE k.flag_karyawan = 1', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('CREATE VIEW vw_penanggung_jawab AS
+            SELECT
+                k.id_kpe,
+                k.npk,
+                k.nama_gelar,
+                k.jenkel,
+                k.kategori,
+                k.no_hp1,
+                k.no_wa,
+                k.email,
+                k.unit_kerja AS unit_kerja_id,
+                u.nama_unit
+            FROM ylpi_karyawan k
+            LEFT JOIN tbl_unit_kerja u
+                ON u.id_unit_kerja = k.unit_kerja
+                AND u.flag_aktif = 1
+            WHERE k.flag_karyawan = 1')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('CREATE VIEW vw_penanggung_jawab AS
+            SELECT
+                k.id_kpe,
+                k.npk,
+                k.nama_gelar,
+                k.jenkel,
+                k.kategori,
+                k.no_hp1,
+                k.no_wa,
+                k.email,
+                k.unit_kerja AS unit_kerja_id,
+                u.nama_unit
+            FROM ylpi_karyawan k
+            LEFT JOIN tbl_unit_kerja u
+                ON u.id_unit_kerja = k.unit_kerja
+                AND u.flag_aktif = 1
+            WHERE k.flag_karyawan = 1')
+ 4 APPPATH\Database\Migrations\2026-01-05-000021_CreateVwPenanggungJawabView.php(35): CodeIgniter\Database\BaseConnection->query('CREATE VIEW vw_penanggung_jawab AS
+            SELECT
+                k.id_kpe,
+                k.npk,
+                k.nama_gelar,
+                k.jenkel,
+                k.kategori,
+                k.no_hp1,
+                k.no_wa,
+                k.email,
+                k.unit_kerja AS unit_kerja_id,
+                u.nama_unit
+            FROM ylpi_karyawan k
+            LEFT JOIN tbl_unit_kerja u
+                ON u.id_unit_kerja = k.unit_kerja
+                AND u.flag_aktif = 1
+            WHERE k.flag_karyawan = 1')
+ 5 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\CreateVwPenanggungJawabView->up()
+ 6 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 7 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+ 8 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+ 9 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+10 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([...])
+11 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [...])
+12 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+13 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+14 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:29:49 --> CodeIgniter\Filters\Exceptions\FilterException: "auth" filter must have a matching alias defined.
+[Method: GET, Route: /]
+in SYSTEMPATH\Filters\Filters.php on line 590.
+ 1 SYSTEMPATH\Filters\Filters.php(590): CodeIgniter\Filters\Exceptions\FilterException::forNoAlias('auth')
+ 2 SYSTEMPATH\Filters\Filters.php(641): CodeIgniter\Filters\Filters->enableFilter('auth', 'before')
+ 3 SYSTEMPATH\CodeIgniter.php(453): CodeIgniter\Filters\Filters->enableFilters([...], 'before')
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:31:05 --> CodeIgniter\Filters\Exceptions\FilterException: "auth" filter must have a matching alias defined.
+[Method: GET, Route: /]
+in SYSTEMPATH\Filters\Filters.php on line 590.
+ 1 SYSTEMPATH\Filters\Filters.php(590): CodeIgniter\Filters\Exceptions\FilterException::forNoAlias('auth')
+ 2 SYSTEMPATH\Filters\Filters.php(641): CodeIgniter\Filters\Filters->enableFilter('auth', 'before')
+ 3 SYSTEMPATH\CodeIgniter.php(453): CodeIgniter\Filters\Filters->enableFilters([...], 'before')
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:31:13 --> CodeIgniter\Filters\Exceptions\FilterException: "auth" filter must have a matching alias defined.
+[Method: GET, Route: /]
+in SYSTEMPATH\Filters\Filters.php on line 590.
+ 1 SYSTEMPATH\Filters\Filters.php(590): CodeIgniter\Filters\Exceptions\FilterException::forNoAlias('auth')
+ 2 SYSTEMPATH\Filters\Filters.php(641): CodeIgniter\Filters\Filters->enableFilter('auth', 'before')
+ 3 SYSTEMPATH\CodeIgniter.php(453): CodeIgniter\Filters\Filters->enableFilters([...], 'before')
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:32:15 --> CodeIgniter\Filters\Exceptions\FilterException: "auth" filter must have a matching alias defined.
+[Method: GET, Route: /]
+in SYSTEMPATH\Filters\Filters.php on line 590.
+ 1 SYSTEMPATH\Filters\Filters.php(590): CodeIgniter\Filters\Exceptions\FilterException::forNoAlias('auth')
+ 2 SYSTEMPATH\Filters\Filters.php(641): CodeIgniter\Filters\Filters->enableFilter('auth', 'before')
+ 3 SYSTEMPATH\CodeIgniter.php(453): CodeIgniter\Filters\Filters->enableFilters([...], 'before')
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:32:19 --> CodeIgniter\Filters\Exceptions\FilterException: "guest" filter must have a matching alias defined.
+[Method: GET, Route: auth/login]
+in SYSTEMPATH\Filters\Filters.php on line 590.
+ 1 SYSTEMPATH\Filters\Filters.php(590): CodeIgniter\Filters\Exceptions\FilterException::forNoAlias('guest')
+ 2 SYSTEMPATH\Filters\Filters.php(641): CodeIgniter\Filters\Filters->enableFilter('guest', 'before')
+ 3 SYSTEMPATH\CodeIgniter.php(453): CodeIgniter\Filters\Filters->enableFilters([...], 'before')
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:32:50 --> CodeIgniter\Filters\Exceptions\FilterException: "guest" filter must have a matching alias defined.
+[Method: GET, Route: auth/login]
+in SYSTEMPATH\Filters\Filters.php on line 590.
+ 1 SYSTEMPATH\Filters\Filters.php(590): CodeIgniter\Filters\Exceptions\FilterException::forNoAlias('guest')
+ 2 SYSTEMPATH\Filters\Filters.php(641): CodeIgniter\Filters\Filters->enableFilter('guest', 'before')
+ 3 SYSTEMPATH\CodeIgniter.php(453): CodeIgniter\Filters\Filters->enableFilters([...], 'before')
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:34:10 --> CodeIgniter\Filters\Exceptions\FilterException: "guest" filter must have a matching alias defined.
+[Method: GET, Route: auth/login]
+in SYSTEMPATH\Filters\Filters.php on line 590.
+ 1 SYSTEMPATH\Filters\Filters.php(590): CodeIgniter\Filters\Exceptions\FilterException::forNoAlias('guest')
+ 2 SYSTEMPATH\Filters\Filters.php(641): CodeIgniter\Filters\Filters->enableFilter('guest', 'before')
+ 3 SYSTEMPATH\CodeIgniter.php(453): CodeIgniter\Filters\Filters->enableFilters([...], 'before')
+ 4 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 8 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:35:21 --> Error: Call to undefined function form_open()
+[Method: GET, Route: auth/login]
+in APPPATH\Views\auth\login.php on line 20.
+ 1 SYSTEMPATH\View\View.php(240): include()
+ 2 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/login', [], true)
+ 4 APPPATH\Controllers\Auth\LoginController.php(29): view('auth/login')
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+ERROR - 2026-04-29 16:38:10 --> Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:10\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:10\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:10\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 5 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:38:10 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'login' in 'where clause'
+[Method: POST, Route: auth/login]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 2 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 3 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:38:10 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:10\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:10\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 4 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 5 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:38:10 --> [Caused by] mysqli_sql_exception: Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:10\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:10\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:10\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 5 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+ERROR - 2026-04-29 16:38:15 --> Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:15\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:15\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:15\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 5 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:38:15 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'login' in 'where clause'
+[Method: POST, Route: auth/login]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 2 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 3 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+10 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:38:15 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:15\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:15\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 4 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 5 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+12 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+CRITICAL - 2026-04-29 16:38:15 --> [Caused by] mysqli_sql_exception: Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:15\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:15\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:23:15\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 5 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+13 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\asetUIR\\public\\index.php')
+ERROR - 2026-04-29 16:41:58 --> Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:26:58\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:26:58\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:26:58\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 5 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:41:58 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'login' in 'where clause'
+[Method: POST, Route: auth/login]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 2 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 3 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:41:58 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:26:58\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:26:58\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 4 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 5 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:41:58 --> [Caused by] mysqli_sql_exception: Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:26:58\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:26:58\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:26:58\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 5 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-29 16:42:01 --> Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:27:01\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:27:01\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:27:01\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 5 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:42:01 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'login' in 'where clause'
+[Method: POST, Route: auth/login]
+in SYSTEMPATH\Database\BaseConnection.php on line 865.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 2 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 3 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:42:01 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:27:01\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:27:01\'')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 4 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 5 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 6 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 7 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 8 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:42:01 --> [Caused by] mysqli_sql_exception: Unknown column 'login' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:27:01\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:27:01\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = \'::1\'
+AND `is_success` = 0
+AND `login` >= \'2026-04-29 16:27:01\'')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1733): CodeIgniter\Database\BaseConnection->query('SELECT COUNT(*) AS `numrows`
+FROM `sys_login_attempts`
+WHERE `ip_address` = :ip_address:
+AND `is_success` = :is_success:
+AND `login` >= :login:', [...], false)
+ 5 APPPATH\Controllers\Auth\LoginController.php(127): CodeIgniter\Database\BaseBuilder->countAllResults()
+ 6 APPPATH\Controllers\Auth\LoginController.php(37): App\Controllers\Auth\LoginController->isTooManyAttempts('::1')
+ 7 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\LoginController->attemptLogin()
+ 8 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\LoginController))
+ 9 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:47:12 --> Error: Call to undefined function form_open()
+[Method: GET, Route: auth/change-password]
+in APPPATH\Views\auth\change_password.php on line 27.
+ 1 SYSTEMPATH\View\View.php(240): include()
+ 2 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/change_password', [], true)
+ 4 APPPATH\Controllers\Auth\PasswordController.php(30): view('auth/change_password')
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\PasswordController->change()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\PasswordController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 16:47:15 --> Error: Call to undefined function form_open()
+[Method: GET, Route: auth/change-password]
+in APPPATH\Views\auth\change_password.php on line 27.
+ 1 SYSTEMPATH\View\View.php(240): include()
+ 2 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('auth/change_password', [], true)
+ 4 APPPATH\Controllers\Auth\PasswordController.php(30): view('auth/change_password')
+ 5 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Auth\PasswordController->change()
+ 6 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Auth\PasswordController))
+ 7 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:32:18 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/unit-kerja]
+in APPPATH\Views\master\unit_kerja\index.php on line 78.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/unit_kerja/index', [], true)
+ 3 APPPATH\Controllers\Master\UnitKerjaController.php(48): view('master/unit_kerja/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\UnitKerjaController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\UnitKerjaController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:32:23 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/penanggung-jawab]
+in APPPATH\Views\master\penanggung_jawab\index.php on line 79.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/penanggung_jawab/index', [], true)
+ 3 APPPATH\Controllers\Master\PenanggungJawabController.php(50): view('master/penanggung_jawab/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\PenanggungJawabController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\PenanggungJawabController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:32:24 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/unit-kerja]
+in APPPATH\Views\master\unit_kerja\index.php on line 78.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/unit_kerja/index', [], true)
+ 3 APPPATH\Controllers\Master\UnitKerjaController.php(48): view('master/unit_kerja/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\UnitKerjaController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\UnitKerjaController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:32:32 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/unit-kerja]
+in APPPATH\Views\master\unit_kerja\index.php on line 78.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/unit_kerja/index', [], true)
+ 3 APPPATH\Controllers\Master\UnitKerjaController.php(48): view('master/unit_kerja/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\UnitKerjaController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\UnitKerjaController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:32:36 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/penanggung-jawab]
+in APPPATH\Views\master\penanggung_jawab\index.php on line 79.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/penanggung_jawab/index', [], true)
+ 3 APPPATH\Controllers\Master\PenanggungJawabController.php(50): view('master/penanggung_jawab/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\PenanggungJawabController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\PenanggungJawabController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:32:41 --> Error: Class "App\Models\Master\GedungModel" not found
+[Method: GET, Route: master/lantai]
+in APPPATH\Controllers\Master\LantaiController.php on line 17.
+ 1 SYSTEMPATH\CodeIgniter.php(921): App\Controllers\Master\LantaiController->__construct()
+ 2 SYSTEMPATH\CodeIgniter.php(488): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:32:51 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/unit-kerja]
+in APPPATH\Views\master\unit_kerja\index.php on line 78.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/unit_kerja/index', [], true)
+ 3 APPPATH\Controllers\Master\UnitKerjaController.php(48): view('master/unit_kerja/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\UnitKerjaController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\UnitKerjaController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:32:58 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/penanggung-jawab]
+in APPPATH\Views\master\penanggung_jawab\index.php on line 79.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/penanggung_jawab/index', [], true)
+ 3 APPPATH\Controllers\Master\PenanggungJawabController.php(50): view('master/penanggung_jawab/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\PenanggungJawabController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\PenanggungJawabController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:33:01 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/unit-kerja]
+in APPPATH\Views\master\unit_kerja\index.php on line 78.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/unit_kerja/index', [], true)
+ 3 APPPATH\Controllers\Master\UnitKerjaController.php(48): view('master/unit_kerja/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\UnitKerjaController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\UnitKerjaController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:33:04 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/penanggung-jawab]
+in APPPATH\Views\master\penanggung_jawab\index.php on line 79.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/penanggung_jawab/index', [], true)
+ 3 APPPATH\Controllers\Master\PenanggungJawabController.php(50): view('master/penanggung_jawab/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\PenanggungJawabController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\PenanggungJawabController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:33:16 --> ParseError: syntax error, unexpected token ";", expecting ")"
+[Method: GET, Route: master/unit-kerja]
+in APPPATH\Views\master\unit_kerja\index.php on line 78.
+ 1 SYSTEMPATH\View\View.php(243): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/unit_kerja/index', [], true)
+ 3 APPPATH\Controllers\Master\UnitKerjaController.php(48): view('master/unit_kerja/index', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\UnitKerjaController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\UnitKerjaController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:48:57 --> Error: Class "App\Models\Master\GedungModel" not found
+[Method: GET, Route: master/lantai]
+in APPPATH\Controllers\Master\LantaiController.php on line 17.
+ 1 SYSTEMPATH\CodeIgniter.php(921): App\Controllers\Master\LantaiController->__construct()
+ 2 SYSTEMPATH\CodeIgniter.php(488): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:52:49 --> Error: Class "App\Models\Master\GedungModel" not found
+[Method: GET, Route: master/lantai]
+in APPPATH\Controllers\Master\LantaiController.php on line 17.
+ 1 SYSTEMPATH\CodeIgniter.php(921): App\Controllers\Master\LantaiController->__construct()
+ 2 SYSTEMPATH\CodeIgniter.php(488): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:53:03 --> Error: Class "App\Models\Master\GedungModel" not found
+[Method: GET, Route: master/lantai]
+in APPPATH\Controllers\Master\LantaiController.php on line 17.
+ 1 SYSTEMPATH\CodeIgniter.php(921): App\Controllers\Master\LantaiController->__construct()
+ 2 SYSTEMPATH\CodeIgniter.php(488): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:53:34 --> Error: Class "App\Models\Master\GedungModel" not found
+[Method: GET, Route: master/lantai]
+in APPPATH\Controllers\Master\LantaiController.php on line 17.
+ 1 SYSTEMPATH\CodeIgniter.php(921): App\Controllers\Master\LantaiController->__construct()
+ 2 SYSTEMPATH\CodeIgniter.php(488): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:54:05 --> Error: Class "App\Models\Master\GedungModel" not found
+[Method: GET, Route: master/lantai]
+in APPPATH\Controllers\Master\LantaiController.php on line 17.
+ 1 SYSTEMPATH\CodeIgniter.php(921): App\Controllers\Master\LantaiController->__construct()
+ 2 SYSTEMPATH\CodeIgniter.php(488): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 17:55:44 --> Error: Class "App\Models\Master\SubUnitModel" not found
+[Method: GET, Route: master/ruangan]
+in APPPATH\Controllers\Master\RuanganController.php on line 22.
+ 1 SYSTEMPATH\CodeIgniter.php(921): App\Controllers\Master\RuanganController->__construct()
+ 2 SYSTEMPATH\CodeIgniter.php(488): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-29 19:19:33 --> Incorrect table definition; there can be only one auto column and it must be defined as a key
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 4 SYSTEMPATH\Database\Forge.php(772): CodeIgniter\Database\BaseConnection->query('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 5 APPPATH\Database\Migrations\2026-04-30-000024_UpdateMasterTablePrimaryKeys.php(38): CodeIgniter\Database\Forge->addColumn('aset_gedung', [...])
+ 6 APPPATH\Database\Migrations\2026-04-30-000024_UpdateMasterTablePrimaryKeys.php(15): App\Database\Migrations\UpdateMasterTablePrimaryKeys->addNewPkColumns()
+ 7 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\UpdateMasterTablePrimaryKeys->up()
+ 8 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 9 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+10 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+11 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+12 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([...])
+13 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [...])
+14 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+15 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+16 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 19:22:46 --> Incorrect table definition; there can be only one auto column and it must be defined as a key
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 4 SYSTEMPATH\Database\Forge.php(772): CodeIgniter\Database\BaseConnection->query('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 5 APPPATH\Database\Migrations\2026-04-30-000024_UpdateMasterTablePrimaryKeys.php(38): CodeIgniter\Database\Forge->addColumn('aset_gedung', [...])
+ 6 APPPATH\Database\Migrations\2026-04-30-000024_UpdateMasterTablePrimaryKeys.php(15): App\Database\Migrations\UpdateMasterTablePrimaryKeys->addNewPkColumns()
+ 7 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\UpdateMasterTablePrimaryKeys->up()
+ 8 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 9 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+10 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+11 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+12 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([...])
+13 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [...])
+14 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+15 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+16 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+ERROR - 2026-04-29 19:27:11 --> Incorrect table definition; there can be only one auto column and it must be defined as a key
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(910): CodeIgniter\Database\MySQLi\Connection->execute('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 3 SYSTEMPATH\Database\BaseConnection.php(827): CodeIgniter\Database\BaseConnection->simpleQuery('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 4 SYSTEMPATH\Database\Forge.php(772): CodeIgniter\Database\BaseConnection->query('ALTER TABLE `aset_gedung`
+	ADD `gd_id` INT(6) UNSIGNED NOT NULL AUTO_INCREMENT')
+ 5 APPPATH\Database\Migrations\2026-04-30-000024_UpdateMasterTablePrimaryKeys.php(38): CodeIgniter\Database\Forge->addColumn('aset_gedung', [...])
+ 6 APPPATH\Database\Migrations\2026-04-30-000024_UpdateMasterTablePrimaryKeys.php(15): App\Database\Migrations\UpdateMasterTablePrimaryKeys->addNewPkColumns()
+ 7 SYSTEMPATH\Database\MigrationRunner.php(1014): App\Database\Migrations\UpdateMasterTablePrimaryKeys->up()
+ 8 SYSTEMPATH\Database\MigrationRunner.php(202): CodeIgniter\Database\MigrationRunner->migrate('up', Object(stdClass))
+ 9 SYSTEMPATH\Commands\Database\Migrate.php(89): CodeIgniter\Database\MigrationRunner->latest(null)
+10 SYSTEMPATH\CLI\SignalTrait.php(245): CodeIgniter\Commands\Database\Migrate::CodeIgniter\Commands\Database\{closure}()
+11 SYSTEMPATH\Commands\Database\Migrate.php(88): CodeIgniter\Commands\Database\Migrate->withSignalsBlocked(Object(Closure))
+12 SYSTEMPATH\CLI\Commands.php(74): CodeIgniter\Commands\Database\Migrate->run([...])
+13 SYSTEMPATH\CLI\Console.php(47): CodeIgniter\CLI\Commands->run('migrate', [...])
+14 SYSTEMPATH\Boot.php(442): CodeIgniter\CLI\Console->run()
+15 SYSTEMPATH\Boot.php(166): CodeIgniter\Boot::runCommand(Object(CodeIgniter\CLI\Console))
+16 ROOTPATH\spark(87): CodeIgniter\Boot::bootSpark(Object(Config\Paths))
+CRITICAL - 2026-04-29 19:54:11 --> Error: Class "App\Models\Master\GedungModel" not found
+[Method: GET, Route: master/lantai]
+in APPPATH\Controllers\Master\LantaiController.php on line 17.
+ 1 SYSTEMPATH\CodeIgniter.php(921): App\Controllers\Master\LantaiController->__construct()
+ 2 SYSTEMPATH\CodeIgniter.php(488): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 19:54:21 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "master/gedung/show.php"
+[Method: GET, Route: master/gedung/1]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(228): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('master/gedung/show.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/gedung/show', [], true)
+ 3 APPPATH\Controllers\Master\GedungController.php(44): view('master/gedung/show', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\GedungController->show('1')
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\GedungController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 19:54:25 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "master/gedung/show.php"
+[Method: GET, Route: master/gedung/1]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(228): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('master/gedung/show.php')
+ 2 SYSTEMPATH\Common.php(1250): CodeIgniter\View\View->render('master/gedung/show', [], true)
+ 3 APPPATH\Controllers\Master\GedungController.php(44): view('master/gedung/show', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\Master\GedungController->show('1')
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Master\GedungController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
