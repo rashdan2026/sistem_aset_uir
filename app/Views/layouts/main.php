@@ -149,11 +149,24 @@
             color: #0D1F12 !important;
         }
         .sidebar .nav-link.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%) !important;
+            background: linear-gradient(135deg, #45a482 0%, #56b894 100%) !important;
             color: #fff !important;
             font-weight: 700;
-            box-shadow: var(--shadow-soft);
+            box-shadow: 0 3px 12px rgba(56,150,110,0.18);
             transform: none;
+            position: relative;
+        }
+        .sidebar .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: var(--accent);
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 8px rgba(184,155,94,0.4);
         }
         .sidebar .nav-link i {
             font-size: 16px;
@@ -162,7 +175,7 @@
             width: 20px;
             text-align: center;
         }
-        .sidebar .nav-link.active i { opacity: 1; }
+        .sidebar .nav-link.active i { opacity: 1; color: #fff; }
         .sidebar .nav-header {
             font-size: 10.5px;
             font-weight: 800;
@@ -589,88 +602,51 @@
     <div class="container-fluid">
         <div class="row">
             <?php if (session()->has('user_id')): ?>
+            <?php
+                $currentPath = '/' . trim(uri_string(), '/');
+                $sidebarMenu = [
+                    ['url' => '/admin/dashboard',        'icon' => 'bi-speedometer2',         'label' => 'Dashboard',          'section' => null],
+                    ['url' => '/master/unit-kerja',       'icon' => 'bi-buildings',            'label' => 'Unit Kerja',          'section' => 'REFERENSI'],
+                    ['url' => '/master/penanggung-jawab', 'icon' => 'bi-person-badge',         'label' => 'Penanggung Jawab',    'section' => null],
+                    ['url' => '/master/sub-units',         'icon' => 'bi-house-door',           'label' => 'Sub Unit',            'section' => 'LOKASI'],
+                    ['url' => '/master/gedung',            'icon' => 'bi-building',             'label' => 'Gedung',              'section' => null],
+                    ['url' => '/master/lantai',            'icon' => 'bi-signpost',             'label' => 'Lantai',              'section' => null],
+                    ['url' => '/master/ruangan',           'icon' => 'bi-door-open',            'label' => 'Ruangan',             'section' => null],
+                    ['url' => '/master/kategori',          'icon' => 'bi-tag',                  'label' => 'Kategori',            'section' => 'KLASIFIKASI ASET'],
+                    ['url' => '/master/sub-kategori',      'icon' => 'bi-tags',                 'label' => 'Sub Kategori',        'section' => null],
+                    ['url' => '/master/golongan',          'icon' => 'bi-collection',           'label' => 'Golongan',            'section' => null],
+                    ['url' => '/master/merk',               'icon' => 'bi-badge-ad',             'label' => 'Merk',                'section' => null],
+                    ['url' => '/master/type',               'icon' => 'bi-speedometer',         'label' => 'Type',                'section' => null],
+                    ['url' => '/master/kondisi-barang',    'icon' => 'bi-exclamation-triangle',  'label' => 'Kondisi',             'section' => null],
+                    ['url' => '/master/sumber-dana',        'icon' => 'bi-cash-stack',           'label' => 'Sumber Dana',         'section' => null],
+                    ['url' => '/master/aset',               'icon' => 'bi-box-seam',             'label' => 'Registrasi Aset',     'section' => 'REGISTRASI ASET'],
+                ];
+
+                function isMenuActive($menuUrl, $currentPath) {
+                    $menuPath = '/' . trim($menuUrl, '/');
+                    if ($menuPath === $currentPath) return true;
+                    if (str_starts_with($currentPath, $menuPath . '/')) return true;
+                    $menuBase = preg_replace('#^/master/#', '', $menuPath);
+                    $currentBase = preg_replace('#^/master/#', '', $currentPath);
+                    $menuSegments = explode('/', $menuBase);
+                    $currentSegments = explode('/', $currentBase);
+                    return ($menuSegments[0] ?? '') === ($currentSegments[0] ?? '') && $menuSegments[0] !== '';
+                }
+            ?>
             <nav class="col-md-2 d-md-block sidebar collapse">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/admin/dashboard') ?>">
-                                <i class="bi bi-speedometer2"></i> Dashboard
-                            </a>
-                        </li>
-                        <li class="nav-header mt-3 mb-1 small text-muted">REFERENSI</li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/unit-kerja') ?>">
-                                <i class="bi bi-buildings"></i> Unit Kerja
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/penanggung-jawab') ?>">
-                                <i class="bi bi-person-badge"></i> Penanggung Jawab
-                            </a>
-                        </li>
-                        <li class="nav-header mt-3 mb-1 small text-muted">LOKASI</li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/sub-units') ?>">
-                                <i class="bi bi-house-door"></i> Sub Unit
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/gedung') ?>">
-                                <i class="bi bi-building"></i> Gedung
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/lantai') ?>">
-                                <i class="bi bi-signpost"></i> Lantai
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/ruangan') ?>">
-                                <i class="bi bi-door-open"></i> Ruangan
-                            </a>
-                        </li>
-                        <li class="nav-header mt-3 mb-1 small text-muted">KLASIFIKASI ASET</li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/kategori') ?>">
-                                <i class="bi bi-tag"></i> Kategori
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/sub-kategori') ?>">
-                                <i class="bi bi-tags"></i> Sub Kategori
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/golongan') ?>">
-                                <i class="bi bi-collection"></i> Golongan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/merk') ?>">
-                                <i class="bi bi-badge-ad"></i> Merk
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/type') ?>">
-                                <i class="bi bi-speedometer"></i> Type
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/kondisi-barang') ?>">
-                                <i class="bi bi-exclamation-triangle"></i> Kondisi
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/sumber-dana') ?>">
-                                <i class="bi bi-cash-stack"></i> Sumber Dana
-                            </a>
-                        </li>
-                        <li class="nav-header mt-3 mb-1 small text-muted">REGISTRASI ASET</li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('/master/aset') ?>">
-                                <i class="bi bi-box-seam"></i> Registrasi Aset
-                            </a>
-                        </li>
+                        <?php foreach ($sidebarMenu as $item): ?>
+                            <?php if ($item['section'] !== null): ?>
+                                <li class="nav-header mt-3 mb-1 small text-muted"><?= $item['section'] ?></li>
+                            <?php endif; ?>
+                            <?php $isActive = isMenuActive($item['url'], $currentPath); ?>
+                            <li class="nav-item">
+                                <a class="nav-link<?= $isActive ? ' active' : '' ?>" href="<?= base_url($item['url']) ?>">
+                                    <i class="bi <?= $item['icon'] ?>"></i> <?= $item['label'] ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
             </nav>
