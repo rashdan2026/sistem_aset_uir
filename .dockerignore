@@ -1,0 +1,47 @@
+# Dependencies
+/vendor/
+/vendor/
+
+# Development files
+/.env
+/.env.*
+/.env.production
+
+# Git
+/.git/
+/.gitignore
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+/doc/
+/doc
+
+# Test and CI
+/tests/
+/phpunit.xml*
+/.phpunit.*
+
+# Temporary and garbage files
+/sampah/
+/.qwen/
+/public_html/
+
+# Docker files (don't copy this Dockerfile itself into the image)
+/Dockerfile
+/docker-compose*.yml
+/.dockerignore
+
+# Local development files
+/writable/cache/
+/writable/logs/
+/writable/session/
