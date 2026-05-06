@@ -18,5 +18,3 @@ logs/
 Thumbs.db
 # Build artifacts
 temp/
-.env.*
-writable/
