@@ -27,6 +27,10 @@ RUN mkdir -p \
     /app/public/uploads \
     /run/nginx
 
+# Gunakan production env saat build jika tersedia
+RUN if [ -f /app/.env.production ]; then cp /app/.env.production /app/.env; fi
+
+# Jangan biarkan .env localhost ikut dipakai kalau sudah ada .env.production
 RUN chown -R www-data:www-data /app
 
 RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader --no-interaction --no-progress --ignore-platform-reqs; fi
