@@ -60,7 +60,7 @@
                                             </a>
                                             <form action="<?= base_url('/master/sumber-dana/' . $row['sd_id']) ?>" method="post" style="display:inline;">
                                                 <?= csrf_field() ?>
-                                                <input type="hidden" name="_method" value="delete">
+                                                <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="icon-btn delete-btn" title="Hapus" onclick="return confirm('Yakin nonaktifkan?')">
                                                     <svg viewBox="0 0 24 24"><path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M6 6l1 14h10l1-14" /><path d="M10 11v6" /><path d="M14 11v6" /></svg>
                                                 </button>
