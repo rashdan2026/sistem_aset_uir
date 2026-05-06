@@ -1,0 +1,156 @@
+Running 2.8.4 (2024-12-11 11:57:47) with PHP 8.2.12 on Windows NT / 10.0
+Reading ./composer.json (D:\xampp\htdocs\asetUIR\composer.json)
+Loading config file ./composer.json (D:\xampp\htdocs\asetUIR\composer.json)
+Checked CA file D:\xampp\apache\bin\curl-ca-bundle.crt: valid
+Executing command (D:\xampp\htdocs\asetUIR): git branch -a --no-color --no-abbrev -v
+Failed to initialize global composer: Composer could not find the config file: C:/Users/Hendra/AppData/Roaming/Composer/composer.json
+
+Reading ./composer.lock (D:\xampp\htdocs\asetUIR\composer.lock)
+Reading D:\xampp\htdocs\asetUIR/vendor/composer/installed.json (D:\xampp\htdocs\asetUIR\vendor\composer\installed.json)
+Installing dependencies from lock file
+Verifying lock file contents can be installed on current platform.
+Reading ./composer.lock (D:\xampp\htdocs\asetUIR\composer.lock)
+Built pool.
+Generating rules
+Resolving dependencies through SAT
+Looking at all rules.
+
+Dependency resolution completed in 0.000 seconds
+Nothing to install, update or remove
+Generating optimized autoload files
+Class Laminas\Escaper\Escaper located in ./system/ThirdParty/Escaper/Escaper.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Laminas\Escaper\EscaperInterface located in ./system/ThirdParty/Escaper/EscaperInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Laminas\Escaper\Exception\ExceptionInterface located in ./system/ThirdParty/Escaper/Exception/ExceptionInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Laminas\Escaper\Exception\InvalidArgumentException located in ./system/ThirdParty/Escaper/Exception/InvalidArgumentException.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Laminas\Escaper\Exception\RuntimeException located in ./system/ThirdParty/Escaper/Exception/RuntimeException.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\CallFinder located in ./system/ThirdParty/Kint/CallFinder.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\FacadeInterface located in ./system/ThirdParty/Kint/FacadeInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Kint located in ./system/ThirdParty/Kint/Kint.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\AbstractPlugin located in ./system/ThirdParty/Kint/Parser/AbstractPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ArrayLimitPlugin located in ./system/ThirdParty/Kint/Parser/ArrayLimitPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ArrayObjectPlugin located in ./system/ThirdParty/Kint/Parser/ArrayObjectPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\Base64Plugin located in ./system/ThirdParty/Kint/Parser/Base64Plugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\BinaryPlugin located in ./system/ThirdParty/Kint/Parser/BinaryPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\BlacklistPlugin located in ./system/ThirdParty/Kint/Parser/BlacklistPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ClassHooksPlugin located in ./system/ThirdParty/Kint/Parser/ClassHooksPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ClassMethodsPlugin located in ./system/ThirdParty/Kint/Parser/ClassMethodsPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ClassStaticsPlugin located in ./system/ThirdParty/Kint/Parser/ClassStaticsPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ClassStringsPlugin located in ./system/ThirdParty/Kint/Parser/ClassStringsPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ClosurePlugin located in ./system/ThirdParty/Kint/Parser/ClosurePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ColorPlugin located in ./system/ThirdParty/Kint/Parser/ColorPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ConstructablePluginInterface located in ./system/ThirdParty/Kint/Parser/ConstructablePluginInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\DateTimePlugin located in ./system/ThirdParty/Kint/Parser/DateTimePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\DomPlugin located in ./system/ThirdParty/Kint/Parser/DomPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\EnumPlugin located in ./system/ThirdParty/Kint/Parser/EnumPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\FsPathPlugin located in ./system/ThirdParty/Kint/Parser/FsPathPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\HtmlPlugin located in ./system/ThirdParty/Kint/Parser/HtmlPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\IteratorPlugin located in ./system/ThirdParty/Kint/Parser/IteratorPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\JsonPlugin located in ./system/ThirdParty/Kint/Parser/JsonPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\MicrotimePlugin located in ./system/ThirdParty/Kint/Parser/MicrotimePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\MysqliPlugin located in ./system/ThirdParty/Kint/Parser/MysqliPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\Parser located in ./system/ThirdParty/Kint/Parser/Parser.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\PluginBeginInterface located in ./system/ThirdParty/Kint/Parser/PluginBeginInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\PluginCompleteInterface located in ./system/ThirdParty/Kint/Parser/PluginCompleteInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\PluginInterface located in ./system/ThirdParty/Kint/Parser/PluginInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ProfilePlugin located in ./system/ThirdParty/Kint/Parser/ProfilePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ProxyPlugin located in ./system/ThirdParty/Kint/Parser/ProxyPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\SerializePlugin located in ./system/ThirdParty/Kint/Parser/SerializePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\SimpleXMLElementPlugin located in ./system/ThirdParty/Kint/Parser/SimpleXMLElementPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\SplFileInfoPlugin located in ./system/ThirdParty/Kint/Parser/SplFileInfoPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\StreamPlugin located in ./system/ThirdParty/Kint/Parser/StreamPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\TablePlugin located in ./system/ThirdParty/Kint/Parser/TablePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ThrowablePlugin located in ./system/ThirdParty/Kint/Parser/ThrowablePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\TimestampPlugin located in ./system/ThirdParty/Kint/Parser/TimestampPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\ToStringPlugin located in ./system/ThirdParty/Kint/Parser/ToStringPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\TracePlugin located in ./system/ThirdParty/Kint/Parser/TracePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Parser\XmlPlugin located in ./system/ThirdParty/Kint/Parser/XmlPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\AbstractRenderer located in ./system/ThirdParty/Kint/Renderer/AbstractRenderer.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\AssetRendererTrait located in ./system/ThirdParty/Kint/Renderer/AssetRendererTrait.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\CliRenderer located in ./system/ThirdParty/Kint/Renderer/CliRenderer.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\ConstructableRendererInterface located in ./system/ThirdParty/Kint/Renderer/ConstructableRendererInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\PlainRenderer located in ./system/ThirdParty/Kint/Renderer/PlainRenderer.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\RendererInterface located in ./system/ThirdParty/Kint/Renderer/RendererInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\AbstractPlugin located in ./system/ThirdParty/Kint/Renderer/Rich/AbstractPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\BinaryPlugin located in ./system/ThirdParty/Kint/Renderer/Rich/BinaryPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\CallableDefinitionPlugin located in ./system/ThirdParty/Kint/Renderer/Rich/CallableDefinitionPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\CallablePlugin located in ./system/ThirdParty/Kint/Renderer/Rich/CallablePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\ColorPlugin located in ./system/ThirdParty/Kint/Renderer/Rich/ColorPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\LockPlugin located in ./system/ThirdParty/Kint/Renderer/Rich/LockPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\MicrotimePlugin located in ./system/ThirdParty/Kint/Renderer/Rich/MicrotimePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\PluginInterface located in ./system/ThirdParty/Kint/Renderer/Rich/PluginInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\ProfilePlugin located in ./system/ThirdParty/Kint/Renderer/Rich/ProfilePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\SourcePlugin located in ./system/ThirdParty/Kint/Renderer/Rich/SourcePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\TablePlugin located in ./system/ThirdParty/Kint/Renderer/Rich/TablePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\TabPluginInterface located in ./system/ThirdParty/Kint/Renderer/Rich/TabPluginInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\TraceFramePlugin located in ./system/ThirdParty/Kint/Renderer/Rich/TraceFramePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Rich\ValuePluginInterface located in ./system/ThirdParty/Kint/Renderer/Rich/ValuePluginInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\RichRenderer located in ./system/ThirdParty/Kint/Renderer/RichRenderer.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Text\AbstractPlugin located in ./system/ThirdParty/Kint/Renderer/Text/AbstractPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Text\LockPlugin located in ./system/ThirdParty/Kint/Renderer/Text/LockPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Text\MicrotimePlugin located in ./system/ThirdParty/Kint/Renderer/Text/MicrotimePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Text\PluginInterface located in ./system/ThirdParty/Kint/Renderer/Text/PluginInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Text\SplFileInfoPlugin located in ./system/ThirdParty/Kint/Renderer/Text/SplFileInfoPlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\Text\TracePlugin located in ./system/ThirdParty/Kint/Renderer/Text/TracePlugin.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Renderer\TextRenderer located in ./system/ThirdParty/Kint/Renderer/TextRenderer.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Utils located in ./system/ThirdParty/Kint/Utils.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\AbstractValue located in ./system/ThirdParty/Kint/Value/AbstractValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\ArrayValue located in ./system/ThirdParty/Kint/Value/ArrayValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\ClosedResourceValue located in ./system/ThirdParty/Kint/Value/ClosedResourceValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\ClosureValue located in ./system/ThirdParty/Kint/Value/ClosureValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\ColorValue located in ./system/ThirdParty/Kint/Value/ColorValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\ArrayContext located in ./system/ThirdParty/Kint/Value/Context/ArrayContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\BaseContext located in ./system/ThirdParty/Kint/Value/Context/BaseContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\ClassConstContext located in ./system/ThirdParty/Kint/Value/Context/ClassConstContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\ClassDeclaredContext located in ./system/ThirdParty/Kint/Value/Context/ClassDeclaredContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\ClassOwnedContext located in ./system/ThirdParty/Kint/Value/Context/ClassOwnedContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\ContextInterface located in ./system/ThirdParty/Kint/Value/Context/ContextInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\DoubleAccessMemberContext located in ./system/ThirdParty/Kint/Value/Context/DoubleAccessMemberContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\MethodContext located in ./system/ThirdParty/Kint/Value/Context/MethodContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\PropertyContext located in ./system/ThirdParty/Kint/Value/Context/PropertyContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Context\StaticPropertyContext located in ./system/ThirdParty/Kint/Value/Context/StaticPropertyContext.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\DateTimeValue located in ./system/ThirdParty/Kint/Value/DateTimeValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\DeclaredCallableBag located in ./system/ThirdParty/Kint/Value/DeclaredCallableBag.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\DomNodeListValue located in ./system/ThirdParty/Kint/Value/DomNodeListValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\DomNodeValue located in ./system/ThirdParty/Kint/Value/DomNodeValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\EnumValue located in ./system/ThirdParty/Kint/Value/EnumValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\FixedWidthValue located in ./system/ThirdParty/Kint/Value/FixedWidthValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\FunctionValue located in ./system/ThirdParty/Kint/Value/FunctionValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\InstanceValue located in ./system/ThirdParty/Kint/Value/InstanceValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\MethodValue located in ./system/ThirdParty/Kint/Value/MethodValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\MicrotimeValue located in ./system/ThirdParty/Kint/Value/MicrotimeValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\ParameterBag located in ./system/ThirdParty/Kint/Value/ParameterBag.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\ParameterHoldingTrait located in ./system/ThirdParty/Kint/Value/ParameterHoldingTrait.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\AbstractRepresentation located in ./system/ThirdParty/Kint/Value/Representation/AbstractRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\BinaryRepresentation located in ./system/ThirdParty/Kint/Value/Representation/BinaryRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\CallableDefinitionRepresentation located in ./system/ThirdParty/Kint/Value/Representation/CallableDefinitionRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\ColorRepresentation located in ./system/ThirdParty/Kint/Value/Representation/ColorRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\ContainerRepresentation located in ./system/ThirdParty/Kint/Value/Representation/ContainerRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\MicrotimeRepresentation located in ./system/ThirdParty/Kint/Value/Representation/MicrotimeRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\ProfileRepresentation located in ./system/ThirdParty/Kint/Value/Representation/ProfileRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\RepresentationInterface located in ./system/ThirdParty/Kint/Value/Representation/RepresentationInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\SourceRepresentation located in ./system/ThirdParty/Kint/Value/Representation/SourceRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\SplFileInfoRepresentation located in ./system/ThirdParty/Kint/Value/Representation/SplFileInfoRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\StringRepresentation located in ./system/ThirdParty/Kint/Value/Representation/StringRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\TableRepresentation located in ./system/ThirdParty/Kint/Value/Representation/TableRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\Representation\ValueRepresentation located in ./system/ThirdParty/Kint/Value/Representation/ValueRepresentation.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\ResourceValue located in ./system/ThirdParty/Kint/Value/ResourceValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\SimpleXMLElementValue located in ./system/ThirdParty/Kint/Value/SimpleXMLElementValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\SplFileInfoValue located in ./system/ThirdParty/Kint/Value/SplFileInfoValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\StreamValue located in ./system/ThirdParty/Kint/Value/StreamValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\StringValue located in ./system/ThirdParty/Kint/Value/StringValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\ThrowableValue located in ./system/ThirdParty/Kint/Value/ThrowableValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\TraceFrameValue located in ./system/ThirdParty/Kint/Value/TraceFrameValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\TraceValue located in ./system/ThirdParty/Kint/Value/TraceValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\UninitializedValue located in ./system/ThirdParty/Kint/Value/UninitializedValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\UnknownValue located in ./system/ThirdParty/Kint/Value/UnknownValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Kint\Value\VirtualValue located in ./system/ThirdParty/Kint/Value/VirtualValue.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Psr\Log\AbstractLogger located in ./system/ThirdParty/PSR/Log/AbstractLogger.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Psr\Log\InvalidArgumentException located in ./system/ThirdParty/PSR/Log/InvalidArgumentException.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Psr\Log\LoggerAwareInterface located in ./system/ThirdParty/PSR/Log/LoggerAwareInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Psr\Log\LoggerAwareTrait located in ./system/ThirdParty/PSR/Log/LoggerAwareTrait.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Psr\Log\LoggerInterface located in ./system/ThirdParty/PSR/Log/LoggerInterface.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Psr\Log\LoggerTrait located in ./system/ThirdParty/PSR/Log/LoggerTrait.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Psr\Log\LogLevel located in ./system/ThirdParty/PSR/Log/LogLevel.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+Class Psr\Log\NullLogger located in ./system/ThirdParty/PSR/Log/NullLogger.php does not comply with psr-4 autoloading standard (rule: CodeIgniter\ => ./system). Skipping.
+1 package you are using is looking for funding.
+Use the `composer fund` command to find out more!
