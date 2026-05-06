@@ -1,80 +1,19 @@
-# syntax=docker/dockerfile:1
+FROM php:8.2-fpm-alpine
 
-# ------------------------------------------------------------------------------
-# Stage 1: Build dependencies
-# ------------------------------------------------------------------------------
-FROM composer:2 AS vendor_builder
+RUN apk add --no-cache nginx bash icu-dev libzip-dev oniguruma-dev zip unzip git curl
+RUN docker-php-ext-install pdo pdo_mysql intl mbstring zip opcache
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
+COPY . /app
 
-COPY composer.json composer.lock* ./
+RUN mkdir -p /app/writable/cache /app/writable/debugbar /app/writable/logs /app/writable/session /app/writable/uploads /app/public/uploads
+RUN chown -R www-data:www-data /app
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --ignore-platform-reqs
+RUN mkdir -p /run/nginx
+COPY .dokku/nginx.conf /etc/nginx/http.d/default.conf
 
-# ------------------------------------------------------------------------------
-# Stage 2: Production image
-# ------------------------------------------------------------------------------
-FROM php:8.2-apache-bookworm
+RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader --no-interaction; fi
 
-# Install system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libicu-dev \
-    && docker-php-ext-install intl mbstring mysqli \
-    && apt-get purge -y --auto-remove libicu-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Enable Apache modules
-RUN a2enmod rewrite headers
-
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy application files
-COPY --from=vendor_builder /app/vendor /var/www/html/vendor
-COPY app /var/www/html/app
-COPY public /var/www/html/public
-COPY system /var/www/html/system
-COPY writable /var/www/html/writable
-
-# Copy production environment config
-COPY .env.production /var/www/html/.env
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/writable \
-    && chmod -R 755 /var/www/html/writable
-
-# Apache configuration for Dokku
-RUN echo 'ServerName localhost' >> /etc/apache2/apache2.conf \
-    && echo 'DirectoryIndex index.php index.html' >> /etc/apache2/apache2.conf
-
-# VirtualHost for Document Root
-RUN cat > /etc/apache2/sites-available/000-default.conf << 'EOF'
-<VirtualHost *:80>
-    DocumentRoot /var/www/html/public
-
-    <Directory /var/www/html/public>
-        Options -Indexes +FollowSymLinks
-        AllowOverride All
-        Require all granted
-
-        # Rewrite rules for CodeIgniter
-        RewriteEngine On
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule ^(.*)$ index.php/$1 [L]
-    </Directory>
-
-    # Security headers
-    Header always set X-Content-Type-Options "nosniff"
-    Header always set X-Frame-Options "SAMEORIGIN"
-    Header always set X-XSS-Protection "1; mode=block"
-</VirtualHost>
-EOF
-
-# Expose port 80
-EXPOSE 80
-
-# Start Apache
-CMD ["apache2-foreground"]
-
-  
+EXPOSE 8181
+CMD sh -c "php-fpm -D && nginx -g 'daemon off;' -c /etc/nginx/nginx.conf"
