@@ -21,7 +21,7 @@
             ?>
             <form action="<?= base_url($isEdit ? '/master/sumber-dana/' . $sdId : '/master/sumber-dana') ?>" method="post">
                 <?= csrf_field() ?>
-                <input type="hidden" name="_method" value="<?= $isEdit ? 'put' : 'post' ?>">
+                <input type="hidden" name="_method" value="<?= $isEdit ? 'PUT' : 'POST' ?>">
 
                 <div class="row">
                     <div class="col-md-6">

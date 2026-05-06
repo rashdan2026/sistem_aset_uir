@@ -22,7 +22,7 @@
             <form action="<?= $actionUrl ?>" method="post">
                 <?= csrf_field() ?>
                 <?php if ($isEdit): ?>
-                <input type="hidden" name="_method" value="put">
+                <input type="hidden" name="_method" value="PUT">
                 <?php endif; ?>
 
                 <!-- Section: Identitas Aset -->

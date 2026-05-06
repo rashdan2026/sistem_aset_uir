@@ -22,7 +22,7 @@
             ?>
             <form action="<?= base_url($isEdit ? '/master/sub-kategori/' . $skId : '/master/sub-kategori') ?>" method="post">
                 <?= csrf_field() ?>
-                <input type="hidden" name="_method" value="<?= $isEdit ? 'put' : 'post' ?>">
+                <input type="hidden" name="_method" value="<?= $isEdit ? 'PUT' : 'POST' ?>">
 
                 <div class="form-group">
                     <label>Kategori <span class="text-danger">*</span></label>
