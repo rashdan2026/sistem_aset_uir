@@ -653,7 +653,7 @@
             <?php endif; ?>
             
             <main class="<?= session()->has('user_id') ? 'col-md-10 ms-sm-auto' : '' ?> px-md-4">
-                <?php if(session()->has('error') || session()->has('success')): ?>
+                <?php if(session()->has('user_id') && (session()->has('error') || session()->has('success'))): ?>
                 <div class="flash-messages">
                     <?php if(session()->has('error')): ?>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
