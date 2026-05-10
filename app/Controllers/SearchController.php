@@ -5,19 +5,25 @@ namespace App\Controllers;
 use CodeIgniter\RESTful\ResourceController;
 use App\Models\Master\RuanganModel;
 use App\Models\Reference\PenanggungJawabReadOnlyModel;
-use App\Models\Reference\UnitKerjaReadOnlyModel;
+use App\Models\Reference\UnitKerjaAllowedModel;
+use App\Models\GedungModel;
+use App\Models\SubUnitModel;
 
 class SearchController extends ResourceController
 {
     protected $ruanganModel;
     protected $pjModel;
     protected $unitKerjaModel;
+    protected $gedungModel;
+    protected $subUnitModel;
 
     public function __construct()
     {
         $this->ruanganModel = new RuanganModel();
         $this->pjModel = new PenanggungJawabReadOnlyModel();
-        $this->unitKerjaModel = new UnitKerjaReadOnlyModel();
+        $this->unitKerjaModel = new UnitKerjaAllowedModel();
+        $this->gedungModel = new GedungModel();
+        $this->subUnitModel = new SubUnitModel();
         helper(['request']);
     }
 
@@ -90,9 +96,71 @@ class SearchController extends ResourceController
         $results = array_map(function($r) {
             return [
                 'id' => $r['id_unit_kerja'],
-                'text' => $r['nama_unit'] . ' (' . ($r['kode_unit'] ?? $r['id_unit_kerja']) . ')'
+                'text' => $r['nama_unit'] . ' (' . $r['id_unit_kerja'] . ')'
             ];
         }, $units);
+
+        return $this->respond($results);
+    }
+
+    public function searchGedung()
+    {
+        $q = $this->request->getGet('q');
+        $limit = min((int)($this->request->getGet('limit') ?? 20), 50);
+
+        $gedungQuery = $this->gedungModel
+            ->select('gd_id, kode_gedung, nama_gedung')
+            ->where('is_active', 1);
+
+        if ($q && strlen($q) >= 3) {
+            $gedungQuery->groupStart()
+                ->like('nama_gedung', $q, 'both')
+                ->orLike('kode_gedung', $q, 'both')
+            ->groupEnd();
+        }
+
+        $gedung = $gedungQuery
+            ->orderBy('nama_gedung', 'ASC')
+            ->limit($limit)
+            ->findAll();
+
+        $results = array_map(function($r) {
+            return [
+                'id' => $r['gd_id'],
+                'text' => $r['nama_gedung'] . ' (' . $r['kode_gedung'] . ')'
+            ];
+        }, $gedung);
+
+        return $this->respond($results);
+    }
+
+    public function searchSubUnit()
+    {
+        $q = $this->request->getGet('q');
+        $limit = min((int)($this->request->getGet('limit') ?? 20), 50);
+
+        $subUnitQuery = $this->subUnitModel
+            ->select('su_id, kode_sub_unit, nama_sub_unit')
+            ->where('is_active', 1);
+
+        if ($q && strlen($q) >= 3) {
+            $subUnitQuery->groupStart()
+                ->like('nama_sub_unit', $q, 'both')
+                ->orLike('kode_sub_unit', $q, 'both')
+            ->groupEnd();
+        }
+
+        $subUnit = $subUnitQuery
+            ->orderBy('nama_sub_unit', 'ASC')
+            ->limit($limit)
+            ->findAll();
+
+        $results = array_map(function($r) {
+            return [
+                'id' => $r['su_id'],
+                'text' => $r['nama_sub_unit'] . ' (' . $r['kode_sub_unit'] . ')'
+            ];
+        }, $subUnit);
 
         return $this->respond($results);
     }

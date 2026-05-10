@@ -14,7 +14,7 @@
     <?php endif; ?>
 
     <div class="card shadow">
-        <div class="card-body">
+        <div class="card-body" style="overflow: visible;">
             <?php
                 $isEdit = isset($record) && !empty($record);
                 $actionUrl = $isEdit ? base_url('/master/aset/' . $record['all_id']) : base_url('/master/aset');
@@ -54,9 +54,11 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group" style="position: relative;">
                             <label>Nama Aset <span class="text-danger">*</span></label>
-                            <input type="text" name="nama_aset" id="nama_aset" class="form-control" value="<?= old('nama_aset', $record['nama_aset'] ?? '') ?>" maxlength="200" required>
+                            <input type="text" name="nama_aset" id="nama_aset" class="form-control" value="<?= old('nama_aset', $record['nama_aset'] ?? '') ?>" maxlength="200" required autocomplete="off">
+                            <div id="suggestions" class="suggestions-box" style="display: none;"></div>
+                            <small class="form-text text-muted">Pilih Kategori terlebih dahulu, lalu ketik min. 4 huruf untuk mencari.</small>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -101,7 +103,7 @@
                             <select name="merk_id" id="merk_id" class="form-control" onchange="loadType()">
                                 <option value="">-- Tidak Ada --</option>
                                 <?php foreach ($merk as $m): ?>
-                                    <option value="<?= $m['mr_id'] ?>" <?= ($isEdit && ($record['merk_id'] ?? '') == $m['mr_id']) ? 'selected' : '' ?>><?= esc($m['nama_merk']) ?></option>
+                                    <option value="<?= $m['mr_id'] ?>" <?= ($isEdit && ($record['merk_id'] ?? '') == $m['mr_id']) ? 'selected' : '' ?>><?= esc($m['nama_merk']) ?> (<?= esc($m['kode_merk']) ?>)</option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -133,8 +135,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Sumber Dana</label>
-                            <select name="sumber_dana_id" class="form-control">
+                            <label>Sumber Dana <span class="text-danger">*</span></label>
+                            <select name="sumber_dana_id" id="sumber_dana_id" class="form-control" required>
                                 <option value="">-- Tidak Ada --</option>
                                 <?php foreach ($sumberDana as $sd): ?>
                                     <option value="<?= $sd['sd_id'] ?>" <?= ($isEdit && ($record['sumber_dana_id'] ?? '') == $sd['sd_id']) ? 'selected' : '' ?>><?= esc($sd['nama_sumber_dana']) ?></option>
@@ -153,7 +155,7 @@
                             <select name="unit_kerja_id" id="unit_kerja_id" class="form-control" required onchange="loadSubUnit()">
                                 <option value="">-- Pilih Unit Kerja --</option>
                                 <?php foreach ($unitKerja as $u): ?>
-                                    <option value="<?= $u['id_unit_kerja'] ?>" <?= ($isEdit && ($record['unit_kerja_id'] ?? '') == $u['id_unit_kerja']) ? 'selected' : '' ?>><?= esc($u['nama_unit']) ?></option>
+                                    <option value="<?= $u['id_unit_kerja'] ?>" <?= ($isEdit && ($record['unit_kerja_id'] ?? '') == $u['id_unit_kerja']) ? 'selected' : '' ?>><?= esc($u['nama_unit']) ?> (<?= esc($u['kode_unit'] ?? $u['id_unit_kerja']) ?>)</option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -253,6 +255,37 @@
     </div>
 </div>
 
+<style>
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 9999;
+    margin-top: 2px;
+}
+
+.suggestion-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f8f9fa;
+}
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var skSelect = document.getElementById('sub_kategori_id');
@@ -260,6 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
         onSubKategoriChange();
     }
     initSelect2();
+    initAsetAutocomplete();
 });
 
 function loadSubKategori() {
@@ -439,6 +473,131 @@ function initSelect2() {
             allowClear: true
         });
     }
+
+    var unitKerjaData = [
+        <?php foreach ($unitKerja as $u): ?>
+            { id: '<?= esc($u['id_unit_kerja']) ?>', text: '<?= esc($u['nama_unit']) ?> (<?= esc($u['kode_unit'] ?? $u['id_unit_kerja']) ?>)' },
+        <?php endforeach; ?>
+    ];
+
+    var merkData = [
+        <?php foreach ($merk as $m): ?>
+            { id: '<?= esc($m['mr_id']) ?>', text: '<?= esc($m['nama_merk']) ?> (<?= esc($m['kode_merk']) ?>)' },
+        <?php endforeach; ?>
+    ];
+
+    var $unitKerja = $('#unit_kerja_id');
+    if ($unitKerja.length) {
+        $unitKerja.select2({
+            theme: 'bootstrap-5',
+            data: unitKerjaData,
+            placeholder: 'Pilih Unit Kerja atau ketik minimal 3 huruf',
+            allowClear: true,
+            width: '100%',
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (typeof data.text === 'undefined') {
+                    return null;
+                }
+                var term = params.term.toLowerCase();
+                var text = data.text.toLowerCase();
+                if (term.length < 3) {
+                    return data;
+                }
+                if (text.indexOf(term) > -1) {
+                    return data;
+                }
+                return null;
+            }
+        });
+    }
+
+    var $merk = $('#merk_id');
+    if ($merk.length) {
+        $merk.select2({
+            theme: 'bootstrap-5',
+            data: merkData,
+            placeholder: 'Pilih Merk atau ketik minimal 3 huruf',
+            allowClear: true,
+            width: '100%',
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (typeof data.text === 'undefined') {
+                    return null;
+                }
+                var term = params.term.toLowerCase();
+                var text = data.text.toLowerCase();
+                if (term.length < 3) {
+                    return data;
+                }
+                if (text.indexOf(term) > -1) {
+                    return data;
+                }
+                return null;
+            }
+        });
+    }
+}
+
+function initAsetAutocomplete() {
+    var namaAsetInput = document.getElementById('nama_aset');
+    var suggestionsBox = document.getElementById('suggestions');
+    var timeout = null;
+
+    if (!namaAsetInput || !suggestionsBox) return;
+
+    namaAsetInput.addEventListener('keyup', function () {
+        var keyword = this.value.trim();
+        var kategoriId = document.getElementById('kategori_id').value;
+
+        clearTimeout(timeout);
+
+        if (keyword.length < 4 || !kategoriId) {
+            suggestionsBox.style.display = 'none';
+            suggestionsBox.innerHTML = '';
+            return;
+        }
+
+        timeout = setTimeout(function() {
+            fetch('<?= base_url("/master/aset/search") ?>?q=' + encodeURIComponent(keyword) + '&kategori_id=' + encodeURIComponent(kategoriId))
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    suggestionsBox.innerHTML = '';
+
+                    if (data.length === 0) {
+                        suggestionsBox.style.display = 'none';
+                        return;
+                    }
+
+                    data.forEach(function(item) {
+                        var div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.textContent = item.nama_aset + (item.nomor_aset_baru ? ' (' + item.nomor_aset_baru + ')' : '');
+                        div.addEventListener('click', function () {
+                            namaAsetInput.value = item.nama_aset;
+                            suggestionsBox.style.display = 'none';
+                        });
+                        suggestionsBox.appendChild(div);
+                    });
+
+                    suggestionsBox.style.display = 'block';
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    suggestionsBox.style.display = 'none';
+                });
+        }, 300);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('#nama_aset') && !e.target.closest('#suggestions')) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
 }
 </script>
 <?php $this->endSection(); ?>

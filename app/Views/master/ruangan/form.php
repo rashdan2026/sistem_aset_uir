@@ -28,8 +28,8 @@
                                 <option value="">Pilih Gedung</option>
                                 <?php if (!empty($gedung)): ?>
                                     <?php foreach ($gedung as $g): ?>
-                                    <option value="<?= esc($g['gd_id']) ?>" <?= (string)old('gedung_id', $record['gedung_id'] ?? '') === (string)$g['gd_id'] ? 'selected' : '' ?>>
-                                        <?= esc($g['nama_gedung']) ?>
+                                    <option value="<?= esc($g['gd_id']) ?>" <?= (!empty($record['gedung_id']) && $record['gedung_id'] == $g['gd_id']) ? 'selected' : '' ?>>
+                                        <?= esc($g['nama_gedung']) ?> (<?= esc($g['kode_gedung']) ?>)
                                     </option>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -54,10 +54,10 @@
                             <label for="sub_unit_id">Sub Unit *</label>
                             <select name="sub_unit_id" id="sub_unit_id" class="form-control" required>
                                 <option value="">Pilih Sub Unit</option>
-                                <?php if (isset($subUnit) && !empty($subUnit)): ?>
+                                <?php if (!empty($subUnit)): ?>
                                     <?php foreach ($subUnit as $su): ?>
-                                    <option value="<?= esc($su['su_id']) ?>" <?= old('sub_unit_id', $record['sub_unit_id'] ?? '') == $su['su_id'] ? 'selected' : '' ?>>
-                                        <?= esc($su['nama_sub_unit']) ?>
+                                    <option value="<?= esc($su['su_id']) ?>" <?= (!empty($record['sub_unit_id']) && $record['sub_unit_id'] == $su['su_id']) ? 'selected' : '' ?>>
+                                        <?= esc($su['nama_sub_unit']) ?> (<?= esc($su['kode_sub_unit']) ?>)
                                     </option>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -72,12 +72,13 @@
                                    required maxlength="30">
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3" style="position: relative;">
                             <label for="nama_ruangan">Nama Ruangan *</label>
                             <input type="text" name="nama_ruangan" id="nama_ruangan"
                                    class="form-control"
                                    value="<?= old('nama_ruangan', $record['nama_ruangan'] ?? '') ?>"
-                                   required maxlength="150">
+                                   required maxlength="150" autocomplete="off">
+                            <div id="suggestions" class="suggestions-box" style="display: none;"></div>
                         </div>
 
                         <div class="form-group mb-3">
@@ -150,7 +151,92 @@
     </div>
 </div>
 
+<style>
+.suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 9999;
+    margin-top: 2px;
+}
+
+.suggestion-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background-color: #f8f9fa;
+}
+</style>
+
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    var namaRuanganInput = document.getElementById('nama_ruangan');
+    var suggestionsBox = document.getElementById('suggestions');
+    var timeout = null;
+
+    namaRuanganInput.addEventListener('keyup', function () {
+        var keyword = this.value.trim();
+
+        clearTimeout(timeout);
+
+        if (keyword.length < 4) {
+            suggestionsBox.style.display = 'none';
+            suggestionsBox.innerHTML = '';
+            return;
+        }
+
+        timeout = setTimeout(function() {
+            fetch('<?= base_url("/master/ruangan/search") ?>?q=' + encodeURIComponent(keyword))
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    suggestionsBox.innerHTML = '';
+
+                    if (data.length === 0) {
+                        suggestionsBox.style.display = 'none';
+                        return;
+                    }
+
+                    data.forEach(function(item) {
+                        var div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        div.textContent = item.nama_ruangan + ' (' + item.kode_ruangan + ')';
+                        div.addEventListener('click', function () {
+                            namaRuanganInput.value = item.nama_ruangan;
+                            suggestionsBox.style.display = 'none';
+                        });
+                        suggestionsBox.appendChild(div);
+                    });
+
+                    suggestionsBox.style.display = 'block';
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    suggestionsBox.style.display = 'none';
+                });
+        }, 300);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('#nama_ruangan') && !e.target.closest('#suggestions')) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
+});
+
 document.getElementById('gedung_id').addEventListener('change', function() {
     var gedungId = this.value;
     var lantaiSelect = document.getElementById('lantai_id');
@@ -173,7 +259,7 @@ document.getElementById('gedung_id').addEventListener('change', function() {
 document.addEventListener('DOMContentLoaded', function() {
     var $pj = $('#penanggung_jawab_id_kpe');
     if ($pj.length) {
-        var initialData = <?= isset($pjData) && !empty($pjData) ? json_encode(['id' => $pjData['id_kpe'], 'text' => $pjData['nama_gelar'] . ' (' . $pjData['npk'] . ')']) : 'null' ?>;
+        var initialDataPj = <?= isset($pjData) && !empty($pjData) ? json_encode(['id' => $pjData['id_kpe'], 'text' => $pjData['nama_gelar'] . ' (' . $pjData['npk'] . ')']) : 'null' ?>;
         $pj.select2({
             theme: 'bootstrap-5',
             ajax: {
@@ -193,9 +279,97 @@ document.addEventListener('DOMContentLoaded', function() {
             allowClear: true,
             width: '100%',
             initSelection: function(element, callback) {
-                if (initialData) {
-                    callback(initialData);
+                if (initialDataPj) {
+                    callback(initialDataPj);
                 }
+            }
+        });
+    }
+
+    var gedungData = [
+        <?php if (!empty($gedung)): ?>
+            <?php foreach ($gedung as $g): ?>
+                { id: '<?= esc($g['gd_id']) ?>', text: '<?= esc($g['nama_gedung']) ?> (<?= esc($g['kode_gedung']) ?>)' },
+            <?php endforeach; ?>
+        <?php endif; ?>
+    ];
+
+    var subUnitData = [
+        <?php if (!empty($subUnit)): ?>
+            <?php foreach ($subUnit as $su): ?>
+                { id: '<?= esc($su['su_id']) ?>', text: '<?= esc($su['nama_sub_unit']) ?> (<?= esc($su['kode_sub_unit']) ?>)' },
+            <?php endforeach; ?>
+        <?php endif; ?>
+    ];
+
+    var $gedung = $('#gedung_id');
+    if ($gedung.length) {
+        $gedung.select2({
+            theme: 'bootstrap-5',
+            data: gedungData,
+            placeholder: 'Pilih Gedung atau ketik minimal 3 huruf',
+            allowClear: true,
+            width: '100%',
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (typeof data.text === 'undefined') {
+                    return null;
+                }
+                var term = params.term.toLowerCase();
+                var text = data.text.toLowerCase();
+                if (term.length < 3) {
+                    return data;
+                }
+                if (text.indexOf(term) > -1) {
+                    return data;
+                }
+                return null;
+            }
+        }).on('select2:select', function(e) {
+            var gedungId = e.params.data.id;
+            var lantaiSelect = document.getElementById('lantai_id');
+            lantaiSelect.innerHTML = '<option value="">Pilih Lantai</option>';
+            if (gedungId) {
+                fetch('<?= base_url('/master/lantai/by-gedung/') ?>' + gedungId)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(function(l) {
+                            var option = document.createElement('option');
+                            option.value = l.id;
+                            option.textContent = l.nama_lantai + ' (Lt.' + l.nomor_lantai + ')';
+                            lantaiSelect.appendChild(option);
+                        });
+                    });
+            }
+        });
+    }
+
+    var $subUnit = $('#sub_unit_id');
+    if ($subUnit.length) {
+        $subUnit.select2({
+            theme: 'bootstrap-5',
+            data: subUnitData,
+            placeholder: 'Pilih Sub Unit atau ketik minimal 3 huruf',
+            allowClear: true,
+            width: '100%',
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (typeof data.text === 'undefined') {
+                    return null;
+                }
+                var term = params.term.toLowerCase();
+                var text = data.text.toLowerCase();
+                if (term.length < 3) {
+                    return data;
+                }
+                if (text.indexOf(term) > -1) {
+                    return data;
+                }
+                return null;
             }
         });
     }

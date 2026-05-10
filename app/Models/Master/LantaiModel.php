@@ -19,7 +19,8 @@ class LantaiModel extends Model
         'nama_lantai',
         'nomor_lantai',
         'keterangan',
-        'is_active'
+        'is_active',
+        'deleted_at'
     ];
 
     /**

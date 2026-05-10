@@ -20,7 +20,8 @@ class GedungModel extends Model
         'alamat_ringkas',
         'jumlah_lantai',
         'keterangan',
-        'is_active'
+        'is_active',
+        'deleted_at'
     ];
 
     // Custom find with unit name

@@ -11,7 +11,7 @@ use App\Models\Master\TypeModel;
 use App\Models\Master\KondisiBarangModel;
 use App\Models\Master\SumberDanaModel;
 use App\Models\SubUnitModel;
-use App\Models\Reference\UnitKerjaReadOnlyModel;
+use App\Models\Reference\UnitKerjaAllowedModel;
 use App\Services\AssetNumberService;
 use CodeIgniter\Controller;
 
@@ -40,7 +40,7 @@ class AsetController extends Controller
         $this->kondisiModel = new KondisiBarangModel();
         $this->sumberDanaModel = new SumberDanaModel();
         $this->subUnitModel = new SubUnitModel();
-        $this->unitKerjaModel = new UnitKerjaReadOnlyModel();
+        $this->unitKerjaModel = new UnitKerjaAllowedModel();
         $this->assetNumberService = new AssetNumberService();
         helper(['form', 'url']);
     }
@@ -50,6 +50,7 @@ class AsetController extends Controller
         $search = $this->request->getGet('q');
         $status = $this->request->getGet('status');
         $kategori = $this->request->getGet('kategori_id');
+        $inputMode = $this->request->getGet('input_mode');
 
         $builder = db_connect()->table('aset_all_uir a');
 
@@ -70,6 +71,12 @@ class AsetController extends Controller
             $builder->where('a.kategori_id', $kategori);
         }
 
+        if (!empty($inputMode)) {
+            $builder->where('a.input_mode', $inputMode);
+        }
+
+        $builder->where('a.deleted_at', null);
+
         $total = $builder->countAllResults(false);
         $perPage = 20;
         $currentPage = (int) ($this->request->getGet('page') ?? 1);
@@ -78,12 +85,12 @@ class AsetController extends Controller
         $totalPages = $total > 0 ? ceil($total / $perPage) : 1;
 
         $records = $builder
-            ->select('a.*, ak.nama_kategori, ask.nama_sub_kategori, akb.nama_kondisi')
+            ->select('a.*, ak.nama_kategori, ask.nama_sub_kategori, akb.nama_kondisi, a.input_mode, a.batch_id')
             ->join('aset_kategori ak', 'ak.kt_id = a.kategori_id', 'left')
             ->join('aset_sub_kategori ask', 'ask.sk_id = a.sub_kategori_id', 'left')
             ->join('aset_kondisi_barang akb', 'akb.kd_id = a.kondisi_id', 'left')
             ->limit($perPage, $offset)
-            ->orderBy('a.created_at', 'DESC')
+            ->orderBy('a.updated_at', 'DESC')
             ->get()
             ->getResultArray();
 
@@ -95,6 +102,7 @@ class AsetController extends Controller
             'totalPages' => $totalPages,
             'search' => $search,
             'status' => $status,
+            'inputMode' => $inputMode,
             'kategoriFilter' => $kategori,
             'kategoriOptions' => $this->kategoriModel->where('is_active', 1)->orderBy('nama_kategori', 'ASC')->findAll(),
         ];
@@ -139,6 +147,7 @@ class AsetController extends Controller
             'nama_aset' => 'required|max_length[200]',
             'unit_kerja_id' => 'required|integer',
             'kondisi_id' => 'required|integer',
+            'sumber_dana_id' => 'required|integer',
         ];
 
         if (!empty($subKategori['wajib_merk'])) {
@@ -151,8 +160,22 @@ class AsetController extends Controller
             $rules['ruangan_id'] = 'required|integer';
         }
 
-        if (!$this->validate($rules)) {
+if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $namaAset = trim($this->request->getPost('nama_aset'));
+
+        $exists = $this->asetModel
+            ->where('nama_aset', $namaAset)
+            ->where('kategori_id', $kategoriId)
+            ->where('is_active', 1)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Aset "' . $namaAset . '" sudah pernah diinput pada Kategori ini.');
         }
 
         $golonganId = $this->request->getPost('golongan_id');
@@ -172,7 +195,7 @@ class AsetController extends Controller
             'all_id' => $allId,
             'nomor_aset_baru' => $nomorAsetBaru,
             'nomor_aset_lama' => $this->request->getPost('nomor_aset_lama') ?: null,
-            'nama_aset' => $this->request->getPost('nama_aset'),
+            'nama_aset' => $namaAset,
             'kategori_id' => $kategoriId,
             'sub_kategori_id' => $subKategoriId,
             'golongan_id' => $this->request->getPost('golongan_id') ?: null,
@@ -191,6 +214,8 @@ class AsetController extends Controller
             'nilai_perolehan' => $this->request->getPost('nilai_perolehan') ?: null,
             'status_aset' => $this->request->getPost('status_aset') ?: 'draft',
             'is_active' => 1,
+            'input_mode' => 'single',
+            'batch_id' => null,
         ];
 
         $this->asetModel->save($saveData);
@@ -244,6 +269,7 @@ class AsetController extends Controller
             'nama_aset' => 'required|max_length[200]',
             'unit_kerja_id' => 'required|integer',
             'kondisi_id' => 'required|integer',
+            'sumber_dana_id' => 'required|integer',
         ];
 
         if (!empty($subKategori['wajib_merk'])) {
@@ -260,8 +286,23 @@ class AsetController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $golonganId = $this->request->getPost('golongan_id');
         $kategoriId = (int) $this->request->getPost('kategori_id');
+        $namaAset = trim($this->request->getPost('nama_aset'));
+
+        $exists = $this->asetModel
+            ->where('nama_aset', $namaAset)
+            ->where('kategori_id', $kategoriId)
+            ->where('is_active', 1)
+            ->where('all_id !=', $id)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Aset "' . $namaAset . '" sudah pernah diinput pada Kategori ini.');
+        }
+
+        $golonganId = $this->request->getPost('golongan_id');
         if (!empty($golonganId)) {
             $golongan = $this->golonganModel->find($golonganId);
             $kategori = $this->kategoriModel->find($kategoriId);
@@ -272,8 +313,8 @@ class AsetController extends Controller
 
         $updateData = [
             'nomor_aset_lama' => $this->request->getPost('nomor_aset_lama') ?: null,
-            'nama_aset' => $this->request->getPost('nama_aset'),
-            'kategori_id' => (int) $this->request->getPost('kategori_id'),
+            'nama_aset' => $namaAset,
+            'kategori_id' => $kategoriId,
             'sub_kategori_id' => $subKategoriId,
             'golongan_id' => $this->request->getPost('golongan_id') ?: null,
             'merk_id' => $this->request->getPost('merk_id') ?: null,
@@ -300,14 +341,43 @@ class AsetController extends Controller
 
     public function delete($id)
     {
-        $record = $this->asetModel->find($id);
+        $record = $this->asetModel->withDeleted()->find($id);
         if (!$record) {
             return redirect()->to(base_url('/master/aset'))->with('error', 'Data tidak ditemukan.');
         }
 
-        $this->asetModel->update($id, ['is_active' => 0, 'status_aset' => 'dihapus']);
+        if ($record['is_active'] == 0 && $record['deleted_at'] !== null) {
+            return redirect()->to(base_url('/master/aset'))->with('error', 'Data sudah tidak aktif.');
+        }
+
+        $this->asetModel->withDeleted()->update($id, [
+            'is_active' => 0,
+            'status_aset' => 'dihapus',
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
 
         return redirect()->to(base_url('/master/aset'))->with('success', 'Aset berhasil dinonaktifkan.');
+    }
+
+    public function search()
+    {
+        $q = $this->request->getGet('q');
+        $kategoriId = $this->request->getGet('kategori_id');
+
+        if (!$q || strlen($q) < 4 || !$kategoriId) {
+            return $this->response->setJSON([]);
+        }
+
+        $results = $this->asetModel
+            ->select('all_id, nama_aset, nomor_aset_baru')
+            ->like('nama_aset', $q, 'both')
+            ->where('is_active', 1)
+            ->where('kategori_id', (int) $kategoriId)
+            ->orderBy('nama_aset', 'ASC')
+            ->findAll(10);
+
+        return $this->response->setJSON($results);
     }
 
     public function show($id)

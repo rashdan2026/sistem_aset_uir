@@ -45,7 +45,7 @@ class KondisiBarangController extends Controller
         }
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_kondisi_barang.level_kondisi', 'ASC')
+        $records = $builder->orderBy('aset_kondisi_barang.updated_at', 'DESC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 

@@ -619,8 +619,27 @@
                     ['url' => '/master/type',               'icon' => 'bi-speedometer',         'label' => 'Type',                'section' => null],
                     ['url' => '/master/kondisi-barang',    'icon' => 'bi-exclamation-triangle',  'label' => 'Kondisi',             'section' => null],
                     ['url' => '/master/sumber-dana',        'icon' => 'bi-cash-stack',           'label' => 'Sumber Dana',         'section' => null],
-                    ['url' => '/master/aset',               'icon' => 'bi-box-seam',             'label' => 'Registrasi Aset',     'section' => 'REGISTRASI ASET'],
+                    ['url' => '/master/aset',               'icon' => 'bi-box-seam',             'label' => 'Single Aset',         'section' => 'REGISTRASI ASET'],
+                    ['url' => '/master/bulk-aset/new',      'icon' => 'bi-layers',               'label' => 'Bulk Aset',           'section' => null],
                 ];
+
+                $userId = session('user_id');
+                $isAdmin = false;
+                if ($userId) {
+                    $role = db_connect()->table('sys_roles r')
+                        ->select('r.role_code')
+                        ->join('sys_user_roles ur', 'ur.role_id = r.id')
+                        ->where('ur.user_id', $userId)
+                        ->where('ur.is_active', 1)
+                        ->get()
+                        ->getRowArray();
+                    $isAdmin = $role && in_array($role['role_code'], ['super_admin', 'admin_aset_pusat']);
+                }
+
+                if ($isAdmin) {
+                    $sidebarMenu[] = ['url' => '/setting/user', 'icon' => 'bi-people', 'label' => 'Setting User', 'section' => 'SETTING'];
+                    $sidebarMenu[] = ['url' => '/setting/unit-kerja', 'icon' => 'bi-sliders', 'label' => 'Setting Unit Kerja', 'section' => null];
+                }
 
                 function isMenuActive($menuUrl, $currentPath) {
                     $menuPath = '/' . trim($menuUrl, '/');

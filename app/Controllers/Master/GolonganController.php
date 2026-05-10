@@ -49,7 +49,7 @@ class GolonganController extends Controller
         }
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_golongan.kode_golongan', 'ASC')
+        $records = $builder->orderBy('aset_golongan.updated_at', 'DESC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 
@@ -99,9 +99,22 @@ class GolonganController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $namaGolongan = trim($this->request->getPost('nama_golongan'));
+
+        $exists = $this->model
+            ->where('nama_golongan', $namaGolongan)
+            ->where('is_active', 1)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Golongan "' . $namaGolongan . '" sudah pernah diinput.');
+        }
+
         $this->model->save([
             'kode_golongan' => $this->request->getPost('kode_golongan'),
-            'nama_golongan' => $this->request->getPost('nama_golongan'),
+            'nama_golongan' => $namaGolongan,
             'kelompok' => $this->request->getPost('kelompok'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
@@ -136,9 +149,23 @@ class GolonganController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $namaGolongan = trim($this->request->getPost('nama_golongan'));
+
+        $exists = $this->model
+            ->where('nama_golongan', $namaGolongan)
+            ->where('is_active', 1)
+            ->where('gl_id !=', $id)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Golongan "' . $namaGolongan . '" sudah pernah diinput.');
+        }
+
         $this->model->update($id, [
             'kode_golongan' => $this->request->getPost('kode_golongan'),
-            'nama_golongan' => $this->request->getPost('nama_golongan'),
+            'nama_golongan' => $namaGolongan,
             'kelompok' => $this->request->getPost('kelompok'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,
@@ -156,5 +183,23 @@ class GolonganController extends Controller
 
         $this->model->update($id, ['is_active' => 0]);
         return redirect()->to(base_url('/master/golongan'))->with('success', 'Golongan berhasil dihapus.');
+    }
+
+    public function search()
+    {
+        $q = $this->request->getGet('q');
+
+        if (!$q || strlen($q) < 4) {
+            return $this->response->setJSON([]);
+        }
+
+        $results = $this->model
+            ->select('gl_id, nama_golongan, kode_golongan')
+            ->like('nama_golongan', $q, 'both')
+            ->where('is_active', 1)
+            ->orderBy('nama_golongan', 'ASC')
+            ->findAll(10);
+
+        return $this->response->setJSON($results);
     }
 }

@@ -48,8 +48,10 @@ class KategoriController extends Controller
             $builder->where('aset_kategori.is_active', 1);
         }
 
+        $builder->where('aset_kategori.deleted_at', null);
+
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_kategori.kode_kategori', 'ASC')
+        $records = $builder->orderBy('aset_kategori.updated_at', 'DESC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 
@@ -105,9 +107,22 @@ class KategoriController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $namaKategori = trim($this->request->getPost('nama_kategori'));
+
+        $exists = $this->kategoriModel
+            ->where('nama_kategori', $namaKategori)
+            ->where('is_active', 1)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Kategori "' . $namaKategori . '" sudah pernah diinput.');
+        }
+
         $this->kategoriModel->save([
             'kode_kategori' => $this->request->getPost('kode_kategori'),
-            'nama_kategori' => $this->request->getPost('nama_kategori'),
+            'nama_kategori' => $namaKategori,
             'jenis_aset' => $this->request->getPost('jenis_aset'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
@@ -148,9 +163,23 @@ class KategoriController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $namaKategori = trim($this->request->getPost('nama_kategori'));
+
+        $exists = $this->kategoriModel
+            ->where('nama_kategori', $namaKategori)
+            ->where('is_active', 1)
+            ->where('kt_id !=', $id)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Kategori "' . $namaKategori . '" sudah pernah diinput.');
+        }
+
         $this->kategoriModel->update($id, [
             'kode_kategori' => $this->request->getPost('kode_kategori'),
-            'nama_kategori' => $this->request->getPost('nama_kategori'),
+            'nama_kategori' => $namaKategori,
             'jenis_aset' => $this->request->getPost('jenis_aset'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,
@@ -162,14 +191,39 @@ class KategoriController extends Controller
 
     public function delete($id)
     {
-        $kategori = $this->kategoriModel->find($id);
+        $kategori = $this->kategoriModel->withDeleted()->find($id);
         if (!$kategori) {
             return redirect()->to(base_url('/master/kategori'))->with('error', 'Data kategori tidak ditemukan.');
         }
 
-        $this->kategoriModel->delete($id);
-        $this->kategoriModel->update($id, ['is_active' => 0]);
+        if ($kategori['is_active'] == 0 && $kategori['deleted_at'] !== null) {
+            return redirect()->to(base_url('/master/kategori'))->with('error', 'Data sudah tidak aktif.');
+        }
+
+        $this->kategoriModel->withDeleted()->update($id, [
+            'is_active' => 0,
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
 
         return redirect()->to(base_url('/master/kategori'))->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    public function search()
+    {
+        $q = $this->request->getGet('q');
+
+        if (!$q || strlen($q) < 4) {
+            return $this->response->setJSON([]);
+        }
+
+        $results = $this->kategoriModel
+            ->select('kt_id, nama_kategori, kode_kategori')
+            ->like('nama_kategori', $q, 'both')
+            ->where('is_active', 1)
+            ->orderBy('nama_kategori', 'ASC')
+            ->findAll(10);
+
+        return $this->response->setJSON($results);
     }
 }

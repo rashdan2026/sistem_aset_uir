@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\Reference\UnitKerjaReadOnlyModel;
+use App\Models\Reference\UnitKerjaAllowedModel;
 use App\Models\SubUnitModel;
 use App\Models\GedungModel;
 use App\Models\Master\RuanganModel;
@@ -13,7 +13,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $unitKerjaModel = new UnitKerjaReadOnlyModel();
+        $unitKerjaModel = new UnitKerjaAllowedModel();
         $subUnitModel = new SubUnitModel();
         $gedungModel = new GedungModel();
         $ruanganModel = new RuanganModel();

@@ -17,7 +17,8 @@ class KategoriModel extends Model
         'nama_kategori',
         'jenis_aset',
         'keterangan',
-        'is_active'
+        'is_active',
+        'deleted_at'
     ];
 
     /**

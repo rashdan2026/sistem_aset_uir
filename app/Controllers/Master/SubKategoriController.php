@@ -59,8 +59,10 @@ class SubKategoriController extends Controller
             $builder->where('aset_sub_kategori.is_active', 1);
         }
 
+        $builder->where('aset_sub_kategori.deleted_at', null);
+
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_sub_kategori.kode_sub_kategori', 'ASC')
+        $records = $builder->orderBy('aset_sub_kategori.updated_at', 'DESC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 
@@ -106,10 +108,23 @@ class SubKategoriController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $namaSubKategori = trim($this->request->getPost('nama_sub_kategori'));
+
+        $exists = $this->model
+            ->where('nama_sub_kategori', $namaSubKategori)
+            ->where('is_active', 1)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Sub Kategori "' . $namaSubKategori . '" sudah pernah diinput.');
+        }
+
         $this->model->save([
             'kategori_id' => $this->request->getPost('kategori_id'),
             'kode_sub_kategori' => $this->request->getPost('kode_sub_kategori'),
-            'nama_sub_kategori' => $this->request->getPost('nama_sub_kategori'),
+            'nama_sub_kategori' => $namaSubKategori,
             'wajib_merk' => $this->request->getPost('wajib_merk') ? 1 : 0,
             'wajib_type' => $this->request->getPost('wajib_type') ? 1 : 0,
             'wajib_ruangan' => $this->request->getPost('wajib_ruangan') ? 1 : 0,
@@ -167,11 +182,39 @@ class SubKategoriController extends Controller
 
     public function delete($id)
     {
-        $record = $this->model->find($id);
+        $record = $this->model->withDeleted()->find($id);
         if (!$record) {
             return redirect()->to(base_url('/master/sub-kategori'))->with('error', 'Data tidak ditemukan.');
         }
-        $this->model->delete($id);
+
+        if ($record['is_active'] == 0 && $record['deleted_at'] !== null) {
+            return redirect()->to(base_url('/master/sub-kategori'))->with('error', 'Data sudah tidak aktif.');
+        }
+
+        $this->model->withDeleted()->update($id, [
+            'is_active' => 0,
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
         return redirect()->to(base_url('/master/sub-kategori'))->with('success', 'Sub Kategori berhasil dihapus.');
+    }
+
+    public function search()
+    {
+        $q = $this->request->getGet('q');
+
+        if (!$q || strlen($q) < 4) {
+            return $this->response->setJSON([]);
+        }
+
+        $results = $this->model
+            ->select('sk_id, nama_sub_kategori, kode_sub_kategori')
+            ->like('nama_sub_kategori', $q, 'both')
+            ->where('is_active', 1)
+            ->orderBy('nama_sub_kategori', 'ASC')
+            ->findAll(10);
+
+        return $this->response->setJSON($results);
     }
 }
