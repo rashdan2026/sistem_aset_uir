@@ -23,7 +23,8 @@ class RuanganModel extends Model
         'kapasitas',
         'luas_m2',
         'keterangan',
-        'is_active'
+        'is_active',
+        'deleted_at'
     ];
 
     /**

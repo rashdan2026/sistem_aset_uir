@@ -3,7 +3,7 @@
 namespace App\Controllers\Master;
 
 use App\Models\SubUnitModel;
-use App\Models\Reference\UnitKerjaReadOnlyModel;
+use App\Models\Reference\UnitKerjaAllowedModel;
 use App\Controllers\Master\Traits\SearchFilterTrait;
 use CodeIgniter\Controller;
 
@@ -17,7 +17,7 @@ class SubUnitController extends Controller
     public function __construct()
     {
         $this->subUnitModel = new SubUnitModel();
-        $this->unitKerjaModel = new UnitKerjaReadOnlyModel();
+        $this->unitKerjaModel = new UnitKerjaAllowedModel();
         helper(['form', 'url']);
     }
 
@@ -65,9 +65,10 @@ class SubUnitController extends Controller
             $builder->where('aset_sub_units.is_active', 1);
         }
 
+        $builder->where('aset_sub_units.deleted_at', null);
+
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('tbl_unit_kerja.nama_unit', 'ASC')
-            ->orderBy('aset_sub_units.nama_sub_unit', 'ASC')
+        $records = $builder->orderBy('aset_sub_units.updated_at', 'DESC')
             ->get($perPage, $offset)
             ->getResultArray();
 
@@ -134,10 +135,23 @@ class SubUnitController extends Controller
             return redirect()->back()->withInput()->with('errors', ['kode_sub_unit' => 'Kode sub unit sudah digunakan dalam unit kerja ini.']);
         }
 
+        $namaSubUnit = trim($this->request->getPost('nama_sub_unit'));
+
+        $exists = $this->subUnitModel
+            ->where('nama_sub_unit', $namaSubUnit)
+            ->where('is_active', 1)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Sub Unit "' . $namaSubUnit . '" sudah pernah diinput.');
+        }
+
         $data = [
             'unit_kerja_id' => $unitKerjaId,
             'kode_sub_unit' => $kodeSubUnit,
-            'nama_sub_unit' => $this->request->getPost('nama_sub_unit'),
+            'nama_sub_unit' => $namaSubUnit,
             'jenis_sub_unit' => $this->request->getPost('jenis_sub_unit'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
@@ -208,15 +222,40 @@ class SubUnitController extends Controller
 
     public function delete($id)
     {
-        $subUnit = $this->subUnitModel->find($id);
+        $subUnit = $this->subUnitModel->withDeleted()->find($id);
 
         if (!$subUnit) {
             return redirect()->back()->with('error', 'Data sub unit tidak ditemukan.');
         }
 
-        $this->subUnitModel->delete($id);
-        $this->subUnitModel->update($id, ['is_active' => 0]);
+        if ($subUnit['is_active'] == 0 && $subUnit['deleted_at'] !== null) {
+            return redirect()->back()->with('error', 'Data sudah tidak aktif.');
+        }
+
+        $this->subUnitModel->withDeleted()->update($id, [
+            'is_active' => 0,
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
 
         return redirect()->to(base_url('/master/sub-units'))->with('success', 'Sub Unit berhasil dihapus.');
+    }
+
+    public function search()
+    {
+        $q = $this->request->getGet('q');
+
+        if (!$q || strlen($q) < 4) {
+            return $this->response->setJSON([]);
+        }
+
+        $results = $this->subUnitModel
+            ->select('su_id, nama_sub_unit, kode_sub_unit')
+            ->like('nama_sub_unit', $q, 'both')
+            ->where('is_active', 1)
+            ->orderBy('nama_sub_unit', 'ASC')
+            ->findAll(10);
+
+        return $this->response->setJSON($results);
     }
 }

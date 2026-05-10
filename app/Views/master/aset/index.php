@@ -13,7 +13,10 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Daftar Aset (<?= number_format($total) ?> data)</h6>
-            <a href="<?= base_url('/master/aset/new') ?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Registrasi Aset Baru</a>
+            <div>
+                <a href="<?= base_url('/master/aset/new') ?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Single Aset</a>
+                <a href="<?= base_url('/master/bulk-aset/new') ?>" class="btn btn-warning btn-sm"><i class="bi bi-layers"></i> Bulk Aset</a>
+            </div>
         </div>
         <div class="card-body">
             <form method="get" class="mb-4">
@@ -29,6 +32,13 @@
                             <option value="nonaktif" <?= ($status ?? '') === 'nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
                             <option value="hilang" <?= ($status ?? '') === 'hilang' ? 'selected' : '' ?>>Hilang</option>
                             <option value="dihapus" <?= ($status ?? '') === 'dihapus' ? 'selected' : '' ?>>Dihapus</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select name="input_mode" class="form-control">
+                            <option value="">Semua Mode</option>
+                            <option value="single" <?= ($inputMode ?? '') === 'single' ? 'selected' : '' ?>>Single</option>
+                            <option value="bulk" <?= ($inputMode ?? '') === 'bulk' ? 'selected' : '' ?>>Bulk</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -57,6 +67,7 @@
                             <th>Kategori</th>
                             <th>Sub Kategori</th>
                             <th>Kondisi</th>
+                            <th>Mode</th>
                             <th>Status</th>
                             <th width="120">Aksi</th>
                         </tr>
@@ -70,6 +81,16 @@
                                     <td><?= esc($row['nama_kategori'] ?? '-') ?></td>
                                     <td><?= esc($row['nama_sub_kategori'] ?? '-') ?></td>
                                     <td><?= esc($row['nama_kondisi'] ?? '-') ?></td>
+                                    <td>
+                                        <?php if (($row['input_mode'] ?? 'single') === 'bulk'): ?>
+                                            <span class="badge bg-warning text-dark">Bulk</span>
+                                            <?php if (!empty($row['batch_id'])): ?>
+                                                <br><small class="text-muted" title="Batch ID"><?= esc(substr($row['batch_id'], 0, 20)) ?></small>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <span class="badge bg-info">Single</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <td>
                                         <?php
                                             $badgeClass = match($row['status_aset'] ?? 'draft') {
@@ -104,8 +125,8 @@
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="7" class="text-center text-muted py-4">
-                                    <?php if (!empty($search) || !empty($status) || !empty($kategoriFilter)): ?>
+                                <td colspan="8" class="text-center text-muted py-4">
+<?php if (!empty($search) || !empty($status) || !empty($kategoriFilter) || !empty($inputMode)): ?>
                                         Tidak ada hasil untuk pencarian tersebut.
                                     <?php else: ?>
                                         Belum ada data aset. <a href="<?= base_url('/master/aset/new') ?>">Registrasi aset pertama</a>
@@ -123,6 +144,7 @@
             if (!empty($search)) $searchParam .= '&q=' . urlencode($search);
             if (!empty($status)) $searchParam .= '&status=' . urlencode($status);
             if (!empty($kategoriFilter)) $searchParam .= '&kategori_id=' . urlencode($kategoriFilter);
+            if (!empty($inputMode)) $searchParam .= '&input_mode=' . urlencode($inputMode);
             $window = 2;
             $start = max(1, $currentPage - $window);
             $end = min($totalPages, $currentPage + $window);

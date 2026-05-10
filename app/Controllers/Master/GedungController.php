@@ -4,7 +4,7 @@ namespace App\Controllers\Master;
 
 use App\Models\GedungModel;
 use App\Models\Master\LantaiModel;
-use App\Models\Reference\UnitKerjaReadOnlyModel;
+use App\Models\Reference\UnitKerjaAllowedModel;
 use App\Controllers\Master\Traits\SearchFilterTrait;
 use CodeIgniter\Controller;
 
@@ -19,7 +19,7 @@ class GedungController extends Controller
     public function __construct()
     {
         $this->gedungModel = new GedungModel();
-        $this->unitKerjaModel = new UnitKerjaReadOnlyModel();
+        $this->unitKerjaModel = new UnitKerjaAllowedModel();
         $this->lantaiModel = new LantaiModel();
         helper(['form', 'url']);
     }
@@ -68,9 +68,10 @@ class GedungController extends Controller
             $builder->where('aset_gedung.is_active', 1);
         }
 
+        $builder->where('aset_gedung.deleted_at', null);
+
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('tbl_unit_kerja.nama_unit', 'ASC')
-            ->orderBy('aset_gedung.nama_gedung', 'ASC')
+        $records = $builder->orderBy('aset_gedung.updated_at', 'DESC')
             ->get($perPage, $offset)
             ->getResultArray();
 
@@ -224,14 +225,21 @@ class GedungController extends Controller
 
     public function delete($id)
     {
-        $gedung = $this->gedungModel->find($id);
+        $gedung = $this->gedungModel->withDeleted()->find($id);
 
         if (!$gedung) {
             return redirect()->back()->with('error', 'Data gedung tidak ditemukan.');
         }
 
-        $this->gedungModel->delete($id);
-        $this->gedungModel->update($id, ['is_active' => 0]);
+        if ($gedung['is_active'] == 0 && $gedung['deleted_at'] !== null) {
+            return redirect()->back()->with('error', 'Data sudah tidak aktif.');
+        }
+
+        $this->gedungModel->withDeleted()->update($id, [
+            'is_active' => 0,
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
 
         return redirect()->to(base_url('/master/gedung'))->with('success', 'Gedung berhasil dihapus.');
     }

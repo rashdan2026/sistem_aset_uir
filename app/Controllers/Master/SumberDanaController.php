@@ -45,7 +45,7 @@ class SumberDanaController extends Controller
         }
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_sumber_dana.kode_sumber_dana', 'ASC')
+        $records = $builder->orderBy('aset_sumber_dana.updated_at', 'DESC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 

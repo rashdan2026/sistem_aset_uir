@@ -95,10 +95,10 @@ class RuanganController extends Controller
             $builder->where('aset_ruangan.is_active', 1);
         }
 
+        $builder->where('aset_ruangan.deleted_at', null);
+
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_gedung.nama_gedung', 'ASC')
-            ->orderBy('aset_lantai.nomor_lantai', 'ASC')
-            ->orderBy('aset_ruangan.nama_ruangan', 'ASC')
+        $records = $builder->orderBy('aset_ruangan.updated_at', 'DESC')
             ->get($perPage, $offset)
             ->getResultArray();
 
@@ -145,11 +145,24 @@ class RuanganController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $namaRuangan = trim($this->request->getPost('nama_ruangan'));
+
+        $exists = $this->model
+            ->where('nama_ruangan', $namaRuangan)
+            ->where('is_active', 1)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Ruangan "' . $namaRuangan . '" sudah pernah diinput.');
+        }
+
         $this->model->save([
             'lantai_id' => $this->request->getPost('lantai_id'),
             'sub_unit_id' => $this->request->getPost('sub_unit_id'),
             'kode_ruangan' => $this->request->getPost('kode_ruangan'),
-            'nama_ruangan' => $this->request->getPost('nama_ruangan'),
+            'nama_ruangan' => $namaRuangan,
             'jenis_ruangan' => $this->request->getPost('jenis_ruangan'),
             'penanggung_jawab_id_kpe' => $this->request->getPost('penanggung_jawab_id_kpe') ?: null,
             'kapasitas' => $this->request->getPost('kapasitas') ?: null,
@@ -180,6 +193,22 @@ class RuanganController extends Controller
             $pjData = $this->pjModel->getById($record['penanggung_jawab_id_kpe']);
         }
 
+        $gedungSelectedText = null;
+        if ($gedungId) {
+            $gedung = $this->gedungModel->find($gedungId);
+            if ($gedung) {
+                $gedungSelectedText = $gedung['nama_gedung'] . ' (' . $gedung['kode_gedung'] . ')';
+            }
+        }
+
+        $subUnitSelectedText = null;
+        if (!empty($record['sub_unit_id'])) {
+            $subUnit = $this->subUnitModel->find($record['sub_unit_id']);
+            if ($subUnit) {
+                $subUnitSelectedText = $subUnit['nama_sub_unit'] . ' (' . $subUnit['kode_sub_unit'] . ')';
+            }
+        }
+
         $data = [
             'title' => 'Edit Ruangan',
             'record' => $record,
@@ -187,6 +216,8 @@ class RuanganController extends Controller
             'lantai' => $gedungId ? $this->lantaiModel->where('gedung_id', $gedungId)->where('is_active', 1)->orderBy('nomor_lantai', 'ASC')->findAll() : [],
             'subUnit' => $this->subUnitModel->where('is_active', 1)->orderBy('nama_sub_unit', 'ASC')->findAll(),
             'pjData' => $pjData,
+            'gedungSelectedText' => $gedungSelectedText,
+            'subUnitSelectedText' => $subUnitSelectedText,
             'jenisRuanganOptions' => $this->model->getJenisRuanganOptions(),
         ];
         return view('master/ruangan/form', $data);
@@ -229,12 +260,39 @@ class RuanganController extends Controller
 
     public function delete($id)
     {
-        $record = $this->model->find($id);
+        $record = $this->model->withDeleted()->find($id);
         if (!$record) {
             return redirect()->to(base_url('/master/ruangan'))->with('error', 'Data tidak ditemukan.');
         }
-        $this->model->delete($id);
-        $this->model->update($id, ['is_active' => 0]);
+
+        if ($record['is_active'] == 0 && $record['deleted_at'] !== null) {
+            return redirect()->to(base_url('/master/ruangan'))->with('error', 'Data sudah tidak aktif.');
+        }
+
+        $this->model->withDeleted()->update($id, [
+            'is_active' => 0,
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
         return redirect()->to(base_url('/master/ruangan'))->with('success', 'Ruangan berhasil dihapus.');
+    }
+
+    public function search()
+    {
+        $q = $this->request->getGet('q');
+
+        if (!$q || strlen($q) < 4) {
+            return $this->response->setJSON([]);
+        }
+
+        $results = $this->model
+            ->select('rg_id, nama_ruangan, kode_ruangan')
+            ->like('nama_ruangan', $q, 'both')
+            ->where('is_active', 1)
+            ->orderBy('nama_ruangan', 'ASC')
+            ->findAll(10);
+
+        return $this->response->setJSON($results);
     }
 }

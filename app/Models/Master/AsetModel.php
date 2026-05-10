@@ -37,7 +37,9 @@ class AsetModel extends Model
         'nilai_perolehan',
         'status_aset',
         'is_active',
-        'deleted_at'
+        'deleted_at',
+        'input_mode',
+        'batch_id'
     ];
 
     /**

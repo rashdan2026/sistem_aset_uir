@@ -66,9 +66,10 @@ class LantaiController extends Controller
             $builder->where('aset_lantai.is_active', 1);
         }
 
+        $builder->where('aset_lantai.deleted_at', null);
+
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_gedung.nama_gedung', 'ASC')
-            ->orderBy('aset_lantai.nomor_lantai', 'ASC')
+        $records = $builder->orderBy('aset_lantai.updated_at', 'DESC')
             ->get($perPage, $offset)
             ->getResultArray();
 
@@ -179,9 +180,13 @@ class LantaiController extends Controller
 
     public function delete($id)
     {
-        $record = $this->model->find($id);
+        $record = $this->model->withDeleted()->find($id);
         if (!$record) {
             return redirect()->to(base_url('/master/lantai'))->with('error', 'Data tidak ditemukan.');
+        }
+
+        if ($record['is_active'] == 0 && $record['deleted_at'] !== null) {
+            return redirect()->to(base_url('/master/lantai'))->with('error', 'Data sudah tidak aktif.');
         }
 
         $db = \Config\Database::connect();
@@ -197,8 +202,11 @@ class LantaiController extends Controller
                 ]);
             }
 
-            $this->model->delete($id);
-            $this->model->update($id, ['is_active' => 0]);
+            $this->model->withDeleted()->update($id, [
+                'is_active' => 0,
+                'deleted_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
 
             $db->transCommit();
             return redirect()->to(base_url('/master/lantai'))->with('success', 'Lantai berhasil dihapus.');

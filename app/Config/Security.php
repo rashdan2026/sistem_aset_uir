@@ -70,8 +70,12 @@ class Security extends BaseConfig
      * --------------------------------------------------------------------------
      *
      * Regenerate CSRF Token on every submission.
+     *
+     * NOTE: Disabled because AJAX requests send token via header which doesn't
+     * update the cookie automatically. With regenerate=true, the token can become
+     * stale between requests causing legitimate requests to fail CSRF validation.
      */
-    public bool $regenerate = true;
+    public bool $regenerate = false;
 
     /**
      * --------------------------------------------------------------------------

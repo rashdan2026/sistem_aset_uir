@@ -26,11 +26,13 @@
                             <label for="gedung_id">Gedung *</label>
                             <select name="gedung_id" id="gedung_id" class="form-control" required>
                                 <option value="">Pilih Gedung</option>
-                                <?php foreach ($gedung as $g): ?>
-                                <option value="<?= esc($g['gd_id']) ?>" <?= old('gedung_id', $record['gedung_id'] ?? '') == $g['gd_id'] ? 'selected' : '' ?>>
-                                    <?= esc($g['nama_gedung']) ?>
-                                </option>
-                                <?php endforeach; ?>
+                                <?php if (!empty($gedung)): ?>
+                                    <?php foreach ($gedung as $g): ?>
+                                    <option value="<?= esc($g['gd_id']) ?>" <?= (!empty($record['gedung_id']) && $record['gedung_id'] == $g['gd_id']) ? 'selected' : '' ?>>
+                                        <?= esc($g['nama_gedung']) ?> (<?= esc($g['kode_gedung']) ?>)
+                                    </option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </select>
                         </div>
 
@@ -84,4 +86,44 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var gedungData = [
+        <?php if (!empty($gedung)): ?>
+            <?php foreach ($gedung as $g): ?>
+                { id: '<?= esc($g['gd_id']) ?>', text: '<?= esc($g['nama_gedung']) ?> (<?= esc($g['kode_gedung']) ?>)' },
+            <?php endforeach; ?>
+        <?php endif; ?>
+    ];
+
+    var $gedung = $('#gedung_id');
+    if ($gedung.length) {
+        $gedung.select2({
+            theme: 'bootstrap-5',
+            data: gedungData,
+            placeholder: 'Pilih Gedung atau ketik minimal 3 huruf',
+            allowClear: true,
+            width: '100%',
+            matcher: function(params, data) {
+                if ($.trim(params.term) === '') {
+                    return data;
+                }
+                if (typeof data.text === 'undefined') {
+                    return null;
+                }
+                var term = params.term.toLowerCase();
+                var text = data.text.toLowerCase();
+                if (term.length < 3) {
+                    return data;
+                }
+                if (text.indexOf(term) > -1) {
+                    return data;
+                }
+                return null;
+            }
+        });
+    }
+});
+</script>
 <?php $this->endSection() ?>

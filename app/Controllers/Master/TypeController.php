@@ -60,7 +60,7 @@ class TypeController extends Controller
         }
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_type.kode_type', 'ASC')
+        $records = $builder->orderBy('aset_type.updated_at', 'DESC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 
@@ -105,10 +105,23 @@ class TypeController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $namaType = trim($this->request->getPost('nama_type'));
+
+        $exists = $this->model
+            ->where('nama_type', $namaType)
+            ->where('is_active', 1)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Type "' . $namaType . '" sudah pernah diinput.');
+        }
+
         $this->model->save([
             'merk_id' => $this->request->getPost('merk_id') ?: null,
             'kode_type' => $this->request->getPost('kode_type'),
-            'nama_type' => $this->request->getPost('nama_type'),
+            'nama_type' => $namaType,
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
@@ -146,10 +159,24 @@ class TypeController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $namaType = trim($this->request->getPost('nama_type'));
+
+        $exists = $this->model
+            ->where('nama_type', $namaType)
+            ->where('is_active', 1)
+            ->where('ty_id !=', $id)
+            ->first();
+
+        if ($exists) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Nama Type "' . $namaType . '" sudah pernah diinput.');
+        }
+
         $this->model->update($id, [
             'merk_id' => $this->request->getPost('merk_id') ?: null,
             'kode_type' => $this->request->getPost('kode_type'),
-            'nama_type' => $this->request->getPost('nama_type'),
+            'nama_type' => $namaType,
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,
         ]);
@@ -165,5 +192,23 @@ class TypeController extends Controller
         }
         $this->model->update($id, ['is_active' => 0]);
         return redirect()->to(base_url('/master/type'))->with('success', 'Type berhasil dihapus.');
+    }
+
+    public function search()
+    {
+        $q = $this->request->getGet('q');
+
+        if (!$q || strlen($q) < 4) {
+            return $this->response->setJSON([]);
+        }
+
+        $results = $this->model
+            ->select('ty_id, nama_type, kode_type')
+            ->like('nama_type', $q, 'both')
+            ->where('is_active', 1)
+            ->orderBy('nama_type', 'ASC')
+            ->findAll(10);
+
+        return $this->response->setJSON($results);
     }
 }
