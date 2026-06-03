@@ -296,6 +296,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initAsetAutocomplete();
 });
 
+// Simpan nilai awal untuk Merk dan Type saat edit (sebelum Select2 mengoverride)
+var initialMerkId = <?= $isEdit && !empty($record['merk_id']) ? json_encode((string)$record['merk_id']) : 'null' ?>;
+var savedTypeId = <?= $isEdit && !empty($record['type_id']) ? json_encode((string)$record['type_id']) : 'null' ?>;
+
 function loadSubKategori() {
     var kategoriId = document.getElementById('kategori_id').value;
     var subKategoriSelect = document.getElementById('sub_kategori_id');
@@ -540,7 +544,47 @@ function initSelect2() {
                 return null;
             }
         });
+
+        // Saat edit, set nilai awal Merk dan Type yang tersimpan
+        if (initialMerkId !== null) {
+            // Set nilai Select2 secara diam (tanpa trigger change agar tidak balapan)
+            $merk.val(initialMerkId);
+
+            // Load dan pilih Type yang tersimpan di record
+            loadTypeForInitialMerk(initialMerkId);
+        }
     }
+}
+
+// Load Type untuk merk awal SAAT EDIT saja (bukan karena user ganti merk)
+function loadTypeForInitialMerk(merkId) {
+    var typeSelect = document.getElementById('type_id');
+    typeSelect.innerHTML = '<option value="">Memuat...</option>';
+
+    if (!merkId) {
+        typeSelect.innerHTML = '<option value="">-- Pilih Type --</option>';
+        return;
+    }
+
+    fetch('<?= base_url('/master/aset/get-type/') ?>' + merkId)
+        .then(r => r.json())
+        .then(data => {
+            typeSelect.innerHTML = '<option value="">-- Pilih Type --</option>';
+            data.forEach(function(t) {
+                var opt = document.createElement('option');
+                opt.value = t.ty_id;
+                opt.textContent = t.nama_type;
+                typeSelect.appendChild(opt);
+            });
+
+            // Pilih Type yang tersimpan di record
+            if (savedTypeId !== null) {
+                var existingOpt = typeSelect.querySelector('option[value="' + savedTypeId + '"]');
+                if (existingOpt) {
+                    typeSelect.value = savedTypeId;
+                }
+            }
+        });
 }
 
 function initAsetAutocomplete() {

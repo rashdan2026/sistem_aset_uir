@@ -37,7 +37,8 @@
                         
                         <div class="form-group mb-3">
                             <label for="unit_kerja_id">Unit Kerja *</label>
-                            <select name="unit_kerja_id" id="unit_kerja_id" class="form-control select2-search" data-placeholder="Ketik nama unit (min. 3 karakter)" required>
+                            <select name="unit_kerja_id" id="unit_kerja_id" class="form-control" required>
+                                <option value="">-- Pilih Unit Kerja --</option>
                                 <?php if (!empty($unitKerja)): ?>
                                     <?php foreach ($unitKerja as $uk): ?>
                                         <option value="<?= esc($uk['id_unit_kerja']) ?>" <?= (old('unit_kerja_id', $subUnit['unit_kerja_id'] ?? '') == $uk['id_unit_kerja'] ? 'selected' : '') ?>>
@@ -133,28 +134,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    $('#unit_kerja_id').select2({
-        theme: 'bootstrap-5',
-        ajax: {
-            url: '<?= base_url('/search/unit-kerja') ?>',
-            dataType: 'json',
-            delay: 300,
-            data: function(params) {
-                return {
-                    q: params.term,
-                    limit: 20
-                };
-            },
-            processResults: function(data) {
-                return { results: data };
-            },
-            cache: true
-        },
-        minimumInputLength: 3,
-        placeholder: 'Ketik nama unit (min. 3 karakter)',
-        allowClear: true
-    });
-
     var input = document.getElementById('nama_sub_unit');
     var suggestionsBox = document.getElementById('suggestions');
     var timeout = null;
