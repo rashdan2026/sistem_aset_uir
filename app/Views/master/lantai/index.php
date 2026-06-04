@@ -50,12 +50,12 @@
                     <thead>
                         <tr>
                             <th width="40">No</th>
-                            <th>Kode</th>
                             <th>Nama Lantai</th>
                             <th>Nomor</th>
                             <th>Gedung</th>
                             <th>Unit Kerja</th>
                             <th>Status</th>
+                            <th>Kode</th>
                             <th width="120">Aksi</th>
                         </tr>
                     </thead>
@@ -64,7 +64,6 @@
                         <?php $no = 1; foreach ($records as $r): ?>
                         <tr>
                             <td><?= $no++ ?></td>
-                            <td><?= esc($r['kode_lantai']) ?></td>
                             <td><?= esc($r['nama_lantai']) ?></td>
                             <td><?= esc($r['nomor_lantai']) ?></td>
                             <td><?= esc($r['nama_gedung'] ?? '-') ?></td>
@@ -76,6 +75,7 @@
                                     <span class="badge bg-secondary">Tidak Aktif</span>
                                 <?php endif; ?>
                             </td>
+                            <td><?= esc($r['kode_lantai']) ?></td>
                             <td>
                                 <div class="action-btn-group">
                                     <a href="<?= base_url('/master/lantai/' . $r['lt_id'] . '/edit') ?>" class="icon-btn edit-btn" title="Edit">

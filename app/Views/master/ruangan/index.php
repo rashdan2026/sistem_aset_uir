@@ -71,11 +71,11 @@
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Kode</th>
                             <th>Nama Ruangan</th>
                             <th>Gedung / Lantai</th>
                             <th>Sub Unit</th>
                             <th>PJ</th>
+                            <th>Kode</th>
                             <th width="100">Aksi</th>
                         </tr>
                     </thead>
@@ -83,7 +83,6 @@
                         <?php if (!empty($records)): ?>
                         <?php foreach ($records as $r): ?>
                         <tr>
-                            <td><code><?= esc($r['kode_ruangan']) ?></code></td>
                             <td><?= esc($r['nama_ruangan']) ?></td>
                             <td>
                                 <div class="small fw-medium"><?= esc($r['nama_gedung'] ?? '-') ?></div>
@@ -104,6 +103,7 @@
                                     <span class="text-muted">-</span>
                                 <?php endif; ?>
                             </td>
+                            <td><code><?= esc($r['kode_ruangan']) ?></code></td>
                             <td>
                                 <div class="action-btn-group">
                                     <a href="<?= base_url('/master/ruangan/' . $r['rg_id'] . '/edit') ?>" class="icon-btn edit-btn" title="Edit">

@@ -37,10 +37,10 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Kode</th>
                             <th>Nama</th>
                             <th>Keterangan</th>
                             <th>Status</th>
+                            <th>Kode</th>
                             <th width="100">Aksi</th>
                         </tr>
                     </thead>
@@ -49,10 +49,10 @@
                             <?php $no = (($currentPage - 1) * $perPage) + 1; foreach ($records as $row): ?>
                                 <tr>
                                     <td><?= $no++ ?></td>
-                                    <td><?= esc($row['kode_sumber_dana']) ?></td>
                                     <td><?= esc($row['nama_sumber_dana']) ?></td>
                                     <td><?= esc($row['keterangan'] ?? '-') ?></td>
                                     <td><?= $row['is_active'] ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-secondary">Nonaktif</span>' ?></td>
+                                    <td><?= esc($row['kode_sumber_dana']) ?></td>
                                     <td>
                                         <div class="action-btn-group">
                                             <a href="<?= base_url('/master/sumber-dana/' . $row['sd_id'] . '/edit') ?>" class="icon-btn edit-btn" title="Edit">

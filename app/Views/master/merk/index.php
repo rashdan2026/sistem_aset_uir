@@ -29,10 +29,10 @@
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Kode</th>
                             <th>Nama Merk</th>
                             <th>Keterangan</th>
                             <th>Status</th>
+                            <th>Kode</th>
                             <th width="100">Aksi</th>
                         </tr>
                     </thead>
@@ -40,7 +40,6 @@
                         <?php if (!empty($records)): ?>
                         <?php foreach ($records as $r): ?>
                         <tr>
-                            <td><?= esc($r['kode_merk']) ?></td>
                             <td><?= esc($r['nama_merk']) ?></td>
                             <td><?= esc($r['keterangan'] ?? '-') ?></td>
                             <td>
@@ -50,6 +49,7 @@
                                     <span class="badge bg-secondary">Tidak Aktif</span>
                                 <?php endif; ?>
                             </td>
+                            <td><?= esc($r['kode_merk']) ?></td>
                             <td>
                                 <div class="action-btn-group">
                                     <a href="<?= base_url('/master/merk/' . $r['mr_id'] . '/edit') ?>" class="icon-btn edit-btn" title="Edit">

@@ -38,13 +38,13 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Kode</th>
                             <th>Nama</th>
                             <th>Kategori</th>
                             <th>Wajib Merk</th>
                             <th>Wajib Type</th>
                             <th>Wajib Ruangan</th>
                             <th>Status</th>
+                            <th>Kode</th>
                             <th width="100">Aksi</th>
                         </tr>
                     </thead>
@@ -53,13 +53,13 @@
                             <?php $no = (($currentPage - 1) * $perPage) + 1; foreach ($records as $row): ?>
                                 <tr>
                                     <td><?= $no++ ?></td>
-                                    <td><?= esc($row['kode_sub_kategori']) ?></td>
                                     <td><?= esc($row['nama_sub_kategori']) ?></td>
                                     <td><?= esc($row['nama_kategori'] ?? '-') ?> (<?= esc($row['kode_kategori'] ?? '') ?>)</td>
                                     <td><?= $row['wajib_merk'] ? '<span class="badge bg-success">Ya</span>' : '<span class="badge bg-secondary">Tidak</span>' ?></td>
                                     <td><?= $row['wajib_type'] ? '<span class="badge bg-success">Ya</span>' : '<span class="badge bg-secondary">Tidak</span>' ?></td>
                                     <td><?= $row['wajib_ruangan'] ? '<span class="badge bg-success">Ya</span>' : '<span class="badge bg-secondary">Tidak</span>' ?></td>
                                     <td><?= $row['is_active'] ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-secondary">Nonaktif</span>' ?></td>
+                                    <td><?= esc($row['kode_sub_kategori']) ?></td>
                                     <td>
                                         <div class="action-btn-group">
                                             <a href="<?= base_url('/master/sub-kategori/' . $row['sk_id'] . '/edit') ?>" class="icon-btn edit-btn" title="Edit">

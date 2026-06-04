@@ -49,11 +49,11 @@
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Kode</th>
                             <th>Nama Gedung</th>
                             <th>Unit Kerja</th>
                             <th>Jumlah Lantai</th>
                             <th>Status</th>
+                            <th>Kode</th>
                             <th width="120">Aksi</th>
                         </tr>
                     </thead>
@@ -61,7 +61,6 @@
                         <?php if (!empty($gedung)): ?>
                         <?php foreach ($gedung as $g): ?>
                         <tr>
-                            <td><?= esc($g['kode_gedung']) ?></td>
                             <td><?= esc($g['nama_gedung']) ?></td>
                             <td><?= esc($g['nama_unit'] ?? '-') ?></td>
                             <td><?= esc($g['jumlah_lantai'] ?? '-') ?></td>
@@ -72,6 +71,7 @@
                                     <span class="badge bg-secondary">Tidak Aktif</span>
                                 <?php endif; ?>
                             </td>
+                            <td><?= esc($g['kode_gedung']) ?></td>
                             <td>
                                 <div class="action-btn-group">
                                     <a href="<?= base_url('/master/gedung/' . $g['gd_id']) ?>" class="icon-btn detail-btn" title="Detail">

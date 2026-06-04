@@ -37,10 +37,10 @@
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th width="80">Kode</th>
                             <th>Nama Kategori</th>
                             <th width="120">Jenis Aset</th>
                             <th width="80">Status</th>
+                            <th width="80">Kode</th>
                             <th width="100">Aksi</th>
                         </tr>
                     </thead>
@@ -48,7 +48,6 @@
                         <?php if (!empty($kategori)): ?>
                             <?php foreach ($kategori as $kat): ?>
                                 <tr>
-                                    <td><?= esc($kat['kode_kategori']) ?></td>
                                     <td><?= esc($kat['nama_kategori']) ?></td>
                                     <td>
                                         <?php
@@ -62,6 +61,7 @@
                                         ?>
                                     </td>
                                     <td><?= $kat['is_active'] ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-secondary">Nonaktif</span>' ?></td>
+                                    <td><?= esc($kat['kode_kategori']) ?></td>
                                     <td>
                                         <div class="action-btn-group">
                                             <a href="<?= base_url('/master/kategori/' . $kat['kt_id'] . '/edit') ?>" class="icon-btn edit-btn" title="Edit">

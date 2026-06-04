@@ -49,11 +49,11 @@
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Kode</th>
                             <th>Nama Sub Unit</th>
                             <th>Unit Kerja</th>
                             <th>Jenis</th>
                             <th>Status</th>
+                            <th>Kode</th>
                             <th width="120">Aksi</th>
                         </tr>
                     </thead>
@@ -61,7 +61,6 @@
                         <?php if (!empty($subUnits)): ?>
                         <?php foreach ($subUnits as $subUnit): ?>
                         <tr>
-                            <td><?= esc($subUnit['kode_sub_unit']) ?></td>
                             <td><?= esc($subUnit['nama_sub_unit']) ?></td>
                             <td><?= esc($subUnit['unit_nama'] ?? '-') ?></td>
                             <td><?= esc($subUnit['jenis_sub_unit'] ?? '-') ?></td>
@@ -72,6 +71,7 @@
                                     <span class="badge bg-secondary">Tidak Aktif</span>
                                 <?php endif; ?>
                             </td>
+                            <td><?= esc($subUnit['kode_sub_unit']) ?></td>
                             <td>
                                 <div class="action-btn-group">
                                     <a href="<?= base_url('/master/sub-units/' . $subUnit['su_id']) ?>" class="icon-btn detail-btn" title="Detail">
