@@ -61,7 +61,9 @@ class AsetModel extends Model
                 arg.nama_gedung,
                 al.nama_lantai,
                 ar.nama_ruangan,
-                yk.nama_gelar as nama_penanggung_jawab
+                yk.nama_gelar as nama_penanggung_jawab,
+                yk.tgl_lahir as pj_tgl_lahir,
+                jbat.nama_jabatan as pj_nama_jabatan
             ', false)
             ->join('aset_kategori ak', 'ak.kt_id = aset_all_uir.kategori_id', 'left')
             ->join('aset_sub_kategori ask', 'ask.sk_id = aset_all_uir.sub_kategori_id', 'left')
@@ -75,7 +77,8 @@ class AsetModel extends Model
             ->join('aset_ruangan ar', 'ar.rg_id = aset_all_uir.ruangan_id', 'left')
             ->join('aset_lantai al', 'al.lt_id = ar.lantai_id', 'left')
             ->join('aset_gedung arg', 'arg.gd_id = al.gedung_id', 'left')
-            ->join('ylpi_karyawan yk', 'yk.id_kpe = aset_all_uir.penanggung_jawab_id_kpe', 'left');
+            ->join('ylpi_karyawan yk', 'yk.id_kpe = aset_all_uir.penanggung_jawab_id_kpe', 'left')
+            ->join('tbl_jabatan_pegawai jbat', 'jbat.id_jabatan_pegawai = yk.jabatan_struktural AND jbat.flag_aktif = 1', 'left');
     }
 
     /**

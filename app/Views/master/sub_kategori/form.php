@@ -42,14 +42,14 @@
                     </select>
                 </div>
 
+                <?php if (isset($record)): ?>
+                    <input type="hidden" name="kode_sub_kategori" value="<?= esc($record['kode_sub_kategori'] ?? '') ?>">
+                <?php else: ?>
+                    <input type="hidden" name="kode_sub_kategori" value="">
+                <?php endif; ?>
+
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Kode Sub Kategori <span class="text-danger">*</span></label>
-                            <input type="text" name="kode_sub_kategori" class="form-control" value="<?= old('kode_sub_kategori', $record['kode_sub_kategori'] ?? '') ?>" maxlength="30" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group" style="position: relative;">
                             <label>Nama Sub Kategori <span class="text-danger">*</span></label>
                             <input type="text" name="nama_sub_kategori" id="nama_sub_kategori" class="form-control" value="<?= old('nama_sub_kategori', $record['nama_sub_kategori'] ?? '') ?>" maxlength="150" required autocomplete="off">

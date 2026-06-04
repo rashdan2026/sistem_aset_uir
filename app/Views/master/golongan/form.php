@@ -18,11 +18,11 @@
                             <input type="hidden" name="_method" value="PUT">
                         <?php endif; ?>
 
-                        <div class="mb-3">
-                            <label for="kode_golongan" class="form-label">Kode Golongan *</label>
-                            <input type="text" name="kode_golongan" id="kode_golongan" class="form-control"
-                                   value="<?= old('kode_golongan', $record['kode_golongan'] ?? '') ?>" required maxlength="30">
-                        </div>
+                        <?php if (isset($record)): ?>
+                            <input type="hidden" name="kode_golongan" value="<?= esc($record['kode_golongan'] ?? '') ?>">
+                        <?php else: ?>
+                            <input type="hidden" name="kode_golongan" value="">
+                        <?php endif; ?>
 
                         <div class="mb-3" style="position: relative;">
                             <label for="nama_golongan" class="form-label">Nama Golongan *</label>

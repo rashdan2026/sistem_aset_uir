@@ -103,7 +103,7 @@
             }
             ?>
 
-            <?php if ($totalPages > 1): ?>
+            <?php if ($totalPages > 1 && $total > 50): ?>
             <nav class="mt-3">
                 <ul class="pagination justify-content-center">
                     <?= renderPageItemGolongan(1, $currentPage, $baseUrl, $searchParam, '&laquo;', 'prev') ?>

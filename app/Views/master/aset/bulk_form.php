@@ -59,21 +59,14 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Nama Aset <span class="text-danger">*</span></label>
-                            <input type="text" name="nama_aset" class="form-control" value="<?= old('nama_aset') ?>" maxlength="200" required>
-                            <small class="form-text text-muted">Nama ini akan dipakai oleh semua aset dalam batch.</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
                             <label>Jumlah <span class="text-danger">*</span></label>
                             <input type="number" name="jumlah" id="jumlah" class="form-control font-weight-bold text-danger" value="<?= old('jumlah', 1) ?>" min="1" max="100" required>
                             <small class="form-text text-muted">Maks. 100 unit per proses.</small>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label>No Aset Lama</label>
+                            <label>ID Aset Lama</label>
                             <input type="text" name="nomor_aset_lama" class="form-control" value="<?= old('nomor_aset_lama') ?>" placeholder="Opsional">
                         </div>
                     </div>

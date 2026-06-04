@@ -96,7 +96,20 @@
                                             <td><?= esc($ruangan['nama_ruangan'] ?? '-') ?></td>
                                             <td><?= esc($ruangan['nama_gedung'] ?? '-') ?></td>
                                             <td><?= esc($ruangan['nama_lantai'] ?? '-') ?></td>
-                                            <td><?= esc($ruangan['pj_nama'] ?? '-') ?></td>
+                                            <td>
+                                                <?php if (!empty($ruangan['pj_nama'])): ?>
+                                                    <?php
+                                                    $pjDisplay = [
+                                                        'nama_gelar' => $ruangan['pj_nama'] ?? null,
+                                                        'pj_nama_jabatan' => $ruangan['pj_nama_jabatan'] ?? null,
+                                                        'pj_tgl_lahir' => $ruangan['pj_tgl_lahir'] ?? null,
+                                                    ];
+                                                    echo format_penanggung_jawab($pjDisplay);
+                                                    ?>
+                                                <?php else: ?>
+                                                    -
+                                                <?php endif; ?>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>

@@ -92,8 +92,14 @@
                             <td><?= esc($r['nama_sub_unit'] ?? '-') ?></td>
                             <td>
                                 <?php if (!empty($r['pj_nama'])): ?>
-                                    <div class="small"><?= esc($r['pj_nama']) ?></div>
-                                    <div class="text-muted" style="font-size:11px;"><?= esc($r['pj_npk'] ?? '') ?></div>
+                                    <?php
+                                    $pjDisplay = [
+                                        'nama_gelar' => $r['pj_nama'] ?? null,
+                                        'pj_nama_jabatan' => $r['pj_nama_jabatan'] ?? null,
+                                        'pj_tgl_lahir' => $r['pj_tgl_lahir'] ?? null,
+                                    ];
+                                    ?>
+                                    <div class="small"><?= format_penanggung_jawab($pjDisplay) ?></div>
                                 <?php else: ?>
                                     <span class="text-muted">-</span>
                                 <?php endif; ?>
@@ -142,7 +148,7 @@
             }
             ?>
 
-            <?php if ($totalPages > 1): ?>
+            <?php if ($totalPages > 1 && $total > 50): ?>
             <nav class="mt-3">
                 <ul class="pagination justify-content-center">
                     <?= renderPageItem(1, $currentPage, $baseUrl, $searchParam, '&laquo;', 'prev') ?>

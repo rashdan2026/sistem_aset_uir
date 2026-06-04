@@ -71,7 +71,6 @@ class KondisiBarangController extends Controller
     public function create()
     {
         $rules = [
-            'kode_kondisi' => 'required|max_length[30]|is_unique[aset_kondisi_barang.kode_kondisi]',
             'nama_kondisi' => 'required|max_length[100]|is_unique[aset_kondisi_barang.nama_kondisi]',
             'level_kondisi' => 'required|integer',
         ];
@@ -80,14 +79,16 @@ class KondisiBarangController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $this->model->save([
-            'kode_kondisi' => $this->request->getPost('kode_kondisi'),
+        $insertId = $this->model->insert([
             'nama_kondisi' => $this->request->getPost('nama_kondisi'),
             'level_kondisi' => $this->request->getPost('level_kondisi'),
             'is_available_for_use' => $this->request->getPost('is_available_for_use') ? 1 : 0,
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
+
+        $kodeKondisi = 'KB-' . str_pad($insertId, 2, '0', STR_PAD_LEFT);
+        $this->model->update($insertId, ['kode_kondisi' => $kodeKondisi]);
 
         return redirect()->to(base_url('/master/kondisi-barang'))->with('success', 'Kondisi Barang berhasil ditambahkan.');
     }

@@ -32,11 +32,11 @@
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="kode_type" class="form-label">Kode Type *</label>
-                            <input type="text" name="kode_type" id="kode_type" class="form-control"
-                                   value="<?= old('kode_type', $record['kode_type'] ?? '') ?>" required maxlength="30">
-                        </div>
+                        <?php if (isset($record)): ?>
+                            <input type="hidden" name="kode_type" value="<?= esc($record['kode_type'] ?? '') ?>">
+                        <?php else: ?>
+                            <input type="hidden" name="kode_type" value="">
+                        <?php endif; ?>
 
                         <div class="mb-3" style="position: relative;">
                             <label for="nama_type" class="form-label">Nama Type *</label>

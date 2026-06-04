@@ -22,12 +22,13 @@ class RuanganController extends Controller
 
     public function __construct()
     {
+        helper('pj');
         $this->model = new RuanganModel();
         $this->lantaiModel = new LantaiModel();
         $this->subUnitModel = new SubUnitModel();
         $this->gedungModel = new GedungModel();
         $this->pjModel = new PenanggungJawabReadOnlyModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -60,12 +61,16 @@ class RuanganController extends Controller
                     aset_sub_units.nama_sub_unit,
                     tbl_unit_kerja.nama_unit as unit_nama,
                     ylpi_karyawan.nama_gelar as pj_nama,
-                    ylpi_karyawan.npk as pj_npk')
+                    ylpi_karyawan.npk as pj_npk,
+                    ylpi_karyawan.jabatan_struktural as pj_jabatan_struktural,
+                    ylpi_karyawan.tgl_lahir as pj_tgl_lahir,
+                    tbl_jabatan_pegawai.nama_jabatan as pj_nama_jabatan')
             ->join('aset_lantai', 'aset_lantai.lt_id = aset_ruangan.lantai_id', 'left')
             ->join('aset_gedung', 'aset_gedung.gd_id = aset_lantai.gedung_id', 'left')
             ->join('aset_sub_units', 'aset_sub_units.su_id = aset_ruangan.sub_unit_id', 'left')
             ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja = aset_gedung.unit_kerja_id', 'left')
-            ->join('ylpi_karyawan', 'ylpi_karyawan.id_kpe = aset_ruangan.penanggung_jawab_id_kpe', 'left');
+            ->join('ylpi_karyawan', 'ylpi_karyawan.id_kpe = aset_ruangan.penanggung_jawab_id_kpe', 'left')
+            ->join('tbl_jabatan_pegawai', 'tbl_jabatan_pegawai.id_jabatan_pegawai = ylpi_karyawan.jabatan_struktural AND tbl_jabatan_pegawai.flag_aktif = 1', 'left');
 
         if (!empty($params['q'])) {
             $builder->groupStart();
@@ -137,7 +142,6 @@ class RuanganController extends Controller
         $rules = [
             'lantai_id' => 'required|integer',
             'sub_unit_id' => 'required|integer',
-            'kode_ruangan' => 'required|max_length[30]',
             'nama_ruangan' => 'required|max_length[150]',
         ];
 
@@ -158,10 +162,11 @@ class RuanganController extends Controller
                 ->with('error', 'Nama Ruangan "' . $namaRuangan . '" sudah pernah diinput.');
         }
 
+        $subUnitId = $this->request->getPost('sub_unit_id');
+
         $this->model->save([
             'lantai_id' => $this->request->getPost('lantai_id'),
-            'sub_unit_id' => $this->request->getPost('sub_unit_id'),
-            'kode_ruangan' => $this->request->getPost('kode_ruangan'),
+            'sub_unit_id' => $subUnitId,
             'nama_ruangan' => $namaRuangan,
             'jenis_ruangan' => $this->request->getPost('jenis_ruangan'),
             'penanggung_jawab_id_kpe' => $this->request->getPost('penanggung_jawab_id_kpe') ?: null,
@@ -172,6 +177,10 @@ class RuanganController extends Controller
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
+
+        $ruanganId = $this->model->getInsertID();
+        $kodeRuangan = generate_kode_ruangan($subUnitId, $ruanganId);
+        $this->model->update($ruanganId, ['kode_ruangan' => $kodeRuangan]);
 
         return redirect()->to(base_url('/master/ruangan'))->with('success', 'Ruangan berhasil ditambahkan.');
     }
@@ -233,7 +242,6 @@ class RuanganController extends Controller
         $rules = [
             'lantai_id' => 'required|integer',
             'sub_unit_id' => 'required|integer',
-            'kode_ruangan' => 'required|max_length[30]',
             'nama_ruangan' => 'required|max_length[150]',
         ];
 
@@ -244,7 +252,6 @@ class RuanganController extends Controller
         $this->model->update($id, [
             'lantai_id' => $this->request->getPost('lantai_id'),
             'sub_unit_id' => $this->request->getPost('sub_unit_id'),
-            'kode_ruangan' => $this->request->getPost('kode_ruangan'),
             'nama_ruangan' => $this->request->getPost('nama_ruangan'),
             'jenis_ruangan' => $this->request->getPost('jenis_ruangan'),
             'penanggung_jawab_id_kpe' => $this->request->getPost('penanggung_jawab_id_kpe') ?: null,

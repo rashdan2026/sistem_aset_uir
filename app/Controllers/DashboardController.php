@@ -11,6 +11,11 @@ use App\Models\Master\RuanganModel;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        helper('pj');
+    }
+
     public function index()
     {
         $unitKerjaModel = new UnitKerjaAllowedModel();
@@ -26,11 +31,15 @@ class DashboardController extends Controller
         $latestRuangan = $ruanganModel->select('aset_ruangan.*,
                 aset_lantai.nama_lantai,
                 aset_gedung.nama_gedung,
-                ylpi_karyawan.nama_gelar as pj_nama')
+                ylpi_karyawan.nama_gelar as pj_nama,
+                ylpi_karyawan.jabatan_struktural as pj_jabatan_struktural,
+                ylpi_karyawan.tgl_lahir as pj_tgl_lahir,
+                tbl_jabatan_pegawai.nama_jabatan as pj_nama_jabatan')
             ->join('aset_lantai', 'aset_lantai.lt_id = aset_ruangan.lantai_id', 'left')
             ->join('aset_gedung', 'aset_gedung.gd_id = aset_lantai.gedung_id', 'left')
             ->join('aset_sub_units', 'aset_sub_units.su_id = aset_ruangan.sub_unit_id', 'left')
             ->join('ylpi_karyawan', 'ylpi_karyawan.id_kpe = aset_ruangan.penanggung_jawab_id_kpe', 'left')
+            ->join('tbl_jabatan_pegawai', 'tbl_jabatan_pegawai.id_jabatan_pegawai = ylpi_karyawan.jabatan_struktural AND tbl_jabatan_pegawai.flag_aktif = 1', 'left')
             ->orderBy('aset_ruangan.created_at', 'DESC')
             ->limit(5)
             ->findAll();

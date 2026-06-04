@@ -22,21 +22,18 @@
             <form action="<?= base_url($isEdit ? '/master/kondisi-barang/' . $kdId : '/master/kondisi-barang') ?>" method="post">
                 <?= csrf_field() ?>
                 <input type="hidden" name="_method" value="<?= $isEdit ? 'PUT' : 'POST' ?>">
+                <?php if ($isEdit): ?>
+                    <input type="hidden" name="kode_kondisi" value="<?= esc($record['kode_kondisi'] ?? '') ?>">
+                <?php endif; ?>
 
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Kode Kondisi <span class="text-danger">*</span></label>
-                            <input type="text" name="kode_kondisi" class="form-control" value="<?= old('kode_kondisi', $record['kode_kondisi'] ?? '') ?>" maxlength="30" required>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Nama Kondisi <span class="text-danger">*</span></label>
                             <input type="text" name="nama_kondisi" class="form-control" value="<?= old('nama_kondisi', $record['nama_kondisi'] ?? '') ?>" maxlength="100" required>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Level Kondisi <span class="text-danger">*</span></label>
                             <input type="number" name="level_kondisi" class="form-control" value="<?= old('level_kondisi', $record['level_kondisi'] ?? '') ?>" min="1" required>

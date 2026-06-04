@@ -15,7 +15,7 @@ class SumberDanaController extends Controller
     public function __construct()
     {
         $this->model = new SumberDanaModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -71,7 +71,6 @@ class SumberDanaController extends Controller
     public function create()
     {
         $rules = [
-            'kode_sumber_dana' => 'required|max_length[30]|is_unique[aset_sumber_dana.kode_sumber_dana]',
             'nama_sumber_dana' => 'required|max_length[150]|is_unique[aset_sumber_dana.nama_sumber_dana]',
         ];
 
@@ -80,11 +79,14 @@ class SumberDanaController extends Controller
         }
 
         $this->model->save([
-            'kode_sumber_dana' => $this->request->getPost('kode_sumber_dana'),
             'nama_sumber_dana' => $this->request->getPost('nama_sumber_dana'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
+
+        $sumberDanaId = $this->model->getInsertID();
+        $kodeSumberDana = generate_kode_sumber_dana($sumberDanaId);
+        $this->model->update($sumberDanaId, ['kode_sumber_dana' => $kodeSumberDana]);
 
         return redirect()->to(base_url('/master/sumber-dana'))->with('success', 'Sumber Dana berhasil ditambahkan.');
     }
@@ -107,7 +109,6 @@ class SumberDanaController extends Controller
         }
 
         $rules = [
-            'kode_sumber_dana' => "required|max_length[30]|is_unique[aset_sumber_dana.kode_sumber_dana,sd_id,{$id}]",
             'nama_sumber_dana' => "required|max_length[150]|is_unique[aset_sumber_dana.nama_sumber_dana,sd_id,{$id}]",
         ];
 
@@ -116,7 +117,6 @@ class SumberDanaController extends Controller
         }
 
         $this->model->update($id, [
-            'kode_sumber_dana' => $this->request->getPost('kode_sumber_dana'),
             'nama_sumber_dana' => $this->request->getPost('nama_sumber_dana'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,

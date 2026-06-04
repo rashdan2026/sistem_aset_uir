@@ -19,8 +19,8 @@
                             <td class="fw-bold"><?= esc($pj['npk'] ?? '-') ?></td>
                         </tr>
                         <tr>
-                            <td class="text-muted">Nama</td>
-                            <td class="fw-bold fs-5"><?= esc($pj['nama_gelar'] ?? '-') ?></td>
+                            <td class="text-muted">Penanggung Jawab</td>
+                            <td class="fw-bold fs-5"><?= format_penanggung_jawab($pj) ?></td>
                         </tr>
                         <tr>
                             <td class="text-muted">Unit Kerja</td>

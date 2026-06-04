@@ -16,12 +16,12 @@ class GedungController extends Controller
     protected $unitKerjaModel;
     protected $lantaiModel;
 
-    public function __construct()
+public function __construct()
     {
-        $this->gedungModel = new GedungModel();
+        $this->gedungModel = new gedungModel();
         $this->unitKerjaModel = new UnitKerjaAllowedModel();
         $this->lantaiModel = new LantaiModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -122,7 +122,6 @@ class GedungController extends Controller
     {
         $rules = [
             'unit_kerja_id' => 'required|integer',
-            'kode_gedung' => 'required|max_length[30]',
             'nama_gedung' => 'required|max_length[150]',
             'jumlah_lantai' => 'required|integer|greater_than[0]',
         ];
@@ -131,16 +130,11 @@ class GedungController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $kodeGedung = $this->request->getPost('kode_gedung');
-        if (!$this->gedungModel->isKodeUnique($kodeGedung)) {
-            return redirect()->back()->withInput()->with('errors', ['kode_gedung' => 'Kode gedung sudah digunakan.']);
-        }
-
+        $unitKerjaId = $this->request->getPost('unit_kerja_id');
         $jumlahLantai = (int) $this->request->getPost('jumlah_lantai');
 
         $data = [
-            'unit_kerja_id' => $this->request->getPost('unit_kerja_id'),
-            'kode_gedung' => $this->request->getPost('kode_gedung'),
+            'unit_kerja_id' => $unitKerjaId,
             'nama_gedung' => $this->request->getPost('nama_gedung'),
             'jumlah_lantai' => $jumlahLantai,
             'alamat_ringkas' => $this->request->getPost('alamat_ringkas'),
@@ -151,15 +145,19 @@ class GedungController extends Controller
         try {
             $this->gedungModel->save($data);
             $gedungId = $this->gedungModel->getInsertID();
+            $kodeGedung = generate_kode_gedung($unitKerjaId, $gedungId);
+            $this->gedungModel->update($gedungId, ['kode_gedung' => $kodeGedung]);
 
             for ($i = 1; $i <= $jumlahLantai; $i++) {
                 $this->lantaiModel->save([
                     'gedung_id' => $gedungId,
-                    'kode_lantai' => 'LT_' . $gedungId . '_' . $i,
                     'nama_lantai' => 'Lantai ' . $i,
                     'nomor_lantai' => $i,
                     'is_active' => 1,
                 ]);
+                $lantaiId = $this->lantaiModel->getInsertID();
+                $kodeLantai = generate_kode_lantai($gedungId, $lantaiId);
+                $this->lantaiModel->update($lantaiId, ['kode_lantai' => $kodeLantai]);
             }
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
@@ -195,7 +193,6 @@ class GedungController extends Controller
 
         $rules = [
             'unit_kerja_id' => 'required|integer',
-            'kode_gedung' => 'required|max_length[30]',
             'nama_gedung' => 'required|max_length[150]',
         ];
 
@@ -203,14 +200,8 @@ class GedungController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $kodeGedung = $this->request->getPost('kode_gedung');
-        if (!$this->gedungModel->isKodeUnique($kodeGedung, $id)) {
-            return redirect()->back()->withInput()->with('errors', ['kode_gedung' => 'Kode gedung sudah digunakan.']);
-        }
-
         $data = [
             'unit_kerja_id' => $this->request->getPost('unit_kerja_id'),
-            'kode_gedung' => $this->request->getPost('kode_gedung'),
             'nama_gedung' => $this->request->getPost('nama_gedung'),
             'alamat_ringkas' => $this->request->getPost('alamat_ringkas'),
             'keterangan' => $this->request->getPost('keterangan'),

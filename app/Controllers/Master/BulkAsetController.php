@@ -42,7 +42,7 @@ class BulkAsetController extends Controller
         $this->subUnitModel = new SubUnitModel();
         $this->unitKerjaModel = new UnitKerjaAllowedModel();
         $this->assetNumberService = new AssetNumberService();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'pj']);
     }
 
     public function new()
@@ -70,18 +70,31 @@ class BulkAsetController extends Controller
 
     public function create()
     {
+        $subKategoriId = (int) $this->request->getPost('sub_kategori_id');
+        $unitKerjaId = (int) $this->request->getPost('unit_kerja_id');
+
+        $subKategori = $this->subKategoriModel->find($subKategoriId);
+        if (!$subKategori) {
+            return redirect()->back()->withInput()->with('error', 'Sub Kategori tidak ditemukan.');
+        }
+
+        $unitKerja = $this->unitKerjaModel->getById($unitKerjaId);
+        if (!$unitKerja) {
+            return redirect()->back()->withInput()->with('error', 'Unit Kerja tidak ditemukan atau tidak valid.');
+        }
+
+        $namaSubKategori = $subKategori['nama_sub_kategori'];
+        $namaUnitKerja = $unitKerja['nama_unit'];
+        $namaAset = $namaSubKategori . ' / ' . $namaUnitKerja;
+
         $rules = [
             'kategori_id' => 'required|integer',
             'sub_kategori_id' => 'required|integer',
-            'nama_aset' => 'required|max_length[200]',
             'jumlah' => 'required|integer|greater_than[0]|less_than[101]',
             'kondisi_id' => 'required|integer',
             'sumber_dana_id' => 'required|integer',
             'unit_kerja_id' => 'required|integer',
         ];
-
-        $subKategoriId = (int) $this->request->getPost('sub_kategori_id');
-        $subKategori = $this->subKategoriModel->find($subKategoriId);
 
         if (!empty($subKategori['wajib_merk'])) {
             $rules['merk_id'] = 'required|integer';
@@ -99,7 +112,6 @@ class BulkAsetController extends Controller
 
         $kategoriId = (int) $this->request->getPost('kategori_id');
         $jumlah = (int) $this->request->getPost('jumlah');
-        $namaAset = trim($this->request->getPost('nama_aset'));
 
         $batchId = 'BULK-' . date('Ymd') . '-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
 

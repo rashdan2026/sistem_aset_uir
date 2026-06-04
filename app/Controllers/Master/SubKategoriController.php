@@ -18,7 +18,7 @@ class SubKategoriController extends Controller
     {
         $this->model = new SubKategoriModel();
         $this->kategoriModel = new KategoriModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -100,7 +100,6 @@ class SubKategoriController extends Controller
     {
         $rules = [
             'kategori_id' => 'required|integer',
-            'kode_sub_kategori' => 'required|max_length[30]',
             'nama_sub_kategori' => 'required|max_length[150]',
         ];
 
@@ -121,9 +120,10 @@ class SubKategoriController extends Controller
                 ->with('error', 'Nama Sub Kategori "' . $namaSubKategori . '" sudah pernah diinput.');
         }
 
+        $kategoriId = $this->request->getPost('kategori_id');
+
         $this->model->save([
-            'kategori_id' => $this->request->getPost('kategori_id'),
-            'kode_sub_kategori' => $this->request->getPost('kode_sub_kategori'),
+            'kategori_id' => $kategoriId,
             'nama_sub_kategori' => $namaSubKategori,
             'wajib_merk' => $this->request->getPost('wajib_merk') ? 1 : 0,
             'wajib_type' => $this->request->getPost('wajib_type') ? 1 : 0,
@@ -131,6 +131,10 @@ class SubKategoriController extends Controller
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
+
+        $subKategoriId = $this->model->getInsertID();
+        $kodeSubKategori = generate_kode_sub_kategori($kategoriId, $subKategoriId);
+        $this->model->update($subKategoriId, ['kode_sub_kategori' => $kodeSubKategori]);
 
         return redirect()->to(base_url('/master/sub-kategori'))->with('success', 'Sub Kategori berhasil ditambahkan.');
     }
@@ -158,7 +162,6 @@ class SubKategoriController extends Controller
 
         $rules = [
             'kategori_id' => 'required|integer',
-            'kode_sub_kategori' => 'required|max_length[30]',
             'nama_sub_kategori' => 'required|max_length[150]',
         ];
 
@@ -168,7 +171,6 @@ class SubKategoriController extends Controller
 
         $this->model->update($id, [
             'kategori_id' => $this->request->getPost('kategori_id'),
-            'kode_sub_kategori' => $this->request->getPost('kode_sub_kategori'),
             'nama_sub_kategori' => $this->request->getPost('nama_sub_kategori'),
             'wajib_merk' => $this->request->getPost('wajib_merk') ? 1 : 0,
             'wajib_type' => $this->request->getPost('wajib_type') ? 1 : 0,

@@ -15,7 +15,7 @@ class KategoriController extends Controller
     public function __construct()
     {
         $this->kategoriModel = new KategoriModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -98,7 +98,6 @@ class KategoriController extends Controller
     public function create()
     {
         $rules = [
-            'kode_kategori' => 'required|max_length[30]|is_unique[aset_kategori.kode_kategori]',
             'nama_kategori' => 'required|max_length[150]|is_unique[aset_kategori.nama_kategori]',
             'jenis_aset' => 'required|in_list[bangunan,ruangan,non_bangunan,lainnya]',
         ];
@@ -121,7 +120,6 @@ class KategoriController extends Controller
         }
 
         $this->kategoriModel->save([
-            'kode_kategori' => $this->request->getPost('kode_kategori'),
             'nama_kategori' => $namaKategori,
             'jenis_aset' => $this->request->getPost('jenis_aset'),
             'keterangan' => $this->request->getPost('keterangan'),
@@ -129,6 +127,10 @@ class KategoriController extends Controller
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ]);
+
+        $kategoriId = $this->kategoriModel->getInsertID();
+        $kodeKategori = generate_kode_kategori($kategoriId);
+        $this->kategoriModel->update($kategoriId, ['kode_kategori' => $kodeKategori]);
 
         return redirect()->to(base_url('/master/kategori'))->with('success', 'Kategori berhasil ditambahkan.');
     }
@@ -154,7 +156,6 @@ class KategoriController extends Controller
         }
 
         $rules = [
-            'kode_kategori' => "required|max_length[30]|is_unique[aset_kategori.kode_kategori,kt_id,{$id}]",
             'nama_kategori' => "required|max_length[150]|is_unique[aset_kategori.nama_kategori,kt_id,{$id}]",
             'jenis_aset' => 'required|in_list[bangunan,ruangan,non_bangunan,lainnya]',
         ];
@@ -178,7 +179,6 @@ class KategoriController extends Controller
         }
 
         $this->kategoriModel->update($id, [
-            'kode_kategori' => $this->request->getPost('kode_kategori'),
             'nama_kategori' => $namaKategori,
             'jenis_aset' => $this->request->getPost('jenis_aset'),
             'keterangan' => $this->request->getPost('keterangan'),

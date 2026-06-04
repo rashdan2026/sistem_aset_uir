@@ -15,7 +15,7 @@ class GolonganController extends Controller
     public function __construct()
     {
         $this->model = new GolonganModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -91,7 +91,6 @@ class GolonganController extends Controller
     public function create()
     {
         $rules = [
-            'kode_golongan' => 'required|max_length[30]|is_unique[aset_golongan.kode_golongan]',
             'nama_golongan' => 'required|max_length[150]|is_unique[aset_golongan.nama_golongan]',
         ];
 
@@ -113,12 +112,15 @@ class GolonganController extends Controller
         }
 
         $this->model->save([
-            'kode_golongan' => $this->request->getPost('kode_golongan'),
             'nama_golongan' => $namaGolongan,
             'kelompok' => $this->request->getPost('kelompok'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
+
+        $golonganId = $this->model->getInsertID();
+        $kodeGolongan = generate_kode_golongan($golonganId);
+        $this->model->update($golonganId, ['kode_golongan' => $kodeGolongan]);
 
         return redirect()->to(base_url('/master/golongan'))->with('success', 'Golongan berhasil ditambahkan.');
     }
@@ -141,7 +143,6 @@ class GolonganController extends Controller
         }
 
         $rules = [
-            'kode_golongan' => "required|max_length[30]|is_unique[aset_golongan.kode_golongan,gl_id,{$id}]",
             'nama_golongan' => "required|max_length[150]|is_unique[aset_golongan.nama_golongan,gl_id,{$id}]",
         ];
 
@@ -164,7 +165,6 @@ class GolonganController extends Controller
         }
 
         $this->model->update($id, [
-            'kode_golongan' => $this->request->getPost('kode_golongan'),
             'nama_golongan' => $namaGolongan,
             'kelompok' => $this->request->getPost('kelompok'),
             'keterangan' => $this->request->getPost('keterangan'),

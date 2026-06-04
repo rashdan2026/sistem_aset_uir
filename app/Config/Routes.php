@@ -47,6 +47,7 @@ $routes->group('master', ['filter' => 'auth'], static function($routes) {
     $routes->get('aset/get-sub-unit/(:num)', 'Master\AsetController::getSubUnitByUnitKerja/$1');
     $routes->get('aset/get-ruangan/(:num)', 'Master\AsetController::getRuanganBySubUnitJson/$1');
     $routes->get('aset/lookup-sub-kategori/(:num)', 'Master\AsetController::lookupSubKategori/$1');
+    $routes->get('aset/save_column_preferences', 'Master\AsetController::save_column_preferences');
     $routes->resource('aset', ['controller' => 'Master\AsetController']);
 
     $routes->get('bulk-aset/new', 'Master\BulkAsetController::new');

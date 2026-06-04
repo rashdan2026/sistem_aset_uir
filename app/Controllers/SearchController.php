@@ -24,7 +24,7 @@ class SearchController extends ResourceController
         $this->unitKerjaModel = new UnitKerjaAllowedModel();
         $this->gedungModel = new GedungModel();
         $this->subUnitModel = new SubUnitModel();
-        helper(['request']);
+        helper(['request', 'pj']);
     }
 
     public function searchRuangan()
@@ -74,7 +74,7 @@ class SearchController extends ResourceController
         $results = array_map(function($r) {
             return [
                 'id' => $r['id_kpe'],
-                'text' => $r['nama_gelar'] . ' (' . $r['npk'] . ')'
+                'text' => format_penanggung_jawab($r)
             ];
         }, $pj);
 

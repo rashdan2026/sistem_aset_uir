@@ -18,7 +18,7 @@ class TypeController extends Controller
     {
         $this->model = new TypeModel();
         $this->merkModel = new MerkModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -97,7 +97,6 @@ class TypeController extends Controller
     public function create()
     {
         $rules = [
-            'kode_type' => 'required|max_length[30]',
             'nama_type' => 'required|max_length[100]',
         ];
 
@@ -118,13 +117,18 @@ class TypeController extends Controller
                 ->with('error', 'Nama Type "' . $namaType . '" sudah pernah diinput.');
         }
 
+        $merkId = $this->request->getPost('merk_id') ?: null;
+
         $this->model->save([
-            'merk_id' => $this->request->getPost('merk_id') ?: null,
-            'kode_type' => $this->request->getPost('kode_type'),
+            'merk_id' => $merkId,
             'nama_type' => $namaType,
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
+
+        $typeId = $this->model->getInsertID();
+        $kodeType = generate_kode_type($merkId ?? 0, $typeId);
+        $this->model->update($typeId, ['kode_type' => $kodeType]);
 
         return redirect()->to(base_url('/master/type'))->with('success', 'Type berhasil ditambahkan.');
     }
@@ -151,7 +155,6 @@ class TypeController extends Controller
         }
 
         $rules = [
-            'kode_type' => 'required|max_length[30]',
             'nama_type' => 'required|max_length[100]',
         ];
 
@@ -175,7 +178,6 @@ class TypeController extends Controller
 
         $this->model->update($id, [
             'merk_id' => $this->request->getPost('merk_id') ?: null,
-            'kode_type' => $this->request->getPost('kode_type'),
             'nama_type' => $namaType,
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,

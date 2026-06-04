@@ -12,6 +12,9 @@ use App\Models\Master\KondisiBarangModel;
 use App\Models\Master\SumberDanaModel;
 use App\Models\SubUnitModel;
 use App\Models\Reference\UnitKerjaAllowedModel;
+use App\Models\GedungModel;
+use App\Models\Master\LantaiModel;
+use App\Models\Master\RuanganModel;
 use App\Services\AssetNumberService;
 use CodeIgniter\Controller;
 
@@ -29,7 +32,7 @@ class AsetController extends Controller
     protected $unitKerjaModel;
     protected $assetNumberService;
 
-    public function __construct()
+public function __construct()
     {
         $this->asetModel = new AsetModel();
         $this->kategoriModel = new KategoriModel();
@@ -39,28 +42,120 @@ class AsetController extends Controller
         $this->typeModel = new TypeModel();
         $this->kondisiModel = new KondisiBarangModel();
         $this->sumberDanaModel = new SumberDanaModel();
-        $this->subUnitModel = new SubUnitModel();
         $this->unitKerjaModel = new UnitKerjaAllowedModel();
+        $this->subUnitModel = new SubUnitModel();
+        $this->gedungModel = new GedungModel();
+        $this->lantaiModel = new LantaiModel();
+        $this->ruanganModel = new RuanganModel();
         $this->assetNumberService = new AssetNumberService();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'pj', 'aset_column']);
     }
 
     public function index()
     {
         $search = $this->request->getGet('q');
+        $searchCol = $this->request->getGet('search_col');
         $status = $this->request->getGet('status');
         $kategori = $this->request->getGet('kategori_id');
         $inputMode = $this->request->getGet('input_mode');
+        $sortCol = $this->request->getGet('sort');
+        $sortDir = $this->request->getGet('dir');
+
+        helper('cookie');
+        $visibleColumns = get_aset_visible_columns();
+        $allColumns = get_aset_all_columns();
+        $columnMap = get_aset_column_map();
+
+        $validSortDirs = ['asc', 'desc'];
+        if (!in_array($sortDir, $validSortDirs)) {
+            $sortDir = 'asc';
+        }
+        if ($sortCol && !array_key_exists($sortCol, $allColumns)) {
+            $sortCol = null;
+        }
+
+        $selectFields = ['a.all_id', 'a.nomor_aset_baru', 'a.nama_aset', 'a.status_aset', 'a.input_mode', 'a.batch_id', 'a.updated_at'];
+        $joinTables = [
+            'aset_kategori ak' => 'ak.kt_id = a.kategori_id',
+            'aset_sub_kategori ask' => 'ask.sk_id = a.sub_kategori_id',
+            'aset_kondisi_barang akb' => 'akb.kd_id = a.kondisi_id',
+        ];
+
+        if (in_array('nama_merk', $visibleColumns) || $searchCol === 'nama_merk' || $sortCol === 'nama_merk') {
+            $selectFields[] = 'am.nama_merk';
+            $joinTables['aset_merk am'] = 'am.mr_id = a.merk_id';
+        }
+        if (in_array('nama_type', $visibleColumns) || $searchCol === 'nama_type' || $sortCol === 'nama_type') {
+            $selectFields[] = 'at.nama_type';
+            $joinTables['aset_type at'] = 'at.ty_id = a.type_id';
+        }
+        if (in_array('nama_sumber_dana', $visibleColumns) || $searchCol === 'nama_sumber_dana' || $sortCol === 'nama_sumber_dana') {
+            $selectFields[] = 'asd.nama_sumber_dana';
+            $joinTables['aset_sumber_dana asd'] = 'asd.sd_id = a.sumber_dana_id';
+        }
+        if (in_array('nama_unit', $visibleColumns) || $searchCol === 'nama_unit' || $sortCol === 'nama_unit') {
+            $selectFields[] = 'tu.nama_unit';
+            $joinTables['tbl_unit_kerja tu'] = 'tu.id_unit_kerja = a.unit_kerja_id';
+        }
+        if (in_array('nama_sub_unit', $visibleColumns) || $searchCol === 'nama_sub_unit' || $sortCol === 'nama_sub_unit') {
+            $selectFields[] = 'asu.nama_sub_unit';
+            $joinTables['aset_sub_units asu'] = 'asu.su_id = a.sub_unit_id';
+        }
+        if (in_array('nama_ruangan', $visibleColumns) || $searchCol === 'nama_ruangan' || $sortCol === 'nama_ruangan') {
+            $selectFields[] = 'ar.nama_ruangan';
+            $joinTables['aset_ruangan ar'] = 'ar.rg_id = a.ruangan_id';
+        }
+        if (in_array('nama_penanggung_jawab', $visibleColumns) || $searchCol === 'nama_penanggung_jawab' || $sortCol === 'nama_penanggung_jawab') {
+            $selectFields[] = 'yk.nama_gelar as nama_penanggung_jawab';
+            $selectFields[] = 'yk.tgl_lahir as pj_tgl_lahir';
+            $selectFields[] = 'jp.nama_jabatan as pj_nama_jabatan';
+            $joinTables['ylpi_karyawan yk'] = 'yk.id_kpe = a.penanggung_jawab_id_kpe';
+            $joinTables['tbl_jabatan_pegawai jp'] = 'jp.id_jabatan_pegawai = yk.jabatan_struktural AND jp.flag_aktif = 1';
+        }
+        if (in_array('nilai_perolehan', $visibleColumns) || $sortCol === 'nilai_perolehan') {
+            $selectFields[] = 'a.nilai_perolehan';
+        }
+        if (in_array('tahun_perolehan', $visibleColumns) || $sortCol === 'tahun_perolehan') {
+            $selectFields[] = 'a.tahun_perolehan';
+        }
+        if (in_array('nama_kategori', $visibleColumns) || $searchCol === 'nama_kategori' || $sortCol === 'nama_kategori') {
+            $selectFields[] = 'ak.nama_kategori';
+        }
+        if (in_array('nama_sub_kategori', $visibleColumns) || $searchCol === 'nama_sub_kategori' || $sortCol === 'nama_sub_kategori') {
+            $selectFields[] = 'ask.nama_sub_kategori';
+        }
+        if (in_array('nama_kondisi', $visibleColumns) || $searchCol === 'nama_kondisi' || $sortCol === 'nama_kondisi') {
+            $selectFields[] = 'akb.nama_kondisi';
+        }
+
+        $selectFields = array_unique($selectFields);
 
         $builder = db_connect()->table('aset_all_uir a');
 
         if (!empty($search)) {
-            $builder->groupStart()
-                ->like('a.nama_aset', $search)
-                ->orLike('a.all_id', $search)
-                ->orLike('a.nomor_aset_baru', $search)
-                ->orLike('a.nomor_aset_lama', $search)
-                ->groupEnd();
+            if (!empty($searchCol) && array_key_exists($searchCol, $columnMap)) {
+                $builder->like($columnMap[$searchCol], $search);
+            } else {
+                $builder->groupStart();
+                $builder->orLike('a.nama_aset', $search);
+                $builder->orLike('a.all_id', $search);
+                if (in_array('nomor_aset_baru', $visibleColumns)) {
+                    $builder->orLike('a.nomor_aset_baru', $search);
+                }
+                if (in_array('nama_kategori', $visibleColumns) || isset($joinTables['aset_kategori ak'])) {
+                    $builder->orLike('ak.nama_kategori', $search);
+                }
+                if (in_array('nama_sub_kategori', $visibleColumns) || isset($joinTables['aset_sub_kategori ask'])) {
+                    $builder->orLike('ask.nama_sub_kategori', $search);
+                }
+                if (isset($joinTables['aset_merk am'])) {
+                    $builder->orLike('am.nama_merk', $search);
+                }
+                if (isset($joinTables['aset_type at'])) {
+                    $builder->orLike('at.nama_type', $search);
+                }
+                $builder->groupEnd();
+            }
         }
 
         if (!empty($status)) {
@@ -77,6 +172,10 @@ class AsetController extends Controller
 
         $builder->where('a.deleted_at', null);
 
+        foreach ($joinTables as $table => $on) {
+            $builder->join($table, $on, 'left');
+        }
+
         $total = $builder->countAllResults(false);
         $perPage = 20;
         $currentPage = (int) ($this->request->getGet('page') ?? 1);
@@ -84,15 +183,24 @@ class AsetController extends Controller
         $offset = ($currentPage - 1) * $perPage;
         $totalPages = $total > 0 ? ceil($total / $perPage) : 1;
 
+        if ($sortCol && isset($columnMap[$sortCol])) {
+            $builder->orderBy($columnMap[$sortCol], $sortDir);
+        } else {
+            $builder->orderBy('a.updated_at', 'DESC');
+        }
+
         $records = $builder
-            ->select('a.*, ak.nama_kategori, ask.nama_sub_kategori, akb.nama_kondisi, a.input_mode, a.batch_id')
-            ->join('aset_kategori ak', 'ak.kt_id = a.kategori_id', 'left')
-            ->join('aset_sub_kategori ask', 'ask.sk_id = a.sub_kategori_id', 'left')
-            ->join('aset_kondisi_barang akb', 'akb.kd_id = a.kondisi_id', 'left')
+            ->select(implode(', ', $selectFields))
             ->limit($perPage, $offset)
-            ->orderBy('a.updated_at', 'DESC')
             ->get()
             ->getResultArray();
+
+        $searchableColumns = [];
+        foreach ($visibleColumns as $col) {
+            if (isset($allColumns[$col])) {
+                $searchableColumns[$col] = $allColumns[$col];
+            }
+        }
 
         $data = [
             'title' => 'Registrasi Aset',
@@ -101,13 +209,42 @@ class AsetController extends Controller
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
             'search' => $search,
+            'searchCol' => $searchCol,
             'status' => $status,
             'inputMode' => $inputMode,
             'kategoriFilter' => $kategori,
             'kategoriOptions' => $this->kategoriModel->where('is_active', 1)->orderBy('nama_kategori', 'ASC')->findAll(),
+            'visibleColumns' => $visibleColumns,
+            'allColumns' => $allColumns,
+            'searchableColumns' => $searchableColumns,
+            'sortCol' => $sortCol,
+            'sortDir' => $sortDir,
         ];
 
         return view('master/aset/index', $data);
+    }
+
+    public function save_column_preferences()
+    {
+        helper('cookie');
+
+        $columns = $this->request->getGet('columns');
+        $decoded = json_decode($columns, true);
+
+        if (!is_array($decoded) || count($decoded) === 0 || count($decoded) > 6) {
+            return redirect()->to('/master/aset')->with('error', 'Maksimal 6 kolom.');
+        }
+
+        $validColumns = array_keys(get_aset_all_columns());
+        foreach ($decoded as $col) {
+            if (!in_array($col, $validColumns)) {
+                return redirect()->to('/master/aset');
+            }
+        }
+
+        setcookie('aset_column_prefs', json_encode($decoded), time() + 60 * 60 * 24 * 365, '/');
+
+        return redirect()->to('/master/aset');
     }
 
     public function new()
@@ -139,12 +276,25 @@ class AsetController extends Controller
     {
         $kategoriId = (int) $this->request->getPost('kategori_id');
         $subKategoriId = (int) $this->request->getPost('sub_kategori_id');
+        $unitKerjaId = (int) $this->request->getPost('unit_kerja_id');
 
         $subKategori = $this->subKategoriModel->find($subKategoriId);
+        if (!$subKategori) {
+            return redirect()->back()->withInput()->with('error', 'Sub Kategori tidak ditemukan.');
+        }
+
+        $unitKerja = $this->unitKerjaModel->getById($unitKerjaId);
+        if (!$unitKerja) {
+            return redirect()->back()->withInput()->with('error', 'Unit Kerja tidak ditemukan atau tidak valid.');
+        }
+
+        $namaSubKategori = $subKategori['nama_sub_kategori'];
+        $namaUnitKerja = $unitKerja['nama_unit'];
+        $namaAset = $namaSubKategori . ' / ' . $namaUnitKerja;
+
         $rules = [
             'kategori_id' => 'required|integer',
             'sub_kategori_id' => 'required|integer',
-            'nama_aset' => 'required|max_length[200]',
             'unit_kerja_id' => 'required|integer',
             'kondisi_id' => 'required|integer',
             'sumber_dana_id' => 'required|integer',
@@ -160,22 +310,8 @@ class AsetController extends Controller
             $rules['ruangan_id'] = 'required|integer';
         }
 
-if (!$this->validate($rules)) {
+        if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
-        $namaAset = trim($this->request->getPost('nama_aset'));
-
-        $exists = $this->asetModel
-            ->where('nama_aset', $namaAset)
-            ->where('kategori_id', $kategoriId)
-            ->where('is_active', 1)
-            ->first();
-
-        if ($exists) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Nama Aset "' . $namaAset . '" sudah pernah diinput pada Kategori ini.');
         }
 
         $golonganId = $this->request->getPost('golongan_id');
@@ -261,12 +397,25 @@ if (!$this->validate($rules)) {
         }
 
         $subKategoriId = (int) $this->request->getPost('sub_kategori_id');
+        $unitKerjaId = (int) $this->request->getPost('unit_kerja_id');
+
         $subKategori = $this->subKategoriModel->find($subKategoriId);
+        if (!$subKategori) {
+            return redirect()->back()->withInput()->with('error', 'Sub Kategori tidak ditemukan.');
+        }
+
+        $unitKerja = $this->unitKerjaModel->getById($unitKerjaId);
+        if (!$unitKerja) {
+            return redirect()->back()->withInput()->with('error', 'Unit Kerja tidak ditemukan atau tidak valid.');
+        }
+
+        $namaSubKategori = $subKategori['nama_sub_kategori'];
+        $namaUnitKerja = $unitKerja['nama_unit'];
+        $namaAset = $namaSubKategori . ' / ' . $namaUnitKerja;
 
         $rules = [
             'kategori_id' => 'required|integer',
             'sub_kategori_id' => 'required|integer',
-            'nama_aset' => 'required|max_length[200]',
             'unit_kerja_id' => 'required|integer',
             'kondisi_id' => 'required|integer',
             'sumber_dana_id' => 'required|integer',
@@ -287,20 +436,6 @@ if (!$this->validate($rules)) {
         }
 
         $kategoriId = (int) $this->request->getPost('kategori_id');
-        $namaAset = trim($this->request->getPost('nama_aset'));
-
-        $exists = $this->asetModel
-            ->where('nama_aset', $namaAset)
-            ->where('kategori_id', $kategoriId)
-            ->where('is_active', 1)
-            ->where('all_id !=', $id)
-            ->first();
-
-        if ($exists) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Nama Aset "' . $namaAset . '" sudah pernah diinput pada Kategori ini.');
-        }
 
         $golonganId = $this->request->getPost('golongan_id');
         if (!empty($golonganId)) {

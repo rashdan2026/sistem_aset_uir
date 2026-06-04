@@ -32,18 +32,22 @@ class RuanganModel extends Model
      */
     public function withFullLocation()
     {
-        return $this->select('aset_ruangan.*, 
+        return $this->select('aset_ruangan.*,
             aset_lantai.nama_lantai, aset_lantai.nomor_lantai,
             aset_gedung.gd_id as gedung_id_col, aset_gedung.nama_gedung, aset_gedung.kode_gedung,
             aset_sub_units.nama_sub_unit,
             tbl_unit_kerja.nama_unit,
             ylpi_karyawan.nama_gelar as pj_nama,
-            ylpi_karyawan.npk as pj_npk')
+            ylpi_karyawan.npk as pj_npk,
+            ylpi_karyawan.jabatan_struktural as pj_jabatan_struktural,
+            ylpi_karyawan.tgl_lahir as pj_tgl_lahir,
+            tbl_jabatan_pegawai.nama_jabatan as pj_nama_jabatan')
             ->join('aset_lantai', 'aset_lantai.lt_id = aset_ruangan.lantai_id', 'left')
             ->join('aset_gedung', 'aset_gedung.gd_id = aset_lantai.gedung_id', 'left')
             ->join('aset_sub_units', 'aset_sub_units.su_id = aset_ruangan.sub_unit_id', 'left')
             ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja = aset_gedung.unit_kerja_id', 'left')
-            ->join('ylpi_karyawan', 'ylpi_karyawan.id_kpe = aset_ruangan.penanggung_jawab_id_kpe', 'left');
+            ->join('ylpi_karyawan', 'ylpi_karyawan.id_kpe = aset_ruangan.penanggung_jawab_id_kpe', 'left')
+            ->join('tbl_jabatan_pegawai', 'tbl_jabatan_pegawai.id_jabatan_pegawai = ylpi_karyawan.jabatan_struktural AND tbl_jabatan_pegawai.flag_aktif = 1', 'left');
     }
 
     /**
@@ -91,12 +95,16 @@ class RuanganModel extends Model
                     aset_sub_units.nama_sub_unit,
                     tbl_unit_kerja.nama_unit as unit_nama,
                     ylpi_karyawan.nama_gelar as pj_nama,
-                    ylpi_karyawan.npk as pj_npk')
+                    ylpi_karyawan.npk as pj_npk,
+                    ylpi_karyawan.jabatan_struktural as pj_jabatan_struktural,
+                    ylpi_karyawan.tgl_lahir as pj_tgl_lahir,
+                    tbl_jabatan_pegawai.nama_jabatan as pj_nama_jabatan')
                 ->join('aset_lantai', 'aset_lantai.lt_id = aset_ruangan.lantai_id', 'left')
                 ->join('aset_gedung', 'aset_gedung.gd_id = aset_lantai.gedung_id', 'left')
                 ->join('aset_sub_units', 'aset_sub_units.su_id = aset_ruangan.sub_unit_id', 'left')
                 ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja = aset_gedung.unit_kerja_id', 'left')
                 ->join('ylpi_karyawan', 'ylpi_karyawan.id_kpe = aset_ruangan.penanggung_jawab_id_kpe', 'left')
+                ->join('tbl_jabatan_pegawai', 'tbl_jabatan_pegawai.id_jabatan_pegawai = ylpi_karyawan.jabatan_struktural AND tbl_jabatan_pegawai.flag_aktif = 1', 'left')
                 ->orderBy('aset_gedung.nama_gedung', 'ASC')
                 ->orderBy('aset_lantai.nomor_lantai', 'ASC')
                 ->orderBy('aset_ruangan.nama_ruangan', 'ASC')
@@ -116,12 +124,16 @@ class RuanganModel extends Model
                     aset_sub_units.nama_sub_unit,
                     tbl_unit_kerja.nama_unit as unit_nama,
                     ylpi_karyawan.nama_gelar as pj_nama,
-                    ylpi_karyawan.npk as pj_npk')
+                    ylpi_karyawan.npk as pj_npk,
+                    ylpi_karyawan.jabatan_struktural as pj_jabatan_struktural,
+                    ylpi_karyawan.tgl_lahir as pj_tgl_lahir,
+                    tbl_jabatan_pegawai.nama_jabatan as pj_nama_jabatan')
                 ->join('aset_lantai', 'aset_lantai.lt_id = aset_ruangan.lantai_id', 'left')
                 ->join('aset_gedung', 'aset_gedung.gd_id = aset_lantai.gedung_id', 'left')
                 ->join('aset_sub_units', 'aset_sub_units.su_id = aset_ruangan.sub_unit_id', 'left')
                 ->join('tbl_unit_kerja', 'tbl_unit_kerja.id_unit_kerja = aset_gedung.unit_kerja_id', 'left')
                 ->join('ylpi_karyawan', 'ylpi_karyawan.id_kpe = aset_ruangan.penanggung_jawab_id_kpe', 'left')
+                ->join('tbl_jabatan_pegawai', 'tbl_jabatan_pegawai.id_jabatan_pegawai = ylpi_karyawan.jabatan_struktural AND tbl_jabatan_pegawai.flag_aktif = 1', 'left')
                 ->orderBy('aset_gedung.nama_gedung', 'ASC')
                 ->orderBy('aset_lantai.nomor_lantai', 'ASC')
                 ->orderBy('aset_ruangan.nama_ruangan', 'ASC')

@@ -18,7 +18,7 @@ class LantaiController extends Controller
     {
         $this->model = new LantaiModel();
         $this->gedungModel = new GedungModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -102,7 +102,6 @@ class LantaiController extends Controller
     {
         $rules = [
             'gedung_id' => 'required|integer',
-            'kode_lantai' => 'required|max_length[30]',
             'nama_lantai' => 'required|max_length[100]',
             'nomor_lantai' => 'required|integer',
         ];
@@ -111,14 +110,19 @@ class LantaiController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $gedungId = $this->request->getPost('gedung_id');
+
         $this->model->save([
-            'gedung_id' => $this->request->getPost('gedung_id'),
-            'kode_lantai' => $this->request->getPost('kode_lantai'),
+            'gedung_id' => $gedungId,
             'nama_lantai' => $this->request->getPost('nama_lantai'),
             'nomor_lantai' => $this->request->getPost('nomor_lantai'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
+
+        $lantaiId = $this->model->getInsertID();
+        $kodeLantai = generate_kode_lantai($gedungId, $lantaiId);
+        $this->model->update($lantaiId, ['kode_lantai' => $kodeLantai]);
 
         return redirect()->to(base_url('/master/lantai'))->with('success', 'Lantai berhasil ditambahkan.');
     }
@@ -146,7 +150,6 @@ class LantaiController extends Controller
 
         $rules = [
             'gedung_id' => 'required|integer',
-            'kode_lantai' => 'required|max_length[30]',
             'nama_lantai' => 'required|max_length[100]',
             'nomor_lantai' => 'required|integer',
         ];
@@ -157,7 +160,6 @@ class LantaiController extends Controller
 
         $this->model->update($id, [
             'gedung_id' => $this->request->getPost('gedung_id'),
-            'kode_lantai' => $this->request->getPost('kode_lantai'),
             'nama_lantai' => $this->request->getPost('nama_lantai'),
             'nomor_lantai' => $this->request->getPost('nomor_lantai'),
             'keterangan' => $this->request->getPost('keterangan'),

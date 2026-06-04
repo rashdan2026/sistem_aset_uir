@@ -36,13 +36,11 @@
                             </select>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="kode_lantai">Kode Lantai *</label>
-                            <input type="text" name="kode_lantai" id="kode_lantai"
-                                   class="form-control"
-                                   value="<?= old('kode_lantai', $record['kode_lantai'] ?? '') ?>"
-                                   required maxlength="30">
-                        </div>
+                        <?php if (isset($record)): ?>
+                            <input type="hidden" name="kode_lantai" value="<?= esc($record['kode_lantai'] ?? '') ?>">
+                        <?php else: ?>
+                            <input type="hidden" name="kode_lantai" value="">
+                        <?php endif; ?>
 
                         <div class="form-group mb-3">
                             <label for="nama_lantai">Nama Lantai *</label>

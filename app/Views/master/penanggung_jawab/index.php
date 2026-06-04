@@ -47,8 +47,8 @@
                         <?php foreach ($penanggungJawab as $pj): ?>
                         <tr>
                             <td><?= esc($pj['npk'] ?? '-') ?></td>
-                            <td><?= esc($pj['nama_gelar']) ?></td>
-                            <td><?= esc($pj['unit_kerja'] ?? '-') ?></td>
+                            <td><?= format_penanggung_jawab($pj) ?></td>
+                            <td><?= esc($pj['nama_unit'] ?? '-') ?></td>
                             <td><?= esc($pj['kategori'] ?? '-') ?></td>
                             <td>
                                 <div class="action-btn-group">
@@ -96,7 +96,7 @@
             }
             ?>
 
-            <?php if ($totalPages > 1): ?>
+            <?php if ($totalPages > 1 && $total > 50): ?>
             <nav class="mt-3">
                 <ul class="pagination justify-content-center">
                     <?= renderPageItem(1, $currentPage, $baseUrl, $searchParam, '&laquo;', 'prev') ?>
@@ -188,10 +188,10 @@ function showDetail(idKpe) {
             var html = '<table class="table table-borderless">';
             html += '<tr><td class="text-muted" style="width:160px;">ID KPE</td><td class="fw-bold">' + escHtml(data.id_kpe || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">NPK</td><td class="fw-bold">' + escHtml(data.npk || '-') + '</td></tr>';
-            html += '<tr><td class="text-muted">Nama Lengkap</td><td class="fw-bold fs-5">' + escHtml(data.nama_gelar || '-') + '</td></tr>';
+            html += '<tr><td class="text-muted">Penanggung Jawab</td><td class="fw-bold fs-5">' + formatPenanggungJawab(data) + '</td></tr>';
             html += '<tr><td class="text-muted">Jenis Kelamin</td><td>' + escHtml(data.jenkel || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Kategori</td><td><span class="badge bg-secondary">' + escHtml(data.kategori || '-') + '</span></td></tr>';
-            html += '<tr><td class="text-muted">Unit Kerja</td><td>' + escHtml(data.unit_kerja || '-') + '</td></tr>';
+            html += '<tr><td class="text-muted">Unit Kerja</td><td>' + escHtml(data.nama_unit || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Email</td><td>' + escHtml(data.email || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">No. HP</td><td>' + escHtml(data.no_hp1 || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">No. WA</td><td>' + escHtml(data.no_wa || '-') + '</td></tr>';
@@ -209,6 +209,25 @@ function escHtml(str) {
     var div = document.createElement('div');
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
+}
+
+function formatTanggalIndonesia(dateStr) {
+    if (!dateStr || dateStr === '0000-00-00') return '-';
+    var parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    return parts[2] + '-' + parts[1] + '-' + parts[0];
+}
+
+function formatPenanggungJawab(pj) {
+    if (!pj || !pj.nama_gelar) return '-';
+    var namaGelar = pj.nama_gelar;
+    if (pj.nama_jabatan) {
+        return namaGelar + ' (' + pj.nama_jabatan + ')';
+    }
+    if (pj.tgl_lahir && pj.tgl_lahir !== '0000-00-00') {
+        return namaGelar + ' (' + formatTanggalIndonesia(pj.tgl_lahir) + ')';
+    }
+    return namaGelar;
 }
 </script>
 <?php $this->endSection() ?>

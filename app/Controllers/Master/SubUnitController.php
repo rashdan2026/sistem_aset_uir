@@ -18,7 +18,7 @@ class SubUnitController extends Controller
     {
         $this->subUnitModel = new SubUnitModel();
         $this->unitKerjaModel = new UnitKerjaAllowedModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -118,7 +118,6 @@ class SubUnitController extends Controller
     {
         $rules = [
             'unit_kerja_id' => 'required|integer',
-            'kode_sub_unit' => 'required|max_length[30]',
             'nama_sub_unit' => 'required|max_length[150]',
             'jenis_sub_unit' => 'permit_empty|max_length[50]',
             'keterangan' => 'permit_empty',
@@ -129,12 +128,6 @@ class SubUnitController extends Controller
         }
 
         $unitKerjaId = $this->request->getPost('unit_kerja_id');
-        $kodeSubUnit = $this->request->getPost('kode_sub_unit');
-
-        if (!$this->subUnitModel->isKodeUnique($kodeSubUnit, $unitKerjaId)) {
-            return redirect()->back()->withInput()->with('errors', ['kode_sub_unit' => 'Kode sub unit sudah digunakan dalam unit kerja ini.']);
-        }
-
         $namaSubUnit = trim($this->request->getPost('nama_sub_unit'));
 
         $exists = $this->subUnitModel
@@ -150,7 +143,6 @@ class SubUnitController extends Controller
 
         $data = [
             'unit_kerja_id' => $unitKerjaId,
-            'kode_sub_unit' => $kodeSubUnit,
             'nama_sub_unit' => $namaSubUnit,
             'jenis_sub_unit' => $this->request->getPost('jenis_sub_unit'),
             'keterangan' => $this->request->getPost('keterangan'),
@@ -158,6 +150,9 @@ class SubUnitController extends Controller
         ];
 
         $this->subUnitModel->save($data);
+        $subId = $this->subUnitModel->getInsertID();
+        $kodeSubUnit = generate_kode_sub_unit($unitKerjaId, $subId);
+        $this->subUnitModel->update($subId, ['kode_sub_unit' => $kodeSubUnit]);
 
         return redirect()->to(base_url('/master/sub-units'))->with('success', 'Sub Unit berhasil ditambahkan.');
     }
@@ -189,7 +184,6 @@ class SubUnitController extends Controller
 
         $rules = [
             'unit_kerja_id' => 'required|integer',
-            'kode_sub_unit' => 'required|max_length[30]',
             'nama_sub_unit' => 'required|max_length[150]',
             'jenis_sub_unit' => 'permit_empty|max_length[50]',
             'keterangan' => 'permit_empty',
@@ -199,16 +193,8 @@ class SubUnitController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $unitKerjaId = $this->request->getPost('unit_kerja_id');
-        $kodeSubUnit = $this->request->getPost('kode_sub_unit');
-
-        if (!$this->subUnitModel->isKodeUnique($kodeSubUnit, $unitKerjaId, $id)) {
-            return redirect()->back()->withInput()->with('errors', ['kode_sub_unit' => 'Kode sub unit sudah digunakan dalam unit kerja ini.']);
-        }
-
         $data = [
             'unit_kerja_id' => $this->request->getPost('unit_kerja_id'),
-            'kode_sub_unit' => $this->request->getPost('kode_sub_unit'),
             'nama_sub_unit' => $this->request->getPost('nama_sub_unit'),
             'jenis_sub_unit' => $this->request->getPost('jenis_sub_unit'),
             'keterangan' => $this->request->getPost('keterangan'),

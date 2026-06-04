@@ -15,7 +15,7 @@ class MerkController extends Controller
     public function __construct()
     {
         $this->model = new MerkModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'kode']);
     }
 
     public function index()
@@ -71,7 +71,6 @@ class MerkController extends Controller
     public function create()
     {
         $rules = [
-            'kode_merk' => 'required|max_length[30]|is_unique[aset_merk.kode_merk]',
             'nama_merk' => 'required|max_length[100]|is_unique[aset_merk.nama_merk]',
         ];
 
@@ -93,11 +92,14 @@ class MerkController extends Controller
         }
 
         $this->model->save([
-            'kode_merk' => $this->request->getPost('kode_merk'),
             'nama_merk' => $namaMerk,
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
+
+        $merkId = $this->model->getInsertID();
+        $kodeMerk = generate_kode_merk($merkId);
+        $this->model->update($merkId, ['kode_merk' => $kodeMerk]);
 
         return redirect()->to(base_url('/master/merk'))->with('success', 'Merk berhasil ditambahkan.');
     }
@@ -120,7 +122,6 @@ class MerkController extends Controller
         }
 
         $rules = [
-            'kode_merk' => "required|max_length[30]|is_unique[aset_merk.kode_merk,mr_id,{$id}]",
             'nama_merk' => "required|max_length[100]|is_unique[aset_merk.nama_merk,mr_id,{$id}]",
         ];
 
@@ -143,7 +144,6 @@ class MerkController extends Controller
         }
 
         $this->model->update($id, [
-            'kode_merk' => $this->request->getPost('kode_merk'),
             'nama_merk' => $namaMerk,
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,

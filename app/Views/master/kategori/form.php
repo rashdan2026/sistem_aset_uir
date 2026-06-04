@@ -17,11 +17,11 @@
                             <input type="hidden" name="_method" value="PUT">
                         <?php endif; ?>
 
-                        <div class="mb-3">
-                            <label for="kode_kategori" class="form-label">Kode Kategori *</label>
-                            <input type="text" name="kode_kategori" id="kode_kategori" class="form-control" 
-                                   value="<?= old('kode_kategori', $kategori['kode_kategori'] ?? '') ?>" required maxlength="30">
-                        </div>
+                        <?php if (isset($kategori)): ?>
+                            <input type="hidden" name="kode_kategori" value="<?= esc($kategori['kode_kategori'] ?? '') ?>">
+                        <?php else: ?>
+                            <input type="hidden" name="kode_kategori" value="">
+                        <?php endif; ?>
 
                         <div class="mb-3" style="position: relative;">
                             <label for="nama_kategori" class="form-label">Nama Kategori *</label>

@@ -23,14 +23,14 @@
                 <?= csrf_field() ?>
                 <input type="hidden" name="_method" value="<?= $isEdit ? 'PUT' : 'POST' ?>">
 
+                <?php if (isset($record)): ?>
+                    <input type="hidden" name="kode_sumber_dana" value="<?= esc($record['kode_sumber_dana'] ?? '') ?>">
+                <?php else: ?>
+                    <input type="hidden" name="kode_sumber_dana" value="">
+                <?php endif; ?>
+
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Kode Sumber Dana <span class="text-danger">*</span></label>
-                            <input type="text" name="kode_sumber_dana" class="form-control" value="<?= old('kode_sumber_dana', $record['kode_sumber_dana'] ?? '') ?>" maxlength="30" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label>Nama Sumber Dana <span class="text-danger">*</span></label>
                             <input type="text" name="nama_sumber_dana" class="form-control" value="<?= old('nama_sumber_dana', $record['nama_sumber_dana'] ?? '') ?>" maxlength="150" required>

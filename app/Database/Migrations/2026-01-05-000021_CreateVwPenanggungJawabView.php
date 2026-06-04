@@ -25,12 +25,18 @@ class CreateVwPenanggungJawabView extends Migration
                 k.no_wa,
                 k.email,
                 k.unit_kerja AS unit_kerja_id,
+                k.jabatan_struktural,
+                j.nama_jabatan,
+                k.tgl_lahir,
                 u.nama_unit,
                 1 AS is_active
             FROM ylpi_karyawan k
             LEFT JOIN tbl_unit_kerja u
                 ON u.id_unit_kerja = k.unit_kerja
                 AND u.flag_aktif = 1
+            LEFT JOIN tbl_jabatan_pegawai j
+                ON j.id_jabatan_pegawai = k.jabatan_struktural
+                AND j.flag_aktif = 1
             WHERE k.flag_karyawan = '1'";
         
         $db->query($sql);

@@ -31,13 +31,11 @@
                             </select>
                         </div>
                         
-                        <div class="form-group mb-3">
-                            <label for="kode_gedung">Kode Gedung *</label>
-                            <input type="text" name="kode_gedung" id="kode_gedung" 
-                                   class="form-control" 
-                                   value="<?= old('kode_gedung', $gedung['kode_gedung'] ?? '') ?>" 
-                                   required maxlength="30">
-                        </div>
+                        <?php if (isset($gedung)): ?>
+                            <input type="hidden" name="kode_gedung" value="<?= esc($gedung['kode_gedung'] ?? '') ?>">
+                        <?php else: ?>
+                            <input type="hidden" name="kode_gedung" value="">
+                        <?php endif; ?>
                         
                         <div class="form-group mb-3">
                             <label for="nama_gedung">Nama Gedung *</label>
@@ -49,13 +47,13 @@
 
                         <div class="form-group mb-3">
                             <label for="jumlah_lantai">Jumlah Lantai *</label>
-                            <input type="number" name="jumlah_lantai" id="jumlah_lantai" 
-                                   class="form-control" 
-                                   value="<?= old('jumlah_lantai', $gedung['jumlah_lantai'] ?? 1) ?>" 
+                            <input type="number" name="jumlah_lantai" id="jumlah_lantai"
+                                   class="form-control"
+                                   value="<?= old('jumlah_lantai', $gedung['jumlah_lantai'] ?? 1) ?>"
                                    min="1" max="99"
                                    <?= isset($gedung) ? 'readonly' : '' ?>>
                             <?php if (!isset($gedung)): ?>
-                                <small class="text-muted">Lantai akan otomatis dibuat dengan kode LT_{id_gedung}_1, LT_{id_gedung}_2, dst.</small>
+                                <small class="text-muted">Lantai akan otomatis dibuat dengan kode LT-XX-YYYY.</small>
                             <?php else: ?>
                                 <small class="text-muted">Jumlah lantai tidak dapat diubah. Kelola lantai melalui menu <a href="<?= base_url('/master/lantai') ?>">Master Lantai</a>.</small>
                             <?php endif; ?>

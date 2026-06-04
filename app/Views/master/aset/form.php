@@ -54,20 +54,12 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group" style="position: relative;">
-                            <label>Nama Aset <span class="text-danger">*</span></label>
-                            <input type="text" name="nama_aset" id="nama_aset" class="form-control" value="<?= old('nama_aset', $record['nama_aset'] ?? '') ?>" maxlength="200" required autocomplete="off">
-                            <div id="suggestions" class="suggestions-box" style="display: none;"></div>
-                            <small class="form-text text-muted">Pilih Kategori terlebih dahulu, lalu ketik min. 4 huruf untuk mencari.</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
                         <div class="form-group">
-                            <label>No Aset Lama</label>
+                            <label>ID Aset Lama</label>
                             <input type="text" name="nomor_aset_lama" class="form-control" value="<?= old('nomor_aset_lama', $record['nomor_aset_lama'] ?? '') ?>" placeholder="Jika ada">
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Serial Number</label>
                             <input type="text" name="serial_number" class="form-control" value="<?= old('serial_number', $record['serial_number'] ?? '') ?>" placeholder="Opsional">
@@ -194,7 +186,7 @@
                                     $pjModel = model('App\Models\Reference\PenanggungJawabReadOnlyModel');
                                     $pjData = $pjModel->getById($record['penanggung_jawab_id_kpe']);
                                     if ($pjData): ?>
-                                        <option value="<?= esc($pjData['id_kpe']) ?>" selected><?= esc($pjData['nama_gelar']) ?> (<?= esc($pjData['npk']) ?>)</option>
+                                        <option value="<?= esc($pjData['id_kpe']) ?>" selected><?= format_penanggung_jawab($pjData) ?></option>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </select>
@@ -256,34 +248,6 @@
 </div>
 
 <style>
-.suggestions-box {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 9999;
-    margin-top: 2px;
-}
-
-.suggestion-item {
-    padding: 10px 15px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.suggestion-item:last-child {
-    border-bottom: none;
-}
-
-.suggestion-item:hover {
-    background-color: #f8f9fa;
-}
 </style>
 
 <script>
@@ -293,7 +257,6 @@ document.addEventListener('DOMContentLoaded', function() {
         onSubKategoriChange();
     }
     initSelect2();
-    initAsetAutocomplete();
 });
 
 // Simpan nilai awal untuk Merk dan Type saat edit (sebelum Select2 mengoverride)
@@ -585,63 +548,6 @@ function loadTypeForInitialMerk(merkId) {
                 }
             }
         });
-}
-
-function initAsetAutocomplete() {
-    var namaAsetInput = document.getElementById('nama_aset');
-    var suggestionsBox = document.getElementById('suggestions');
-    var timeout = null;
-
-    if (!namaAsetInput || !suggestionsBox) return;
-
-    namaAsetInput.addEventListener('keyup', function () {
-        var keyword = this.value.trim();
-        var kategoriId = document.getElementById('kategori_id').value;
-
-        clearTimeout(timeout);
-
-        if (keyword.length < 4 || !kategoriId) {
-            suggestionsBox.style.display = 'none';
-            suggestionsBox.innerHTML = '';
-            return;
-        }
-
-        timeout = setTimeout(function() {
-            fetch('<?= base_url("/master/aset/search") ?>?q=' + encodeURIComponent(keyword) + '&kategori_id=' + encodeURIComponent(kategoriId))
-                .then(function(response) { return response.json(); })
-                .then(function(data) {
-                    suggestionsBox.innerHTML = '';
-
-                    if (data.length === 0) {
-                        suggestionsBox.style.display = 'none';
-                        return;
-                    }
-
-                    data.forEach(function(item) {
-                        var div = document.createElement('div');
-                        div.className = 'suggestion-item';
-                        div.textContent = item.nama_aset + (item.nomor_aset_baru ? ' (' + item.nomor_aset_baru + ')' : '');
-                        div.addEventListener('click', function () {
-                            namaAsetInput.value = item.nama_aset;
-                            suggestionsBox.style.display = 'none';
-                        });
-                        suggestionsBox.appendChild(div);
-                    });
-
-                    suggestionsBox.style.display = 'block';
-                })
-                .catch(function(error) {
-                    console.error('Error:', error);
-                    suggestionsBox.style.display = 'none';
-                });
-        }, 300);
-    });
-
-    document.addEventListener('click', function (e) {
-        if (!e.target.closest('#nama_aset') && !e.target.closest('#suggestions')) {
-            suggestionsBox.style.display = 'none';
-        }
-    });
 }
 </script>
 <?php $this->endSection(); ?>

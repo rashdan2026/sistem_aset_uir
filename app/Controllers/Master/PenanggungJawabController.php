@@ -12,7 +12,7 @@ class PenanggungJawabController extends Controller
     public function __construct()
     {
         $this->pjModel = new PenanggungJawabReadOnlyModel();
-        helper(['form', 'url']);
+        helper(['form', 'url', 'pj']);
     }
 
     public function index()
@@ -20,7 +20,7 @@ class PenanggungJawabController extends Controller
         $search = $this->request->getGet('q');
         $db = db_connect();
 
-        $builder = $db->table('ylpi_karyawan');
+        $builder = $db->table('vw_penanggung_jawab');
 
         if (!empty($search)) {
             $builder->groupStart()
@@ -30,8 +30,6 @@ class PenanggungJawabController extends Controller
                 ->groupEnd();
         }
 
-        $builder->where('flag_karyawan', '1');
-
         $perPage = 20;
         $total = $builder->countAllResults(false);
 
@@ -39,7 +37,7 @@ class PenanggungJawabController extends Controller
         $currentPage = ($currentPage < 1) ? 1 : $currentPage;
         $offset = ($currentPage - 1) * $perPage;
 
-        $records = $builder->select('id_kpe, npk, nama_gelar, unit_kerja, kategori, email')
+        $records = $builder->select('id_kpe, npk, nama_gelar, nama_jabatan, tgl_lahir, nama_unit, kategori, email')
                            ->limit($perPage, $offset)
                            ->orderBy('nama_gelar', 'ASC')
                            ->get()

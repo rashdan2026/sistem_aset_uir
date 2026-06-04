@@ -64,13 +64,11 @@
                             </select>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="kode_ruangan">Kode Ruangan *</label>
-                            <input type="text" name="kode_ruangan" id="kode_ruangan"
-                                   class="form-control"
-                                   value="<?= old('kode_ruangan', $record['kode_ruangan'] ?? '') ?>"
-                                   required maxlength="30">
-                        </div>
+                        <?php if (isset($record)): ?>
+                            <input type="hidden" name="kode_ruangan" value="<?= esc($record['kode_ruangan'] ?? '') ?>">
+                        <?php else: ?>
+                            <input type="hidden" name="kode_ruangan" value="">
+                        <?php endif; ?>
 
                         <div class="form-group mb-3" style="position: relative;">
                             <label for="nama_ruangan">Nama Ruangan *</label>
@@ -101,7 +99,7 @@
                                     $pjModel = model('App\Models\Reference\PenanggungJawabReadOnlyModel');
                                     $pjData = $pjModel->getById($record['penanggung_jawab_id_kpe']);
                                     if ($pjData): ?>
-                                        <option value="<?= esc($pjData['id_kpe']) ?>" selected><?= esc($pjData['nama_gelar']) ?> (<?= esc($pjData['npk']) ?>)</option>
+                                        <option value="<?= esc($pjData['id_kpe']) ?>" selected><?= format_penanggung_jawab($pjData) ?></option>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             </select>
@@ -259,7 +257,7 @@ document.getElementById('gedung_id').addEventListener('change', function() {
 document.addEventListener('DOMContentLoaded', function() {
     var $pj = $('#penanggung_jawab_id_kpe');
     if ($pj.length) {
-        var initialDataPj = <?= isset($pjData) && !empty($pjData) ? json_encode(['id' => $pjData['id_kpe'], 'text' => $pjData['nama_gelar'] . ' (' . $pjData['npk'] . ')']) : 'null' ?>;
+        var initialDataPj = <?= isset($pjData) && !empty($pjData) ? json_encode(['id' => $pjData['id_kpe'], 'text' => format_penanggung_jawab($pjData)]) : 'null' ?>;
         $pj.select2({
             theme: 'bootstrap-5',
             ajax: {

@@ -49,13 +49,11 @@
                             </select>
                         </div>
                         
-                        <div class="form-group mb-3">
-                            <label for="kode_sub_unit">Kode Sub Unit *</label>
-                            <input type="text" name="kode_sub_unit" id="kode_sub_unit" 
-                                   class="form-control" 
-                                   value="<?= old('kode_sub_unit', $subUnit['kode_sub_unit'] ?? '') ?>" 
-                                   required maxlength="30">
-                        </div>
+                        <?php if (isset($subUnit)): ?>
+                            <input type="hidden" name="kode_sub_unit" value="<?= esc($subUnit['kode_sub_unit'] ?? '') ?>">
+                        <?php else: ?>
+                            <input type="hidden" name="kode_sub_unit" value="">
+                        <?php endif; ?>
                         
                         <div class="form-group mb-3" style="position: relative;">
                             <label for="nama_sub_unit">Nama Sub Unit *</label>

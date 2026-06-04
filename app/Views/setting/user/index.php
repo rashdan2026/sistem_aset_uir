@@ -91,7 +91,7 @@
                 </table>
             </div>
 
-            <?php if ($totalPages > 1): ?>
+            <?php if ($totalPages > 1 && $total > 50): ?>
             <nav class="mt-3">
                 <ul class="pagination justify-content-center">
                     <?php if ($currentPage > 1): ?>
