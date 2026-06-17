@@ -65,14 +65,6 @@
                         </div>
                         
                         <div class="form-group mb-3">
-                            <label for="jenis_sub_unit">Jenis Sub Unit</label>
-                            <input type="text" name="jenis_sub_unit" id="jenis_sub_unit" 
-                                   class="form-control" 
-                                   value="<?= old('jenis_sub_unit', $subUnit['jenis_sub_unit'] ?? '') ?>" 
-                                   maxlength="50">
-                        </div>
-                        
-                        <div class="form-group mb-3">
                             <label for="keterangan">Keterangan</label>
                             <textarea name="keterangan" id="keterangan" class="form-control"><?= old('keterangan', $subUnit['keterangan'] ?? '') ?></textarea>
                         </div>

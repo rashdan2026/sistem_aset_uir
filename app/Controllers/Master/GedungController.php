@@ -26,7 +26,7 @@ public function __construct()
 
     public function index()
     {
-        $perPage = 20;
+        $perPage = 50;
         $page = (int) ($this->request->getGet('page') ?? 1);
         $page = $page > 0 ? $page : 1;
 

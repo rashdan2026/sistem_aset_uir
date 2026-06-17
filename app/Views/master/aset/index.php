@@ -14,21 +14,25 @@
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary">Daftar Aset (<?= number_format($total) ?> data)</h6>
             <div class="d-flex align-items-center gap-2">
-                <div class="dropdown">
+                <div class="dropdown" id="columnDropdown">
                     <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="columnToggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-table"></i> Kolom
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="columnToggle" style="min-width:220px;" onsubmit="return false;">
-                        <p class="small text-muted mb-2">Pilih kolom (maks 6):</p>
+                    <div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="columnToggle" style="min-width:240px;" id="columnPanel">
+                        <p class="small text-muted mb-2 fw-semibold">Pilih Kolom:</p>
                         <div id="columnCheckboxes">
                             <?php foreach ($allColumns as $key => $label): ?>
                                 <div class="form-check">
-                                    <input class="form-check-input column-cb" type="checkbox" value="<?= esc($key) ?>" id="col_<?= esc($key) ?>" <?= in_array($key, $visibleColumns) ? 'checked' : '' ?> onchange="handleColumnChange(this)">
+                                    <input class="form-check-input column-cb" type="checkbox" value="<?= esc($key) ?>" id="col_<?= esc($key) ?>" <?= in_array($key, $visibleColumns) ? 'checked' : '' ?>>
                                     <label class="form-check-label" for="col_<?= esc($key) ?>"><?= esc($label) ?></label>
                                 </div>
                             <?php endforeach; ?>
                         </div>
-                        <div class="invalid-feedback d-block" id="columnError" style="display:none;"></div>
+                        <div class="invalid-feedback d-block text-danger small mb-2" id="columnError" style="display:none;"></div>
+                        <div class="d-flex gap-2 mt-2">
+                            <button type="button" class="btn btn-primary btn-sm flex-grow-1" id="applyColumnsBtn">Apply</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" id="resetColumnsBtn">Reset</button>
+                        </div>
                     </div>
                 </div>
                 <a href="<?= base_url('/master/aset/new') ?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Single Aset</a>
@@ -89,7 +93,7 @@
                 </div>
             </form>
 
-            <div class="table-responsive">
+            <div class="table-responsive table-wrapper">
                 <table class="table table-bordered table-sm" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -270,6 +274,11 @@
 <style>
 .sortable-header { cursor: pointer; white-space: nowrap; user-select: none; }
 .sortable-header a:hover { text-decoration: underline; }
+.table-wrapper { overflow-x: auto; }
+.table-wrapper table { min-width: 800px; }
+.table-wrapper table th, .table-wrapper table td { white-space: nowrap; }
+.table-wrapper table th:last-child, .table-wrapper table td:last-child { position: sticky; right: 0; background: #fff; z-index: 1; }
+.table-wrapper table thead th:last-child { background: #f8f9fa; z-index: 2; }
 </style>
 
 <script>
@@ -299,7 +308,7 @@ function showDetail(id) {
         .then(data => {
             var html = '<table class="table table-borderless">';
             html += '<tr><td class="text-muted" style="width:180px;">ID Aset</td><td class="fw-bold"><code>' + escHtml(data.all_id || '-') + '</code></td></tr>';
-            html += '<tr><td class="text-muted">No Aset Baru</td><td>' + escHtml(data.nomor_aset_baru || '-') + '</td></tr>';
+            html += '<tr><td class="text-muted">ID Aset Baru</td><td>' + escHtml(data.nomor_aset_baru || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">ID Aset Lama</td><td>' + escHtml(data.nomor_aset_lama || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Nama Aset</td><td class="fw-bold">' + escHtml(data.nama_aset || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Kategori</td><td>' + escHtml(data.nama_kategori || '-') + '</td></tr>';
@@ -354,21 +363,23 @@ function formatPenanggungJawab(data) {
     return escHtml(namaGelar);
 }
 
-function handleColumnChange(cb) {
+function validateColumnSelection() {
     var checked = document.querySelectorAll('.column-cb:checked');
     var error = document.getElementById('columnError');
-    if (checked.length > 6) {
-        cb.checked = false;
-        error.textContent = 'Maksimal 6 kolom.';
-        error.style.display = 'block';
-        return;
-    }
     error.style.display = 'none';
     if (checked.length < 1) {
         error.textContent = 'Pilih minimal 1 kolom.';
         error.style.display = 'block';
+        return false;
+    }
+    return true;
+}
+
+function applyColumns() {
+    if (!validateColumnSelection()) {
         return;
     }
+    var checked = document.querySelectorAll('.column-cb:checked');
     var columns = Array.from(checked).map(function(el) { return el.value; });
     var form = document.createElement('form');
     form.method = 'GET';
@@ -387,12 +398,24 @@ function handleColumnChange(cb) {
     form.submit();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    var dropdown = document.getElementById('columnToggle');
-    dropdown.parentElement.addEventListener('shown.bs.dropdown', function() {
-        var error = document.getElementById('columnError');
-        error.style.display = 'none';
+function resetColumns() {
+    var appliedColumns = <?= json_encode(array_values($visibleColumns)) ?>;
+    document.querySelectorAll('.column-cb').forEach(function(cb) {
+        cb.checked = appliedColumns.includes(cb.value);
     });
+    document.getElementById('columnError').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var applyBtn = document.getElementById('applyColumnsBtn');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', applyColumns);
+    }
+
+    var resetBtn = document.getElementById('resetColumnsBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetColumns);
+    }
 
     document.querySelectorAll('.sortable-header a').forEach(function(link) {
         link.addEventListener('click', function(e) {

@@ -29,7 +29,7 @@ class UnitKerjaController extends Controller
         }
 
         $total = $builder->countAllResults(false);
-        $perPage = 20;
+        $perPage = 50;
         $currentPage = (int) ($this->request->getGet('page') ?? 1);
         $currentPage = ($currentPage < 1) ? 1 : $currentPage;
         $offset = ($currentPage - 1) * $perPage;

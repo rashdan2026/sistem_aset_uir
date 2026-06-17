@@ -30,7 +30,7 @@ class PenanggungJawabController extends Controller
                 ->groupEnd();
         }
 
-        $perPage = 20;
+        $perPage = 50;
         $total = $builder->countAllResults(false);
 
         $currentPage = (int) ($this->request->getGet('page') ?? 1);

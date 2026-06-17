@@ -50,7 +50,7 @@ class SettingUserController extends Controller
                 ->with('error', 'Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
 
-        $perPage = 20;
+        $perPage = 50;
         $page = (int) ($this->request->getGet('page') ?? 1);
         $page = $page > 0 ? $page : 1;
         $search = trim($this->request->getGet('q') ?? '');

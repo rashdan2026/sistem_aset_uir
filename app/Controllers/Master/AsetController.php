@@ -137,7 +137,6 @@ public function __construct()
                 $builder->like($columnMap[$searchCol], $search);
             } else {
                 $builder->groupStart();
-                $builder->orLike('a.nama_aset', $search);
                 $builder->orLike('a.all_id', $search);
                 if (in_array('nomor_aset_baru', $visibleColumns)) {
                     $builder->orLike('a.nomor_aset_baru', $search);
@@ -177,7 +176,7 @@ public function __construct()
         }
 
         $total = $builder->countAllResults(false);
-        $perPage = 20;
+        $perPage = 50;
         $currentPage = (int) ($this->request->getGet('page') ?? 1);
         $currentPage = ($currentPage < 1) ? 1 : $currentPage;
         $offset = ($currentPage - 1) * $perPage;
@@ -231,8 +230,8 @@ public function __construct()
         $columns = $this->request->getGet('columns');
         $decoded = json_decode($columns, true);
 
-        if (!is_array($decoded) || count($decoded) === 0 || count($decoded) > 6) {
-            return redirect()->to('/master/aset')->with('error', 'Maksimal 6 kolom.');
+        if (!is_array($decoded) || count($decoded) === 0) {
+            return redirect()->to('/master/aset')->with('error', 'Pilih minimal 1 kolom.');
         }
 
         $validColumns = array_keys(get_aset_all_columns());

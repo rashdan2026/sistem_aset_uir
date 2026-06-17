@@ -3,11 +3,13 @@
 if (!function_exists('get_aset_visible_columns')) {
     function get_aset_visible_columns(): array
     {
-        $defaults = ['nomor_aset_baru', 'nama_aset', 'nama_kategori', 'nama_sub_kategori', 'nama_kondisi', 'status_aset'];
+        $defaults = ['nomor_aset_baru', 'nama_kategori', 'nama_sub_kategori', 'nama_kondisi', 'status_aset', 'nama_merk'];
+        $validColumns = ['nomor_aset_baru', 'nama_kategori', 'nama_sub_kategori', 'nama_kondisi', 'status_aset', 'input_mode', 'nama_merk', 'nama_type', 'nama_sumber_dana', 'nama_unit', 'nama_sub_unit', 'nama_ruangan', 'nama_penanggung_jawab', 'nilai_perolehan', 'tahun_perolehan'];
         if (isset($_COOKIE['aset_column_prefs'])) {
             $saved = json_decode($_COOKIE['aset_column_prefs'], true);
             if (is_array($saved) && count($saved) > 0) {
-                return $saved;
+                $filtered = array_intersect($saved, $validColumns);
+                return count($filtered) > 0 ? array_values($filtered) : $defaults;
             }
         }
         return $defaults;
@@ -18,8 +20,7 @@ if (!function_exists('get_aset_all_columns')) {
     function get_aset_all_columns(): array
     {
         return [
-            'nomor_aset_baru' => 'No Aset Baru',
-            'nama_aset' => 'Nama Aset',
+            'nomor_aset_baru' => 'ID Aset Baru',
             'nama_kategori' => 'Kategori',
             'nama_sub_kategori' => 'Sub Kategori',
             'nama_kondisi' => 'Kondisi',
@@ -43,7 +44,6 @@ if (!function_exists('get_aset_column_map')) {
     {
         return [
             'nomor_aset_baru' => 'a.nomor_aset_baru',
-            'nama_aset' => 'a.nama_aset',
             'nama_kategori' => 'ak.nama_kategori',
             'nama_sub_kategori' => 'ask.nama_sub_kategori',
             'nama_kondisi' => 'akb.nama_kondisi',
