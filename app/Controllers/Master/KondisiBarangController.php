@@ -18,6 +18,24 @@ class KondisiBarangController extends Controller
         helper(['form', 'url']);
     }
 
+    private function normalizeWarna(?string $warna): string
+    {
+        $warna = trim($warna ?? '');
+        if ($warna === '') {
+            return '#198754';
+        }
+
+        if (substr($warna, 0, 1) !== '#') {
+            $warna = '#' . $warna;
+        }
+
+        if (!preg_match('/^#[0-9A-Fa-f]{6}$/', $warna)) {
+            return '#198754';
+        }
+
+        return strtoupper($warna);
+    }
+
     public function index()
     {
         $perPage = 50;
@@ -45,7 +63,8 @@ class KondisiBarangController extends Controller
         }
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_kondisi_barang.updated_at', 'DESC')
+        $records = $builder->orderBy('aset_kondisi_barang.level_kondisi', 'ASC')
+            ->orderBy('aset_kondisi_barang.kd_id', 'ASC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 
@@ -73,6 +92,7 @@ class KondisiBarangController extends Controller
         $rules = [
             'nama_kondisi' => 'required|max_length[100]|is_unique[aset_kondisi_barang.nama_kondisi]',
             'level_kondisi' => 'required|integer',
+            'warna' => 'permit_empty|max_length[7]',
         ];
 
         if (!$this->validate($rules)) {
@@ -83,6 +103,7 @@ class KondisiBarangController extends Controller
             'nama_kondisi' => $this->request->getPost('nama_kondisi'),
             'level_kondisi' => $this->request->getPost('level_kondisi'),
             'is_available_for_use' => $this->request->getPost('is_available_for_use') ? 1 : 0,
+            'warna' => $this->normalizeWarna($this->request->getPost('warna')),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
@@ -125,6 +146,7 @@ class KondisiBarangController extends Controller
             'nama_kondisi' => $this->request->getPost('nama_kondisi'),
             'level_kondisi' => $this->request->getPost('level_kondisi'),
             'is_available_for_use' => $this->request->getPost('is_available_for_use') ? 1 : 0,
+            'warna' => $this->normalizeWarna($this->request->getPost('warna')),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,
         ]);

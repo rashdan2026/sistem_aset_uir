@@ -64,12 +64,6 @@
                             <small class="form-text text-muted">Maks. 100 unit per proses.</small>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>ID Aset Lama</label>
-                            <input type="text" name="nomor_aset_lama" class="form-control" value="<?= old('nomor_aset_lama') ?>" placeholder="Opsional">
-                        </div>
-                    </div>
                 </div>
 
                 <hr>

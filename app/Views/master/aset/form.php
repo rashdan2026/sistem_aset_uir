@@ -52,21 +52,6 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>ID Aset Lama</label>
-                            <input type="text" name="nomor_aset_lama" class="form-control" value="<?= old('nomor_aset_lama', $record['nomor_aset_lama'] ?? '') ?>" placeholder="Jika ada">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Serial Number</label>
-                            <input type="text" name="serial_number" class="form-control" value="<?= old('serial_number', $record['serial_number'] ?? '') ?>" placeholder="Opsional">
-                        </div>
-                    </div>
-                </div>
-
                 <div class="form-group">
                     <label>Spesifikasi</label>
                     <textarea name="spesifikasi" class="form-control" rows="3"><?= old('spesifikasi', $record['spesifikasi'] ?? '') ?></textarea>

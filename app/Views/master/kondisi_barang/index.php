@@ -50,7 +50,15 @@
                             <?php $no = (($currentPage - 1) * $perPage) + 1; foreach ($records as $row): ?>
                                 <tr>
                                     <td><?= $no++ ?></td>
-                                    <td><?= esc($row['nama_kondisi']) ?></td>
+                                    <td>
+                                        <?php if (!empty($row['warna'])): ?>
+                                            <span class="badge" style="background-color: <?= esc($row['warna']) ?>; color: #fff; font-weight: 500;">
+                                                <?= esc($row['nama_kondisi']) ?>
+                                            </span>
+                                        <?php else: ?>
+                                            <?= esc($row['nama_kondisi']) ?>
+                                        <?php endif; ?>
+                                    </td>
                                     <td><?= esc($row['level_kondisi']) ?></td>
                                     <td><?= $row['is_available_for_use'] ? '<span class="badge bg-success">Ya</span>' : '<span class="badge bg-secondary">Tidak</span>' ?></td>
                                     <td><?= $row['is_active'] ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-secondary">Nonaktif</span>' ?></td>

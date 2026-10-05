@@ -103,7 +103,11 @@ class RuanganController extends Controller
         $builder->where('aset_ruangan.deleted_at', null);
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_ruangan.updated_at', 'DESC')
+        $records = $builder->orderBy('tbl_unit_kerja.nama_unit', 'ASC')
+            ->orderBy('aset_sub_units.nama_sub_unit', 'ASC')
+            ->orderBy('aset_gedung.nama_gedung', 'ASC')
+            ->orderBy('aset_lantai.nomor_lantai', 'ASC')
+            ->orderBy('aset_ruangan.nama_ruangan', 'ASC')
             ->get($perPage, $offset)
             ->getResultArray();
 

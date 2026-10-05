@@ -68,7 +68,8 @@ class SubUnitController extends Controller
         $builder->where('aset_sub_units.deleted_at', null);
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_sub_units.updated_at', 'DESC')
+        $records = $builder->orderBy('tbl_unit_kerja.nama_unit', 'ASC')
+            ->orderBy('aset_sub_units.nama_sub_unit', 'ASC')
             ->get($perPage, $offset)
             ->getResultArray();
 

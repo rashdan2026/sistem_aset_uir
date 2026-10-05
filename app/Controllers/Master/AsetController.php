@@ -17,6 +17,7 @@ use App\Models\Master\LantaiModel;
 use App\Models\Master\RuanganModel;
 use App\Services\AssetNumberService;
 use CodeIgniter\Controller;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 
 class AsetController extends Controller
 {
@@ -79,7 +80,11 @@ public function __construct()
             'aset_kategori ak' => 'ak.kt_id = a.kategori_id',
             'aset_sub_kategori ask' => 'ask.sk_id = a.sub_kategori_id',
             'aset_kondisi_barang akb' => 'akb.kd_id = a.kondisi_id',
+            'tbl_unit_kerja tu' => 'tu.id_unit_kerja = a.unit_kerja_id',
+            'aset_sub_units asu' => 'asu.su_id = a.sub_unit_id',
         ];
+        $selectFields[] = 'tu.nama_unit';
+        $selectFields[] = 'asu.nama_sub_unit';
 
         if (in_array('nama_merk', $visibleColumns) || $searchCol === 'nama_merk' || $sortCol === 'nama_merk') {
             $selectFields[] = 'am.nama_merk';
@@ -180,19 +185,33 @@ public function __construct()
         $currentPage = (int) ($this->request->getGet('page') ?? 1);
         $currentPage = ($currentPage < 1) ? 1 : $currentPage;
         $offset = ($currentPage - 1) * $perPage;
-        $totalPages = $total > 0 ? ceil($total / $perPage) : 1;
 
-        if ($sortCol && isset($columnMap[$sortCol])) {
-            $builder->orderBy($columnMap[$sortCol], $sortDir);
-        } else {
-            $builder->orderBy('a.updated_at', 'DESC');
+        $viewMode = $this->request->getGet('view') ?? 'detail';
+        if (!in_array($viewMode, ['detail', 'grouped'])) {
+            $viewMode = 'detail';
         }
 
-        $records = $builder
-            ->select(implode(', ', $selectFields))
-            ->limit($perPage, $offset)
-            ->get()
-            ->getResultArray();
+        if ($viewMode === 'grouped') {
+            $records = $this->getGroupedRecords($builder, $perPage, $currentPage);
+            $total = $this->getGroupedTotal($builder);
+            $totalPages = $total > 0 ? ceil($total / $perPage) : 1;
+        } else {
+            if ($sortCol && isset($columnMap[$sortCol])) {
+                $builder->orderBy($columnMap[$sortCol], $sortDir);
+            } else {
+                $builder->orderBy('tu.nama_unit', 'ASC')
+                    ->orderBy('asu.nama_sub_unit', 'ASC')
+                    ->orderBy('ak.nama_kategori', 'ASC')
+                    ->orderBy('a.nomor_aset_baru', 'ASC');
+            }
+
+            $records = $builder
+                ->select(implode(', ', $selectFields))
+                ->limit($perPage, $offset)
+                ->get()
+                ->getResultArray();
+            $totalPages = $total > 0 ? ceil($total / $perPage) : 1;
+        }
 
         $searchableColumns = [];
         foreach ($visibleColumns as $col) {
@@ -207,6 +226,7 @@ public function __construct()
             'total' => $total,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
+            'perPage' => $perPage,
             'search' => $search,
             'searchCol' => $searchCol,
             'status' => $status,
@@ -218,6 +238,7 @@ public function __construct()
             'searchableColumns' => $searchableColumns,
             'sortCol' => $sortCol,
             'sortDir' => $sortDir,
+            'viewMode' => $viewMode,
         ];
 
         return view('master/aset/index', $data);
@@ -324,11 +345,9 @@ public function __construct()
 
         $allId = $this->assetNumberService->generateAllId($subKategoriId);
         $tahun = $this->request->getPost('tahun_perolehan') ?: (int) date('Y');
-        $nomorAsetBaru = $this->assetNumberService->generateNomorAsetBaru($kategoriId, (int) $tahun);
 
         $saveData = [
             'all_id' => $allId,
-            'nomor_aset_baru' => $nomorAsetBaru,
             'nomor_aset_lama' => $this->request->getPost('nomor_aset_lama') ?: null,
             'nama_aset' => $namaAset,
             'kategori_id' => $kategoriId,
@@ -353,7 +372,30 @@ public function __construct()
             'batch_id' => null,
         ];
 
-        $this->asetModel->save($saveData);
+        $maxRetries = 5;
+        $attempt = 0;
+        $success = false;
+
+        while ($attempt < $maxRetries) {
+            try {
+                $nomorAsetBaru = $this->assetNumberService->generateNomorAsetBaru($kategoriId, (int) $tahun, $attempt);
+                $saveData['nomor_aset_baru'] = $nomorAsetBaru;
+
+                $this->asetModel->save($saveData);
+                $success = true;
+                break;
+            } catch (DatabaseException $e) {
+                if (!$this->isDuplicateKeyError($e) || $attempt >= $maxRetries - 1) {
+                    throw $e;
+                }
+                $attempt++;
+                usleep(50000 * (1 << ($attempt - 1)));
+            }
+        }
+
+        if (!$success) {
+            return redirect()->back()->withInput()->with('error', 'Gagal generate ID Aset Baru yang unik setelah ' . $maxRetries . ' percobaan. Silakan coba lagi.');
+        }
 
         return redirect()->to(base_url('/master/aset'))->with('success', 'Aset berhasil diregistrasi. ID: ' . $allId);
     }
@@ -524,6 +566,9 @@ public function __construct()
         if (!$record) {
             return $this->response->setJSON(['error' => 'Data tidak ditemukan.'])->setStatusCode(404);
         }
+
+        unset($record['nomor_aset_lama']);
+
         return $this->response->setJSON($record);
     }
 
@@ -594,5 +639,152 @@ public function __construct()
     {
         $golongan = $this->golonganModel->getByKategoriId((int) $kategoriId);
         return $this->response->setJSON($golongan);
+    }
+
+    /**
+     * Ambil records di-group per batch_id untuk mode "Grouped".
+     * Sort default: jumlah DESC (batch terbesar di atas), tiebreaker tanggal DESC.
+     */
+    private function getGroupedRecords($builder, int $perPage, int $currentPage): array
+    {
+        $offset = ($currentPage - 1) * $perPage;
+
+        $rows = $builder
+            ->select('
+                a.batch_id,
+                a.input_mode,
+                a.nama_aset,
+                a.kategori_id,
+                a.sub_kategori_id,
+                a.unit_kerja_id,
+                MIN(a.created_at) AS tanggal_pertama,
+                MAX(a.updated_at) AS tanggal_terakhir,
+                COUNT(*) AS jumlah,
+                MIN(a.nomor_aset_baru) AS nomor_awal,
+                MAX(a.nomor_aset_baru) AS nomor_akhir,
+                MIN(a.all_id) AS sample_all_id,
+                ak.nama_kategori,
+                ask.nama_sub_kategori,
+                tu.nama_unit,
+                SUM(CASE WHEN a.status_aset = "aktif" AND a.deleted_at IS NULL THEN 1 ELSE 0 END) AS count_aktif,
+                SUM(CASE WHEN a.status_aset != "aktif" OR a.deleted_at IS NOT NULL THEN 1 ELSE 0 END) AS count_nonaktif
+            ')
+            ->where('a.input_mode', 'bulk')
+            ->where('a.batch_id IS NOT NULL')
+            ->groupBy('a.batch_id, a.input_mode, a.nama_aset, a.kategori_id, a.sub_kategori_id, a.unit_kerja_id, ak.nama_kategori, ask.nama_sub_kategori, tu.nama_unit')
+            ->orderBy('jumlah', 'DESC')
+            ->orderBy('tanggal_pertama', 'DESC')
+            ->limit($perPage, $offset)
+            ->get()
+            ->getResultArray();
+
+        return $rows;
+    }
+
+    /**
+     * Hitung total batch unik untuk pagination di mode grouped.
+     */
+    private function getGroupedTotal($builder): int
+    {
+        $row = $builder
+            ->select('COUNT(DISTINCT a.batch_id) AS total')
+            ->where('a.input_mode', 'bulk')
+            ->where('a.batch_id IS NOT NULL')
+            ->get()
+            ->getRowArray();
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * AJAX: ambil daftar item dalam satu batch untuk ditampilkan di modal.
+     */
+    public function getBatchItems($batchId)
+    {
+        $items = $this->asetModel
+            ->select('aset_all_uir.all_id, aset_all_uir.nomor_aset_baru, aset_all_uir.status_aset, aset_all_uir.kondisi_id, aset_all_uir.tahun_perolehan, aset_all_uir.deleted_at, aset_all_uir.created_at, ak.nama_kategori, ask.nama_sub_kategori, akb.nama_kondisi, tu.nama_unit')
+            ->join('aset_kategori ak', 'ak.kt_id = aset_all_uir.kategori_id', 'left')
+            ->join('aset_sub_kategori ask', 'ask.sk_id = aset_all_uir.sub_kategori_id', 'left')
+            ->join('aset_kondisi_barang akb', 'akb.kd_id = aset_all_uir.kondisi_id', 'left')
+            ->join('tbl_unit_kerja tu', 'tu.id_unit_kerja = aset_all_uir.unit_kerja_id', 'left')
+            ->where('aset_all_uir.batch_id', $batchId)
+            ->where('aset_all_uir.input_mode', 'bulk')
+            ->orderBy('aset_all_uir.nomor_aset_baru', 'ASC')
+            ->findAll();
+
+        $kondisiOptions = $this->kondisiModel
+            ->where('is_active', 1)
+            ->orderBy('level_kondisi', 'ASC')
+            ->findAll();
+
+        return $this->response->setJSON([
+            'batch_id' => $batchId,
+            'items' => $items,
+            'total' => count($items),
+            'kondisi_options' => $kondisiOptions,
+        ]);
+    }
+
+    /**
+     * AJAX: bulk update status & kondisi untuk item-item dalam satu batch.
+     * Menerima array all_ids + status_aset (optional) + kondisi_id (optional).
+     */
+    public function bulkUpdateBatch()
+    {
+        $allIds = $this->request->getPost('all_ids');
+        $batchId = $this->request->getPost('batch_id');
+        $statusAset = $this->request->getPost('status_aset');
+        $kondisiId = $this->request->getPost('kondisi_id');
+
+        if (empty($batchId) || empty($allIds) || !is_array($allIds)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Batch ID atau item kosong.',
+            ])->setStatusCode(400);
+        }
+
+        $updateData = [];
+        if (!empty($statusAset) && in_array($statusAset, ['draft', 'aktif', 'nonaktif', 'hilang', 'dihapus'])) {
+            $updateData['status_aset'] = $statusAset;
+        }
+        if (!empty($kondisiId) && is_numeric($kondisiId)) {
+            $updateData['kondisi_id'] = (int) $kondisiId;
+        }
+
+        if (empty($updateData)) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Tidak ada field yang diupdate. Pilih Status atau Kondisi.',
+            ])->setStatusCode(400);
+        }
+
+        $updateData['updated_at'] = date('Y-m-d H:i:s');
+
+        $db = db_connect();
+        $builder = $db->table('aset_all_uir')
+            ->where('input_mode', 'bulk')
+            ->where('batch_id', $batchId)
+            ->whereIn('all_id', $allIds);
+
+        $count = count($allIds);
+        $builder->update($updateData);
+
+        return $this->response->setJSON([
+            'success' => true,
+            'updated' => $count,
+            'message' => 'Berhasil update ' . $count . ' item.',
+        ]);
+    }
+
+    /**
+     * Deteksi error duplicate key (UNIQUE constraint violation)
+     * dari exception CodeIgniter / MySQLi.
+     */
+    private function isDuplicateKeyError(\Throwable $e): bool
+    {
+        $msg = $e->getMessage();
+        return strpos($msg, 'Duplicate entry') !== false
+            || strpos($msg, '1062') !== false
+            || strpos($msg, 'UNIQUE constraint') !== false;
     }
 }

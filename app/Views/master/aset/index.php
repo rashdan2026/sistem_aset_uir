@@ -33,7 +33,24 @@
                             <button type="button" class="btn btn-primary btn-sm flex-grow-1" id="applyColumnsBtn">Apply</button>
                             <button type="button" class="btn btn-outline-secondary btn-sm" id="resetColumnsBtn">Reset</button>
                         </div>
+                        <div class="mt-2 pt-2 border-top">
+                            <small class="text-muted d-block" style="font-size:11px; line-height:1.4;">
+                                <i class="bi bi-info-circle"></i>
+                                Setting tersimpan di <strong>cookie browser</strong> per user (1 tahun).
+                                Tidak sync antar device. Geser ikon grip di header untuk ubah urutan.
+                            </small>
+                        </div>
                     </div>
+                </div>
+                <div class="btn-group btn-group-sm" role="group" aria-label="View mode">
+                    <a href="<?= current_url() . '?' . http_build_query(array_merge($_GET ?? [], ['view' => 'detail'])) ?>"
+                       class="btn btn-<?= ($viewMode ?? 'detail') === 'detail' ? 'primary' : 'outline-secondary' ?>">
+                        <i class="bi bi-list-ul"></i> Detail
+                    </a>
+                    <a href="<?= current_url() . '?' . http_build_query(array_merge($_GET ?? [], ['view' => 'grouped'])) ?>"
+                       class="btn btn-<?= ($viewMode ?? 'detail') === 'grouped' ? 'primary' : 'outline-secondary' ?>">
+                        <i class="bi bi-collection"></i> Grouped
+                    </a>
                 </div>
                 <a href="<?= base_url('/master/aset/new') ?>" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Single Aset</a>
                 <a href="<?= base_url('/master/bulk-aset/new') ?>" class="btn btn-warning btn-sm"><i class="bi bi-layers"></i> Bulk Aset</a>
@@ -96,35 +113,89 @@
             <div class="table-responsive table-wrapper">
                 <table class="table table-bordered table-sm" width="100%" cellspacing="0">
                     <thead>
-                        <tr>
-                            <?php foreach ($visibleColumns as $col): ?>
-                                <?php
-                                    $isSorted = ($sortCol === $col);
-                                    $nextDir = $isSorted ? ($sortDir === 'asc' ? 'desc' : 'asc') : 'asc';
-                                    $arrowIcon = $isSorted ? ($sortDir === 'asc' ? ' <i class="bi bi-caret-up-fill"></i>' : ' <i class="bi bi-caret-down-fill"></i>') : ' <i class="bi bi-caret-up-fill text-muted" style="opacity:0.3"></i>';
-                                    $sortParams = array_filter([
-                                        'sort' => $col,
-                                        'dir' => $nextDir,
-                                        'q' => $search ?? null,
-                                        'search_col' => $searchCol ?? null,
-                                        'status' => $status ?? null,
-                                        'input_mode' => $inputMode ?? null,
-                                        'kategori_id' => $kategoriFilter ?? null,
-                                    ], function($v) { return $v !== null && $v !== ''; });
-                                    $sortUrl = base_url('/master/aset') . '?' . http_build_query($sortParams);
-                                ?>
-                                <th class="sortable-header"><a href="<?= esc($sortUrl) ?>" class="text-decoration-none text-dark"><?= esc($allColumns[$col] ?? $col) ?? '' ?><?= $arrowIcon ?></a></th>
-                            <?php endforeach; ?>
-                            <th width="120">Aksi</th>
-                        </tr>
+                        <?php if (($viewMode ?? 'detail') === 'grouped'): ?>
+                            <tr>
+                                <th width="40">No</th>
+                                <th>Batch ID</th>
+                                <th width="100">Jumlah</th>
+                                <th>Range Nomor</th>
+                                <th>Nama Aset</th>
+                                <th>Kategori</th>
+                                <th width="120">Tanggal</th>
+                                <th width="120">Status</th>
+                                <th width="100">Aksi</th>
+                            </tr>
+                        <?php else: ?>
+                            <tr id="asetHeaderRow">
+                                <?php foreach ($visibleColumns as $col): ?>
+                                    <?php
+                                        $isSorted = ($sortCol === $col);
+                                        $nextDir = $isSorted ? ($sortDir === 'asc' ? 'desc' : 'asc') : 'asc';
+                                        $arrowIcon = $isSorted ? ($sortDir === 'asc' ? ' <i class="bi bi-caret-up-fill"></i>' : ' <i class="bi bi-caret-down-fill"></i>') : ' <i class="bi bi-caret-up-fill text-muted" style="opacity:0.3"></i>';
+                                        $sortParams = array_filter([
+                                            'sort' => $col,
+                                            'dir' => $nextDir,
+                                            'q' => $search ?? null,
+                                            'search_col' => $searchCol ?? null,
+                                            'status' => $status ?? null,
+                                            'input_mode' => $inputMode ?? null,
+                                            'kategori_id' => $kategoriFilter ?? null,
+                                            'view' => 'detail',
+                                        ], function($v) { return $v !== null && $v !== ''; });
+                                        $sortUrl = base_url('/master/aset') . '?' . http_build_query($sortParams);
+                                    ?>
+                                    <th class="sortable-header draggable-col" data-col="<?= esc($col) ?>"><a href="<?= esc($sortUrl) ?>" class="text-decoration-none text-dark"><?= esc($allColumns[$col] ?? $col) ?? '' ?><?= $arrowIcon ?></a><span class="drag-handle ms-1" title="Tahan & geser untuk ubah urutan"><i class="bi bi-grip-vertical"></i></span></th>
+                                <?php endforeach; ?>
+                                <th width="120">Aksi</th>
+                            </tr>
+                        <?php endif; ?>
                     </thead>
                     <tbody>
                         <?php if (!empty($records)): ?>
-                            <?php foreach ($records as $row): ?>
-                                <tr>
-                                    <?php foreach ($visibleColumns as $col): ?>
+                            <?php if (($viewMode ?? 'detail') === 'grouped'): ?>
+                                <?php $no = (($currentPage - 1) * $perPage) + 1; foreach ($records as $batch): ?>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><code class="small"><?= esc($batch['batch_id']) ?></code></td>
+                                        <td><span class="badge bg-info"><?= (int)$batch['jumlah'] ?> item</span></td>
                                         <td>
-                                            <?php if ($col === 'input_mode'): ?>
+                                            <?php if ($batch['nomor_awal'] === $batch['nomor_akhir']): ?>
+                                                <code class="small"><?= esc($batch['nomor_awal']) ?></code>
+                                            <?php else: ?>
+                                                <code class="small"><?= esc($batch['nomor_awal']) ?></code>
+                                                <br><i class="bi bi-arrow-down"></i>
+                                                <br><code class="small"><?= esc($batch['nomor_akhir']) ?></code>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= esc($batch['nama_aset']) ?></td>
+                                        <td>
+                                            <?= esc($batch['nama_kategori'] ?? '-') ?>
+                                            <?php if (!empty($batch['nama_sub_kategori'])): ?>
+                                                <br><small class="text-muted"><?= esc($batch['nama_sub_kategori']) ?></small>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><small><?= date('d/m/Y H:i', strtotime($batch['tanggal_pertama'])) ?></small></td>
+                                        <td>
+                                            <span class="badge bg-success" title="Aktif"><?= (int)$batch['count_aktif'] ?></span>
+                                            <?php if ((int)$batch['count_nonaktif'] > 0): ?>
+                                                <span class="badge bg-secondary" title="Nonaktif/Dihapus"><?= (int)$batch['count_nonaktif'] ?></span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                    onclick="showBatchItems('<?= esc($batch['batch_id']) ?>')"
+                                                    title="Lihat <?= (int)$batch['jumlah'] ?> item dalam batch ini">
+                                                <i class="bi bi-eye"></i> Lihat
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <?php foreach ($records as $row): ?>
+                                    <tr>
+                                        <?php foreach ($visibleColumns as $col): ?>
+                                            <td>
+                                                <?php if ($col === 'input_mode'): ?>
                                                 <?php if (($row['input_mode'] ?? 'single') === 'bulk'): ?>
                                                     <span class="badge bg-warning text-dark">Bulk</span>
                                                     <?php if (!empty($row['batch_id'])): ?>
@@ -183,13 +254,18 @@
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
+                            <?php endif; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="<?= count($visibleColumns) + 1 ?>" class="text-center text-muted py-4">
+                                <td colspan="<?= ($viewMode ?? 'detail') === 'grouped' ? 9 : (count($visibleColumns) + 1) ?>" class="text-center text-muted py-4">
                                     <?php if (!empty($search) || !empty($status) || !empty($kategoriFilter) || !empty($inputMode)): ?>
                                         Tidak ada hasil untuk pencarian tersebut.
                                     <?php else: ?>
-                                        Belum ada data aset. <a href="<?= base_url('/master/aset/new') ?>">Registrasi aset pertama</a>
+                                        <?php if (($viewMode ?? 'detail') === 'grouped'): ?>
+                                            Belum ada bulk insert. <a href="<?= base_url('/master/bulk-aset/new') ?>">Buat batch baru</a>
+                                        <?php else: ?>
+                                            Belum ada data aset. <a href="<?= base_url('/master/aset/new') ?>">Registrasi aset pertama</a>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -253,6 +329,28 @@
     </div>
 </div>
 
+<!-- Batch Items Modal -->
+<div class="modal fade" id="batchModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-collection"></i> Detail Batch:
+                    <code class="text-white" id="batchIdTitle">-</code>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="batchModalBody">
+                <div class="text-center py-4"><div class="spinner-border text-info"></div></div>
+            </div>
+            <div class="modal-footer">
+                <span class="me-auto text-muted" id="batchItemCount"></span>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Detail Modal -->
 <div class="modal fade" id="detailModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -279,8 +377,28 @@
 .table-wrapper table th, .table-wrapper table td { white-space: nowrap; }
 .table-wrapper table th:last-child, .table-wrapper table td:last-child { position: sticky; right: 0; background: #fff; z-index: 1; }
 .table-wrapper table thead th:last-child { background: #f8f9fa; z-index: 2; }
+.draggable-col { position: relative; }
+.drag-handle { cursor: grab; color: #6b7280; font-size: 12px; opacity: 0.5; transition: opacity 0.2s; }
+.drag-handle:hover { opacity: 1; color: var(--primary); }
+.drag-handle:active { cursor: grabbing; }
+.sortable-ghost { opacity: 0.4; background: var(--primary-soft) !important; }
+.sortable-chosen { background: var(--primary-soft) !important; }
+.sortable-drag { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+.column-order-hint { font-size: 11px; color: var(--muted); font-style: italic; margin-top: 4px; }
+.batch-row { transition: background-color 0.15s; }
+.batch-row:hover { background-color: #f0f7f4 !important; }
+.batch-modal-table th { font-size: 12px; background-color: #f3f7f4; }
+.batch-modal-table td { font-size: 13px; vertical-align: middle; }
+.bulk-update-card,
+.bulk-update-card .card-body,
+#batchColumnDropdown { overflow: visible !important; }
+.bulk-update-card { position: relative; z-index: 2000; }
+#batchColumnDropdown { position: relative; z-index: 3000; }
+#batchColumnDropdown .dropdown-menu { z-index: 3001 !important; }
+.table-responsive { position: relative; z-index: 1; }
 </style>
 
+<script src="<?= base_url('assets/vendor/sortablejs/Sortable.min.js') ?>"></script>
 <script>
 function currentUrlWithQuery(params) {
     var url = new URL(window.location.origin + window.location.pathname);
@@ -309,7 +427,6 @@ function showDetail(id) {
             var html = '<table class="table table-borderless">';
             html += '<tr><td class="text-muted" style="width:180px;">ID Aset</td><td class="fw-bold"><code>' + escHtml(data.all_id || '-') + '</code></td></tr>';
             html += '<tr><td class="text-muted">ID Aset Baru</td><td>' + escHtml(data.nomor_aset_baru || '-') + '</td></tr>';
-            html += '<tr><td class="text-muted">ID Aset Lama</td><td>' + escHtml(data.nomor_aset_lama || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Nama Aset</td><td class="fw-bold">' + escHtml(data.nama_aset || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Kategori</td><td>' + escHtml(data.nama_kategori || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Sub Kategori</td><td>' + escHtml(data.nama_sub_kategori || '-') + '</td></tr>';
@@ -406,6 +523,253 @@ function resetColumns() {
     document.getElementById('columnError').style.display = 'none';
 }
 
+function showBatchItems(batchId) {
+    var modalEl = document.getElementById('batchModal');
+    var modal = new bootstrap.Modal(modalEl);
+    modal.show();
+    document.getElementById('batchIdTitle').textContent = batchId;
+    document.getElementById('batchModalBody').innerHTML = '<div class="text-center py-4"><div class="spinner-border text-info"></div></div>';
+    document.getElementById('batchItemCount').textContent = '';
+
+    fetch('<?= base_url('/master/aset/batch-items/') ?>' + encodeURIComponent(batchId))
+        .then(r => r.ok ? r.json() : Promise.reject(r))
+        .then(data => {
+            if (!data.items || data.items.length === 0) {
+                document.getElementById('batchModalBody').innerHTML = '<div class="alert alert-warning">Tidak ada item dalam batch ini.</div>';
+                return;
+            }
+
+            var statusOptions = ['draft', 'aktif', 'nonaktif', 'hilang', 'dihapus'];
+            var kondisiOptions = data.kondisi_options || [];
+
+            var html = '';
+
+            html += '<form id="bulkUpdateForm" class="card mb-3 bg-light bulk-update-card">';
+            html += '<div class="card-body p-3">';
+            html += '<div class="row g-2 align-items-end">';
+            html += '<div class="col-auto"><strong class="text-primary"><i class="bi bi-lightning-charge"></i> Bulk Update:</strong></div>';
+            html += '<div class="col-md-3">';
+            html += '<label class="form-label small mb-1">Status</label>';
+            html += '<select id="bulkStatusSelect" class="form-select form-select-sm">';
+            html += '<option value="">-- Tidak diubah --</option>';
+            statusOptions.forEach(function(s) {
+                html += '<option value="' + s + '">' + s.charAt(0).toUpperCase() + s.slice(1) + '</option>';
+            });
+            html += '</select>';
+            html += '</div>';
+            html += '<div class="col-md-3">';
+            html += '<label class="form-label small mb-1">Kondisi</label>';
+            html += '<select id="bulkKondisiSelect" class="form-select form-select-sm">';
+            html += '<option value="">-- Tidak diubah --</option>';
+            kondisiOptions.forEach(function(k) {
+                html += '<option value="' + k.kd_id + '">' + escHtml(k.nama_kondisi) + '</option>';
+            });
+            html += '</select>';
+            html += '</div>';
+            html += '<div class="col-md-2">';
+            html += '<button type="button" class="btn btn-warning btn-sm w-100" id="applyBulkUpdateBtn" disabled>';
+            html += '<i class="bi bi-check2-square"></i> <span id="bulkUpdateBtnLabel">Update 0 item</span>';
+            html += '</button>';
+            html += '</div>';
+            html += '<div class="col-md-2">';
+            html += '<button type="button" class="btn btn-outline-secondary btn-sm w-100" id="resetBulkBtn">';
+            html += '<i class="bi bi-arrow-counterclockwise"></i> Reset';
+            html += '</button>';
+            html += '</div>';
+            html += '<div class="col-md-2 d-flex justify-content-end">';
+            html += '<div class="dropdown position-relative" id="batchColumnDropdown" style="z-index: 1060;">';
+            html += '<button class="btn btn-sm btn-outline-secondary dropdown-toggle w-100" type="button"';
+            html += '        id="batchColumnToggle" data-bs-toggle="dropdown" data-bs-display="static"';
+            html += '        aria-expanded="false" title="Pilih kolom yang ditampilkan">';
+            html += '    <i class="bi bi-table"></i> Kolom';
+            html += '</button>';
+            html += '<div class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="batchColumnToggle"';
+            html += '     id="batchColumnPanel"';
+            html += '     style="min-width:260px; max-height:400px; overflow-y:auto; z-index: 1060;">';
+            html += '    <p class="small text-muted mb-2 fw-semibold">Tampilkan Kolom:</p>';
+            html += '    <div id="batchColumnCheckboxes"></div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div id="bulkUpdateMsg" class="small mt-2"></div>';
+            html += '</div>';
+            html += '</form>';
+
+            html += '<div class="table-responsive"><table class="batch-modal-table table table-sm table-bordered table-hover">';
+            html += '<thead><tr>';
+            html += '<th width="40"><input type="checkbox" id="selectAllBatchItems" title="Pilih semua"></th>';
+            html += '<th width="40">No</th>';
+            html += '<th data-col-key="nomor">ID ASET BARU</th>';
+            html += '<th data-col-key="tahun" width="80">Tahun</th>';
+            html += '<th data-col-key="kategori">Kategori / Sub</th>';
+            html += '<th data-col-key="kondisi">Kondisi</th>';
+            html += '<th data-col-key="status" width="100">Status</th>';
+            html += '<th data-col-key="aksi" width="180">Aksi</th>';
+            html += '</tr></thead><tbody>';
+
+            data.items.forEach(function(item, i) {
+                var isDeleted = item.deleted_at !== null && item.deleted_at !== '';
+                var statusBadge = isDeleted
+                    ? '<span class="badge bg-dark">Dihapus</span>'
+                    : (item.status_aset === 'aktif'
+                        ? '<span class="badge bg-success">Aktif</span>'
+                        : '<span class="badge bg-secondary">' + escHtml(item.status_aset) + '</span>');
+
+                html += '<tr' + (isDeleted ? ' class="table-secondary text-muted"' : '') + '>';
+                html += '<td>';
+                if (!isDeleted) {
+                    html += '<input type="checkbox" class="batch-item-cb" value="' + escHtml(item.all_id) + '" data-nomor="' + escHtml(item.nomor_aset_baru) + '">';
+                }
+                html += '</td>';
+                html += '<td>' + (i + 1) + '</td>';
+                html += '<td data-col-key="nomor"><code class="small">' + escHtml(item.nomor_aset_baru) + '</code></td>';
+                html += '<td data-col-key="tahun">' + escHtml(item.tahun_perolehan || '-') + '</td>';
+                html += '<td data-col-key="kategori">' + escHtml(item.nama_kategori || '-');
+                if (item.nama_sub_kategori) {
+                    html += '<br><small class="text-muted">' + escHtml(item.nama_sub_kategori) + '</small>';
+                }
+                html += '</td>';
+                html += '<td data-col-key="kondisi">' + escHtml(item.nama_kondisi || '-') + '</td>';
+                html += '<td data-col-key="status">' + statusBadge + '</td>';
+                html += '<td data-col-key="aksi">';
+                if (!isDeleted) {
+                    html += '<div class="btn-group btn-group-sm" role="group">';
+                    html += '<a href="<?= base_url('/master/aset/') ?>' + encodeURIComponent(item.all_id) + '/edit" class="btn btn-primary" title="Edit Aset"><i class="bi bi-pencil-square"></i> Edit</a> ';
+                    html += '<button type="button" class="btn btn-danger" title="Hapus Aset" onclick="if(confirm(\'Yakin hapus ' + escHtml(item.nomor_aset_baru) + '?\')) { document.getElementById(\'deleteForm-' + escHtml(item.all_id) + '\').submit(); }"><i class="bi bi-trash"></i> Hapus</button>';
+                    html += '</div>';
+                    html += '<form id="deleteForm-' + escHtml(item.all_id) + '" action="<?= base_url('/master/aset/') ?>' + encodeURIComponent(item.all_id) + '" method="post" style="display:none;"><?= csrf_field() ?><input type="hidden" name="_method" value="DELETE"></form>';
+                } else {
+                    html += '<small class="text-muted">Sudah dihapus</small>';
+                }
+                html += '</td>';
+                html += '</tr>';
+            });
+
+            html += '</tbody></table></div>';
+            document.getElementById('batchModalBody').innerHTML = html;
+            document.getElementById('batchItemCount').textContent = data.total + ' item dalam batch ini';
+
+            attachBulkUpdateHandlers(batchId);
+            initBatchColumnVisibility();
+
+            var batchColToggle = document.getElementById('batchColumnToggle');
+            if (batchColToggle && typeof bootstrap !== 'undefined' && bootstrap.Dropdown) {
+                bootstrap.Dropdown.getOrCreateInstance(batchColToggle);
+            }
+        })
+        .catch(function(err) {
+            document.getElementById('batchModalBody').innerHTML = '<div class="alert alert-danger">Gagal memuat data: ' + (err.message || 'Unknown error') + '</div>';
+        });
+}
+
+function attachBulkUpdateHandlers(batchId) {
+    var selectAllCb = document.getElementById('selectAllBatchItems');
+    var itemCbs = document.querySelectorAll('.batch-item-cb');
+    var statusSelect = document.getElementById('bulkStatusSelect');
+    var kondisiSelect = document.getElementById('bulkKondisiSelect');
+    var applyBtn = document.getElementById('applyBulkUpdateBtn');
+    var resetBtn = document.getElementById('resetBulkBtn');
+    var btnLabel = document.getElementById('bulkUpdateBtnLabel');
+    var msgEl = document.getElementById('bulkUpdateMsg');
+
+    function updateBtnState() {
+        var selected = Array.from(itemCbs).filter(function(cb) { return cb.checked; });
+        var statusVal = statusSelect.value;
+        var kondisiVal = kondisiSelect.value;
+        var hasUpdate = (statusVal !== '' || kondisiVal !== '');
+        var count = selected.length;
+
+        applyBtn.disabled = !(count > 0 && hasUpdate);
+        btnLabel.textContent = 'Update ' + count + ' item';
+        if (count > 0 && !hasUpdate) {
+            msgEl.innerHTML = '<span class="text-warning"><i class="bi bi-exclamation-triangle"></i> Pilih Status atau Kondisi terlebih dahulu.</span>';
+        } else if (count === 0) {
+            msgEl.innerHTML = '<span class="text-muted"><i class="bi bi-info-circle"></i> Centang item yang akan diupdate.</span>';
+        } else if (hasUpdate) {
+            msgEl.innerHTML = '<span class="text-muted"><i class="bi bi-info-circle"></i> ' + count + ' item siap diupdate.</span>';
+        } else {
+            msgEl.innerHTML = '';
+        }
+    }
+
+    if (selectAllCb) {
+        selectAllCb.addEventListener('change', function() {
+            itemCbs.forEach(function(cb) { cb.checked = selectAllCb.checked; });
+            updateBtnState();
+        });
+    }
+
+    itemCbs.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            var allChecked = Array.from(itemCbs).every(function(c) { return c.checked; });
+            var noneChecked = Array.from(itemCbs).every(function(c) { return !c.checked; });
+            if (selectAllCb) selectAllCb.checked = allChecked;
+            updateBtnState();
+        });
+    });
+
+    if (statusSelect) statusSelect.addEventListener('change', updateBtnState);
+    if (kondisiSelect) kondisiSelect.addEventListener('change', updateBtnState);
+
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            if (selectAllCb) selectAllCb.checked = false;
+            itemCbs.forEach(function(cb) { cb.checked = false; });
+            statusSelect.value = '';
+            kondisiSelect.value = '';
+            updateBtnState();
+        });
+    }
+
+    if (applyBtn) {
+        applyBtn.addEventListener('click', function() {
+            var selected = Array.from(itemCbs).filter(function(cb) { return cb.checked; }).map(function(cb) { return cb.value; });
+            if (selected.length === 0) return;
+
+            var statusVal = statusSelect.value;
+            var kondisiVal = kondisiSelect.value;
+            if (statusVal === '' && kondisiVal === '') return;
+
+            applyBtn.disabled = true;
+            btnLabel.textContent = 'Updating...';
+            msgEl.innerHTML = '<span class="text-info"><i class="bi bi-hourglass-split"></i> Memproses ' + selected.length + ' item...</span>';
+
+            var formData = new FormData();
+            formData.append('batch_id', batchId);
+            formData.append('status_aset', statusVal);
+            formData.append('kondisi_id', kondisiVal);
+            formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+            selected.forEach(function(id) {
+                formData.append('all_ids[]', id);
+            });
+
+            fetch('<?= base_url('/master/aset/bulk-update-batch') ?>', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.success) {
+                    msgEl.innerHTML = '<span class="text-success"><i class="bi bi-check-circle"></i> ' + escHtml(data.message) + '</span>';
+                    setTimeout(function() { showBatchItems(batchId); }, 800);
+                } else {
+                    msgEl.innerHTML = '<span class="text-danger"><i class="bi bi-x-circle"></i> ' + escHtml(data.message) + '</span>';
+                    applyBtn.disabled = false;
+                    btnLabel.textContent = 'Update ' + selected.length + ' item';
+                }
+            })
+            .catch(function(err) {
+                msgEl.innerHTML = '<span class="text-danger"><i class="bi bi-x-circle"></i> Gagal: ' + escHtml(err.message || 'Unknown') + '</span>';
+                applyBtn.disabled = false;
+                btnLabel.textContent = 'Update ' + selected.length + ' item';
+            });
+        });
+    }
+
+    updateBtnState();
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     var applyBtn = document.getElementById('applyColumnsBtn');
     if (applyBtn) {
@@ -424,6 +788,106 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = href;
         });
     });
+
+    initColumnDragReorder();
 });
+
+function initBatchColumnVisibility() {
+    var panel = document.getElementById('batchColumnCheckboxes');
+    if (!panel) return;
+
+    var colDefs = [
+        { key: 'nomor', label: 'ID ASET BARU' },
+        { key: 'tahun', label: 'Tahun Perolehan' },
+        { key: 'kategori', label: 'Kategori / Sub' },
+        { key: 'kondisi', label: 'Kondisi' },
+        { key: 'status', label: 'Status' },
+        { key: 'aksi', label: 'Aksi' },
+    ];
+
+    var saved = {};
+    try {
+        saved = JSON.parse(localStorage.getItem('batch_modal_columns') || '{}');
+    } catch (e) { saved = {}; }
+
+    panel.innerHTML = '';
+    colDefs.forEach(function(c) {
+        var checked = saved[c.key] !== false;
+        var div = document.createElement('div');
+        div.className = 'form-check';
+        div.innerHTML = '<input class="form-check-input batch-col-cb" type="checkbox" value="' + c.key + '" id="batch_col_' + c.key + '"' + (checked ? ' checked' : '') + '>' +
+            '<label class="form-check-label text-nowrap" for="batch_col_' + c.key + '" style="white-space:nowrap;">' + c.label + '</label>';
+        panel.appendChild(div);
+    });
+
+    panel.querySelectorAll('.batch-col-cb').forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            var state = {};
+            panel.querySelectorAll('.batch-col-cb').forEach(function(c) {
+                state[c.value] = c.checked;
+            });
+            localStorage.setItem('batch_modal_columns', JSON.stringify(state));
+            applyBatchColumnVisibility();
+        });
+    });
+
+    applyBatchColumnVisibility();
+}
+
+function applyBatchColumnVisibility() {
+    var state = {};
+    try {
+        state = JSON.parse(localStorage.getItem('batch_modal_columns') || '{}');
+    } catch (e) { state = {}; }
+
+    var table = document.querySelector('.batch-modal-table');
+    if (!table) return;
+
+    table.querySelectorAll('th[data-col-key], td[data-col-key]').forEach(function(cell) {
+        var key = cell.getAttribute('data-col-key');
+        var visible = state[key] !== false;
+        cell.style.display = visible ? '' : 'none';
+    });
+}
+
+function initColumnDragReorder() {
+    var headerRow = document.getElementById('asetHeaderRow');
+    if (!headerRow || typeof Sortable === 'undefined') return;
+
+    Sortable.create(headerRow, {
+        animation: 150,
+        handle: '.drag-handle',
+        filter: 'a',
+        preventOnFilter: false,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        onEnd: function(evt) {
+            var newOrder = [];
+            headerRow.querySelectorAll('th.draggable-col').forEach(function(th) {
+                var col = th.getAttribute('data-col');
+                if (col) newOrder.push(col);
+            });
+
+            if (newOrder.length === 0) return;
+
+            var form = document.createElement('form');
+            form.method = 'GET';
+            form.action = '<?= base_url('/master/aset/save_column_preferences') ?>';
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'columns';
+            input.value = JSON.stringify(newOrder);
+            form.appendChild(input);
+            var csrf = document.createElement('input');
+            csrf.type = 'hidden';
+            csrf.name = 'csrf_test_name';
+            csrf.value = '<?= csrf_hash() ?>';
+            form.appendChild(csrf);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
 </script>
 <?php $this->endSection(); ?>

@@ -49,7 +49,8 @@ class GolonganController extends Controller
         }
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_golongan.updated_at', 'DESC')
+        $records = $builder->orderBy('aset_golongan.kelompok', 'ASC')
+            ->orderBy('aset_golongan.nama_golongan', 'ASC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 
@@ -67,6 +68,7 @@ class GolonganController extends Controller
         return [
             'kelompok' => [
                 ['value' => 'bangunan', 'label' => 'Bangunan'],
+                ['value' => 'ruangan', 'label' => 'Ruangan'],
                 ['value' => 'non_bangunan', 'label' => 'Non Bangunan'],
                 ['value' => 'lainnya', 'label' => 'Lainnya'],
             ]

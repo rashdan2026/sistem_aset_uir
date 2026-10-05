@@ -48,8 +48,11 @@ class AssetNumberService
     /**
      * Generate nomor_aset_baru format: {KODE_KATEGORI}-{TAHUN}-{SEQ}
      * Example: IT-2026-00001
+     *
+     * @param int $skipAhead Jumlah sequence yang dilewati untuk menghindari race condition
+     *                          antar transaksi concurrent. Dipakai saat retry di controller.
      */
-    public function generateNomorAsetBaru(int $kategoriId, ?int $tahunPerolehan = null): string
+    public function generateNomorAsetBaru(int $kategoriId, ?int $tahunPerolehan = null, int $skipAhead = 0): string
     {
         $tahun = $tahunPerolehan ?? (int) date('Y');
 
@@ -70,6 +73,8 @@ class AssetNumberService
         if ($last && preg_match('/' . preg_quote($prefix, '/') . '(\d+)$/', $last['nomor_aset_baru'], $m)) {
             $nextSeq = (int) $m[1] + 1;
         }
+
+        $nextSeq += $skipAhead;
 
         return $prefix . sprintf('%05d', $nextSeq);
     }

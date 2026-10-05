@@ -122,9 +122,16 @@ class BulkAsetController extends Controller
             $tahun = $this->request->getPost('tahun_perolehan') ?: (int) date('Y');
             $successCount = 0;
 
+            $baseNomorAsetBaru = $this->assetNumberService->generateNomorAsetBaru($kategoriId, (int) $tahun);
+            if (!preg_match('/^(.*?)(\d+)$/', $baseNomorAsetBaru, $m)) {
+                throw new \RuntimeException('Format nomor_aset_baru tidak valid: ' . $baseNomorAsetBaru);
+            }
+            $nomorPrefix = $m[1];
+            $baseSeq = (int) $m[2];
+
             for ($i = 0; $i < $jumlah; $i++) {
                 $allId = $this->assetNumberService->generateAllId($subKategoriId);
-                $nomorAsetBaru = $this->assetNumberService->generateNomorAsetBaru($kategoriId, (int) $tahun);
+                $nomorAsetBaru = $nomorPrefix . sprintf('%05d', $baseSeq + $i);
 
                 $saveData = [
                     'all_id' => $allId,

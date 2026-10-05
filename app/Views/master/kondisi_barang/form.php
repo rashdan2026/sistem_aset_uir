@@ -53,6 +53,24 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label for="warna">Warna Badge</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="color" name="warna" id="warna" class="form-control form-control-color"
+                               value="<?= old('warna', $record['warna'] ?? '#198754') ?>"
+                               title="Pilih warna untuk badge di daftar Kondisi"
+                               style="max-width: 60px; height: 38px;">
+                        <code id="warnaPreview"><?= old('warna', $record['warna'] ?? '#198754') ?></code>
+                        <small class="text-muted">Hex format #RRGGBB (auto-prepend # jika lupa)</small>
+                    </div>
+                </div>
+
+                <script>
+                document.getElementById('warna').addEventListener('input', function() {
+                    document.getElementById('warnaPreview').textContent = this.value;
+                });
+                </script>
+
                 <?php if ($isEdit): ?>
                 <div class="form-group">
                     <div class="form-check">

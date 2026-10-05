@@ -8,8 +8,8 @@ if (!function_exists('get_aset_visible_columns')) {
         if (isset($_COOKIE['aset_column_prefs'])) {
             $saved = json_decode($_COOKIE['aset_column_prefs'], true);
             if (is_array($saved) && count($saved) > 0) {
-                $filtered = array_intersect($saved, $validColumns);
-                return count($filtered) > 0 ? array_values($filtered) : $defaults;
+                $filtered = array_values(array_intersect($saved, $validColumns));
+                return count($filtered) > 0 ? $filtered : $defaults;
             }
         }
         return $defaults;

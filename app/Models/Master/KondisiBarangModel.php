@@ -17,6 +17,7 @@ class KondisiBarangModel extends Model
         'nama_kondisi',
         'level_kondisi',
         'is_available_for_use',
+        'warna',
         'keterangan',
         'is_active'
     ];

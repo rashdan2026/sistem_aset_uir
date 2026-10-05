@@ -51,7 +51,8 @@ class KategoriController extends Controller
         $builder->where('aset_kategori.deleted_at', null);
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_kategori.updated_at', 'DESC')
+        $records = $builder->orderBy('aset_kategori.jenis_aset', 'ASC')
+            ->orderBy('aset_kategori.nama_kategori', 'ASC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 
