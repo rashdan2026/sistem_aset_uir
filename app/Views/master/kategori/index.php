@@ -17,11 +17,13 @@
                         <input type="text" name="q" class="form-control" value="<?= esc($params['q'] ?? '') ?>" placeholder="Cari kode atau nama kategori...">
                     </div>
                     <div class="col-md-3">
-                        <select name="jenis_aset" class="form-select">
-                            <option value="">Semua Jenis Aset</option>
-                            <?php foreach ($filterOptions['jenis_aset'] as $opt): ?>
-                                <option value="<?= esc($opt['value']) ?>" <?= ($params['jenis_aset'] ?? '') == $opt['value'] ? 'selected' : '' ?>><?= esc($opt['label']) ?></option>
-                            <?php endforeach; ?>
+                        <select name="gl_id" class="form-select">
+                            <option value="">Semua Golongan</option>
+                            <?php if (!empty($filterOptions['golongan'])): ?>
+                                <?php foreach ($filterOptions['golongan'] as $opt): ?>
+                                    <option value="<?= esc($opt['value']) ?>" <?= ($params['gl_id'] ?? '') == $opt['value'] ? 'selected' : '' ?>><?= esc($opt['label']) ?></option>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </select>
                     </div>
                     <div class="col-md-auto">
@@ -38,7 +40,7 @@
                     <thead>
                         <tr>
                             <th>Nama Kategori</th>
-                            <th width="120">Jenis Aset</th>
+                            <th>Golongan</th>
                             <th width="80">Status</th>
                             <th width="80">Kode</th>
                             <th width="100">Aksi</th>
@@ -49,17 +51,7 @@
                             <?php foreach ($kategori as $kat): ?>
                                 <tr>
                                     <td><?= esc($kat['nama_kategori']) ?></td>
-                                    <td>
-                                        <?php
-                                        $jenisLabels = [
-                                            'bangunan' => '<span class="badge bg-primary">Bangunan</span>',
-                                            'ruangan' => '<span class="badge bg-info">Ruangan</span>',
-                                            'non_bangunan' => '<span class="badge bg-success">Non Bangunan</span>',
-                                            'lainnya' => '<span class="badge bg-secondary">Lainnya</span>'
-                                        ];
-                                        echo $jenisLabels[$kat['jenis_aset']] ?? esc($kat['jenis_aset']);
-                                        ?>
-                                    </td>
+                                    <td><?= esc($kat['nama_golongan'] ?? '-') ?></td>
                                     <td><?= $kat['is_active'] ? '<span class="badge bg-success">Aktif</span>' : '<span class="badge bg-secondary">Nonaktif</span>' ?></td>
                                     <td><?= esc($kat['kode_kategori']) ?></td>
                                     <td>

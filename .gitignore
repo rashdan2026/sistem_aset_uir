@@ -19,3 +19,8 @@ Thumbs.db
 # Build artifacts
 temp/
 .env.local
+# Writable runtime files
+writable/session/
+writable/debugbar/
+writable/logs/
+writable/backups/

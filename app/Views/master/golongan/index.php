@@ -16,14 +16,6 @@
                     <div class="col-md-4">
                         <input type="text" name="q" class="form-control" value="<?= esc($params['q'] ?? '') ?>" placeholder="Cari kode atau nama golongan...">
                     </div>
-                    <div class="col-md-3">
-                        <select name="kelompok" class="form-select">
-                            <option value="">Semua Kelompok</option>
-                            <?php foreach ($filterOptions['kelompok'] as $opt): ?>
-                                <option value="<?= esc($opt['value']) ?>" <?= ($params['kelompok'] ?? '') == $opt['value'] ? 'selected' : '' ?>><?= esc($opt['label']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
                     <div class="col-md-auto">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Cari</button>
                         <?php if (!empty(array_filter($params ?? []))): ?>
@@ -37,20 +29,22 @@
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>No</th>
+                            <th>Kode</th>
                             <th>Nama Golongan</th>
-                            <th>Kelompok</th>
                             <th>Keterangan</th>
                             <th>Status</th>
-                            <th>Kode</th>
                             <th width="100">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!empty($records)): ?>
+                        <?php $no = (($currentPage ?? 1) - 1) * $perPage + 1; ?>
                         <?php foreach ($records as $r): ?>
                         <tr>
+                            <td><?= $no++ ?></td>
+                            <td><?= esc($r['kode_golongan']) ?></td>
                             <td><?= esc($r['nama_golongan']) ?></td>
-                            <td><?= esc($r['kelompok'] ?? '-') ?></td>
                             <td><?= esc($r['keterangan'] ?? '-') ?></td>
                             <td>
                                 <?php if ($r['is_active']): ?>
@@ -59,7 +53,6 @@
                                     <span class="badge bg-secondary">Tidak Aktif</span>
                                 <?php endif; ?>
                             </td>
-                            <td><?= esc($r['kode_golongan']) ?></td>
                             <td>
                                 <div class="action-btn-group">
                                     <a href="<?= base_url('/master/golongan/' . $r['gl_id'] . '/edit') ?>" class="icon-btn edit-btn" title="Edit">

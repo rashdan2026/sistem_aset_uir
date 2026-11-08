@@ -63,7 +63,8 @@ class AsetModel extends Model
                 ar.nama_ruangan,
                 yk.nama_gelar as nama_penanggung_jawab,
                 yk.tgl_lahir as pj_tgl_lahir,
-                jbat.nama_jabatan as pj_nama_jabatan
+                jbat.nama_jabatan as pj_nama_jabatan,
+                akb.warna as kondisi_warna
             ', false)
             ->join('aset_kategori ak', 'ak.kt_id = aset_all_uir.kategori_id', 'left')
             ->join('aset_sub_kategori ask', 'ask.sk_id = aset_all_uir.sub_kategori_id', 'left')

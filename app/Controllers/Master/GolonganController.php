@@ -24,7 +24,7 @@ class GolonganController extends Controller
         $page = (int) ($this->request->getGet('page') ?? 1);
         $page = $page > 0 ? $page : 1;
 
-        $filterFields = ['kelompok'];
+        $filterFields = [];
         $params = $this->getFilterParams($filterFields);
         $searchQuery = $this->buildSearchQuery($params);
         $data = $this->getData($perPage, $page, $params);
@@ -40,17 +40,12 @@ class GolonganController extends Controller
         $searchFields = ['aset_golongan.kode_golongan', 'aset_golongan.nama_golongan'];
         $this->applySearchFilters($builder, $searchFields, $params);
 
-        if (!empty($params['kelompok'])) {
-            $builder->where('aset_golongan.kelompok', $params['kelompok']);
-        }
-
         if (!isset($params['is_active'])) {
             $builder->where('aset_golongan.is_active', 1);
         }
 
         $total = $builder->countAllResults(false);
-        $records = $builder->orderBy('aset_golongan.kelompok', 'ASC')
-            ->orderBy('aset_golongan.nama_golongan', 'ASC')
+        $records = $builder->orderBy('aset_golongan.kode_golongan', 'ASC')
             ->get($perPage, ($page - 1) * $perPage)
             ->getResultArray();
 
@@ -65,14 +60,7 @@ class GolonganController extends Controller
 
     protected function getFilterOptions(): array
     {
-        return [
-            'kelompok' => [
-                ['value' => 'bangunan', 'label' => 'Bangunan'],
-                ['value' => 'ruangan', 'label' => 'Ruangan'],
-                ['value' => 'non_bangunan', 'label' => 'Non Bangunan'],
-                ['value' => 'lainnya', 'label' => 'Lainnya'],
-            ]
-        ];
+        return [];
     }
 
     public function show($id)
@@ -87,7 +75,8 @@ class GolonganController extends Controller
 
     public function new()
     {
-        return view('master/golongan/form', ['title' => 'Tambah Golongan']);
+        $data = ['title' => 'Tambah Golongan'];
+        return view('master/golongan/form', $data);
     }
 
     public function create()
@@ -115,7 +104,6 @@ class GolonganController extends Controller
 
         $this->model->save([
             'nama_golongan' => $namaGolongan,
-            'kelompok' => $this->request->getPost('kelompok'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => 1,
         ]);
@@ -168,7 +156,6 @@ class GolonganController extends Controller
 
         $this->model->update($id, [
             'nama_golongan' => $namaGolongan,
-            'kelompok' => $this->request->getPost('kelompok'),
             'keterangan' => $this->request->getPost('keterangan'),
             'is_active' => $this->request->getPost('is_active') ? 1 : 0,
         ]);

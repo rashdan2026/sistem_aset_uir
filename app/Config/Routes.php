@@ -29,6 +29,7 @@ $routes->group('master', ['filter' => 'auth'], static function($routes) {
     $routes->get('ruangan/search', 'Master\RuanganController::search', ['filter' => 'auth']);
     $routes->resource('ruangan', ['controller' => 'Master\RuanganController']);
     $routes->get('kategori/search', 'Master\KategoriController::search', ['filter' => 'auth']);
+    $routes->get('kategori/by-golongan/(:num)', 'Master\KategoriController::getByGolongan/$1');
     $routes->resource('kategori', ['controller' => 'Master\KategoriController']);
     $routes->get('sub-kategori/search', 'Master\SubKategoriController::search', ['filter' => 'auth']);
     $routes->resource('sub-kategori', ['controller' => 'Master\SubKategoriController']);
@@ -43,6 +44,7 @@ $routes->group('master', ['filter' => 'auth'], static function($routes) {
     $routes->get('aset/search', 'Master\AsetController::search', ['filter' => 'auth']);
     $routes->get('aset/get-sub-kategori/(:num)', 'Master\AsetController::getSubKategoriByKategori/$1');
     $routes->get('aset/get-golongan/(:num)', 'Master\AsetController::getGolonganByKategori/$1');
+    $routes->get('aset/get-kategori/(:num)', 'Master\AsetController::getKategoriByGolongan/$1');
     $routes->get('aset/get-type/(:num)', 'Master\AsetController::getTypeByMerk/$1');
     $routes->get('aset/get-sub-unit/(:num)', 'Master\AsetController::getSubUnitByUnitKerja/$1');
     $routes->get('aset/get-ruangan/(:num)', 'Master\AsetController::getRuanganBySubUnitJson/$1');
@@ -50,12 +52,14 @@ $routes->group('master', ['filter' => 'auth'], static function($routes) {
     $routes->get('aset/save_column_preferences', 'Master\AsetController::save_column_preferences');
     $routes->get('aset/batch-items/(:any)', 'Master\AsetController::getBatchItems/$1');
     $routes->post('aset/bulk-update-batch', 'Master\AsetController::bulkUpdateBatch');
+    $routes->post('aset/print-qr-labels', 'Master\AsetController::printQrLabels');
     $routes->resource('aset', ['controller' => 'Master\AsetController']);
 
     $routes->get('bulk-aset/new', 'Master\BulkAsetController::new');
     $routes->post('bulk-aset', 'Master\BulkAsetController::create');
     $routes->get('bulk-aset/get-sub-kategori/(:num)', 'Master\BulkAsetController::getSubKategoriByKategori/$1');
     $routes->get('bulk-aset/get-golongan/(:num)', 'Master\BulkAsetController::getGolonganByKategori/$1');
+    $routes->get('bulk-aset/get-kategori/(:num)', 'Master\BulkAsetController::getKategoriByGolongan/$1');
     $routes->get('bulk-aset/get-sub-unit/(:num)', 'Master\BulkAsetController::getSubUnitByUnitKerja/$1');
     $routes->get('bulk-aset/get-ruangan/(:num)', 'Master\BulkAsetController::getRuanganBySubUnitJson/$1');
     $routes->get('bulk-aset/get-type/(:num)', 'Master\BulkAsetController::getTypeByMerk/$1');
@@ -88,6 +92,9 @@ $routes->get('search/penanggung-jawab', 'SearchController::searchPenanggungJawab
 $routes->get('search/unit-kerja', 'SearchController::searchUnitKerja', ['filter' => 'auth']);
 $routes->get('search/gedung', 'SearchController::searchGedung', ['filter' => 'auth']);
 $routes->get('search/sub-unit', 'SearchController::searchSubUnit', ['filter' => 'auth']);
+
+// Public QR Code for assets — accessible without login
+$routes->get('qr/(:segment)', 'Public\QrController::show/$1');
 
 // Legacy routes for compatibility - should be removed eventually
 $routes->get('admin/dashboard', 'DashboardController::index', ['filter' => 'auth']);

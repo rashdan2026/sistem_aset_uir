@@ -29,28 +29,42 @@
                     <i class="bi bi-info-circle"></i> Form ini akan membuat <strong>beberapa record aset sekaligus</strong> berdasarkan Jumlah yang diisi. Semua aset dalam 1 proses akan memiliki <code>batch_id</code> yang sama untuk memudahkan tracking.
                 </div>
 
-                <!-- Section: Identitas Aset -->
                 <h6 class="font-weight-bold text-primary mb-3">Identitas Aset</h6>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label>Kategori <span class="text-danger">*</span></label>
-                            <select name="kategori_id" id="kategori_id" class="form-control" required onchange="loadSubKategori()">
-                                <option value="">-- Pilih Kategori --</option>
-                                <?php foreach ($kategori as $k): ?>
-                                    <option value="<?= $k['kt_id'] ?>" <?= ($selectedKategoriId ?? '') == $k['kt_id'] ? 'selected' : '' ?>><?= esc($k['nama_kategori']) ?></option>
+                            <label>Golongan <span class="text-danger">*</span></label>
+                            <select name="golongan_id" id="golongan_id" class="form-control" required onchange="loadKategori()">
+                                <option value="">-- Pilih Golongan --</option>
+                                <?php foreach ($golonganOptions as $g): ?>
+                                    <option value="<?= $g['gl_id'] ?>" <?= ($selectedGolonganId ?? '') == $g['gl_id'] ? 'selected' : '' ?>><?= esc($g['nama_golongan']) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Kategori <span class="text-danger">*</span></label>
+                            <select name="kategori_id" id="kategori_id" class="form-control" required onchange="loadSubKategori()">
+                                <option value="">-- Pilih Golongan terlebih dahulu --</option>
+                                <?php if (!empty($kategoriOptions)): ?>
+                                    <?php foreach ($kategoriOptions as $k): ?>
+                                        <option value="<?= $k['kt_id'] ?>" <?= ($selectedKategoriId ?? '') == $k['kt_id'] ? 'selected' : '' ?>><?= esc($k['nama_kategori']) ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Sub Kategori <span class="text-danger">*</span></label>
                             <select name="sub_kategori_id" id="sub_kategori_id" class="form-control" required onchange="onSubKategoriChange()">
-                                <option value="">-- Pilih Sub Kategori --</option>
-                                <?php foreach ($subKategori as $sk): ?>
-                                    <option value="<?= $sk['sk_id'] ?>" <?= ($selectedSubKategoriId ?? '') == $sk['sk_id'] ? 'selected' : '' ?>><?= esc($sk['nama_sub_kategori']) ?></option>
-                                <?php endforeach; ?>
+                                <option value="">-- Pilih Kategori terlebih dahulu --</option>
+                                <?php if (!empty($subKategoriOptions)): ?>
+                                    <?php foreach ($subKategoriOptions as $sk): ?>
+                                        <option value="<?= $sk['sk_id'] ?>" <?= ($selectedSubKategoriId ?? '') == $sk['sk_id'] ? 'selected' : '' ?>><?= esc($sk['nama_sub_kategori']) ?></option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </select>
                         </div>
                     </div>
@@ -69,20 +83,6 @@
                 <hr>
                 <h6 class="font-weight-bold text-primary mb-3">Klasifikasi Aset</h6>
                 <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Golongan</label>
-                            <select name="golongan_id" id="golongan_id" class="form-control">
-                                <option value="">-- Pilih Kategori terlebih dahulu --</option>
-                                <?php if (!empty($golongan)): ?>
-                                    <?php foreach ($golongan as $g): ?>
-                                        <option value="<?= $g['gl_id'] ?>"><?= esc($g['nama_golongan']) ?></option>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </select>
-                            <small class="form-text text-muted">Pilih Kategori terlebih dahulu untuk memfilter Golongan.</small>
-                        </div>
-                    </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Merk <span id="merk-wajib" class="text-danger" style="display:none">*</span></label>
@@ -113,10 +113,7 @@
                             </select>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Sumber Dana <span class="text-danger">*</span></label>
                             <select name="sumber_dana_id" id="sumber_dana_id" class="form-control" required>
@@ -127,10 +124,25 @@
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Tahun Perolehan</label>
                             <input type="number" name="tahun_perolehan" class="form-control" value="<?= old('tahun_perolehan', date('Y')) ?>" min="1900" max="2100">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Status Aset</label>
+                            <select name="status_aset" class="form-control">
+                                <option value="draft" <?= old('status_aset', 'draft') === 'draft' ? 'selected' : '' ?>>Draft</option>
+                                <option value="aktif" <?= old('status_aset') === 'aktif' ? 'selected' : '' ?>>Aktif</option>
+                                <option value="nonaktif" <?= old('status_aset') === 'nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
+                                <option value="hilang" <?= old('status_aset') === 'hilang' ? 'selected' : '' ?>>Hilang</option>
+                            </select>
+                            <small class="form-text text-muted">Akan dipakai oleh semua aset dalam batch.</small>
                         </div>
                     </div>
                 </div>
@@ -166,6 +178,7 @@
                             <select name="ruangan_id" id="ruangan_id" class="form-control">
                                 <option value="">-- Tidak Ada --</option>
                             </select>
+                            <small class="form-text text-muted">Pilih Ruangan (otomatis terfilter sesuai Sub Unit). Format: Gedung / Lantai / Ruangan.</small>
                         </div>
                     </div>
                 </div>
@@ -199,8 +212,6 @@
                     <small class="form-text text-muted">Opsional. Akan dipakai oleh semua aset dalam batch.</small>
                 </div>
 
-                <input type="hidden" name="status_aset" value="draft">
-
                 <div class="mt-3">
                     <button type="submit" class="btn btn-warning btn-lg" onclick="return confirm('Anda akan membuat ' + document.getElementById('jumlah')?.value + ' aset sekaligus. Lanjutkan?')">
                         <i class="bi bi-layers"></i> Registrasi Massal
@@ -213,31 +224,6 @@
 </div>
 
 <style>
-.suggestions-box {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 9999;
-    margin-top: 2px;
-}
-.suggestion-item {
-    padding: 10px 15px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-}
-.suggestion-item:last-child {
-    border-bottom: none;
-}
-.suggestion-item:hover {
-    background-color: #f8f9fa;
-}
 </style>
 
 <script>
@@ -248,6 +234,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     initSelect2();
 });
+
+function loadKategori() {
+    var golonganId = document.getElementById('golongan_id').value;
+    var kategoriSelect = document.getElementById('kategori_id');
+    var subKategoriSelect = document.getElementById('sub_kategori_id');
+
+    kategoriSelect.innerHTML = '<option value="">Memuat...</option>';
+    subKategoriSelect.innerHTML = '<option value="">-- Pilih Kategori terlebih dahulu --</option>';
+
+    var $merk = $('#merk_id');
+    if ($merk.length && $merk.data('select2')) {
+        $merk.val(null).trigger('change');
+    } else {
+        document.getElementById('merk_id').value = '';
+    }
+    var typeSelect = document.getElementById('type_id');
+    typeSelect.innerHTML = '<option value="">-- Pilih Type --</option>';
+    document.getElementById('merk-wajib').style.display = 'none';
+    document.getElementById('merk_id').required = false;
+    document.getElementById('type-wajib').style.display = 'none';
+    document.getElementById('type_id').required = false;
+    document.getElementById('ruangan-wajib').style.display = 'none';
+    document.getElementById('ruangan_id').required = false;
+
+    if (!golonganId) {
+        kategoriSelect.innerHTML = '<option value="">-- Pilih Golongan terlebih dahulu --</option>';
+        return;
+    }
+
+    fetch('<?= base_url('/master/bulk-aset/get-kategori/') ?>' + golonganId)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            kategoriSelect.innerHTML = '<option value="">-- Pilih Kategori --</option>';
+            data.forEach(function(k) {
+                var opt = document.createElement('option');
+                opt.value = k.kt_id;
+                opt.textContent = k.nama_kategori;
+                kategoriSelect.appendChild(opt);
+            });
+        })
+        .catch(function() {
+            kategoriSelect.innerHTML = '<option value="">-- Pilih Golongan terlebih dahulu --</option>';
+        });
+}
 
 function loadSubKategori() {
     var kategoriId = document.getElementById('kategori_id').value;
@@ -269,10 +299,8 @@ function loadSubKategori() {
     document.getElementById('ruangan-wajib').style.display = 'none';
     document.getElementById('ruangan_id').required = false;
 
-    loadGolongan(kategoriId);
-
     if (!kategoriId) {
-        subKategoriSelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
+        subKategoriSelect.innerHTML = '<option value="">-- Pilih Kategori terlebih dahulu --</option>';
         return;
     }
 
@@ -337,11 +365,14 @@ function loadType() {
 function loadSubUnit() {
     var unitId = document.getElementById('unit_kerja_id').value;
     var subUnitSelect = document.getElementById('sub_unit_id');
-    var ruanganSelect = document.getElementById('ruangan_id');
+    var $ruangan = $('#ruangan_id');
+    if ($ruangan.length && $ruangan.data('select2')) {
+        $ruangan.select2('destroy');
+    }
     subUnitSelect.innerHTML = '<option value="">Memuat...</option>';
-    ruanganSelect.innerHTML = '<option value="">-- Tidak Ada --</option>';
     if (!unitId) {
         subUnitSelect.innerHTML = '<option value="">-- Tidak Ada --</option>';
+        resetRuanganSelect([]);
         return;
     }
     fetch('<?= base_url('/master/bulk-aset/get-sub-unit/') ?>' + unitId)
@@ -354,52 +385,106 @@ function loadSubUnit() {
                 opt.textContent = su.nama_sub_unit;
                 subUnitSelect.appendChild(opt);
             });
+            resetRuanganSelect([]);
         });
+}
+
+function formatRuanganText(r) {
+    var parts = [];
+    if (r.nama_gedung) parts.push(r.nama_gedung);
+    if (r.nama_lantai) parts.push(r.nama_lantai);
+    parts.push(r.nama_ruangan + ' (' + r.kode_ruangan + ')');
+    return parts.join(' / ');
+}
+
+function resetRuanganSelect(data) {
+    var $ruangan = $('#ruangan_id');
+    if (!$ruangan.length) return;
+    if ($ruangan.data('select2')) {
+        $ruangan.select2('destroy');
+    }
+    $ruangan.empty();
+    $ruangan.append('<option value="">-- Tidak Ada --</option>');
+    if (Array.isArray(data) && data.length) {
+        data.forEach(function(r) {
+            var opt = new Option(formatRuanganText(r), String(r.rg_id), false, false);
+            $ruangan.append(opt);
+        });
+    }
+    $ruangan.val('').trigger('change');
+    $ruangan.select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Pilih Ruangan atau ketik minimal 3 huruf (Gedung / Lantai / Ruangan)',
+        allowClear: true,
+        width: '100%',
+        matcher: function(params, data) {
+            if ($.trim(params.term) === '') {
+                return data;
+            }
+            if (typeof data.text === 'undefined') {
+                return null;
+            }
+            var term = params.term.toLowerCase();
+            var text = data.text.toLowerCase();
+            if (term.length < 3) {
+                return data;
+            }
+            if (text.indexOf(term) > -1) {
+                return data;
+            }
+            return null;
+        }
+    });
 }
 
 function loadRuangan() {
     var subUnitId = document.getElementById('sub_unit_id').value;
-    var ruanganSelect = document.getElementById('ruangan_id');
     if (!subUnitId) {
-        ruanganSelect.innerHTML = '<option value="">-- Tidak Ada --</option>';
+        resetRuanganSelect([]);
         return;
     }
+    var $ruangan = $('#ruangan_id');
+    if ($ruangan.length && $ruangan.data('select2')) {
+        $ruangan.select2('destroy');
+    }
+    var ruanganSelect = document.getElementById('ruangan_id');
     ruanganSelect.innerHTML = '<option value="">Memuat...</option>';
     fetch('<?= base_url('/master/bulk-aset/get-ruangan/') ?>' + subUnitId)
         .then(function(r) { return r.json(); })
         .then(function(data) {
-            ruanganSelect.innerHTML = '<option value="">-- Tidak Ada --</option>';
-            data.forEach(function(r) {
-                var opt = document.createElement('option');
-                opt.value = r.rg_id;
-                opt.textContent = r.nama_ruangan + ' (' + r.kode_ruangan + ') - ' + (r.nama_gedung || '');
-                ruanganSelect.appendChild(opt);
-            });
+            resetRuanganSelect(data || []);
+        })
+        .catch(function() {
+            resetRuanganSelect([]);
         });
 }
 
-function loadGolongan(kategoriId) {
-    var golonganSelect = document.getElementById('golongan_id');
-    if (!golonganSelect) return;
-    golonganSelect.innerHTML = '<option value="">Memuat...</option>';
-    if (!kategoriId) {
-        golonganSelect.innerHTML = '<option value="">-- Pilih Kategori terlebih dahulu --</option>';
-        return;
-    }
-    fetch('<?= base_url('/master/bulk-aset/get-golongan/') ?>' + kategoriId)
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            golonganSelect.innerHTML = '<option value="">-- Tidak Ada --</option>';
-            data.forEach(function(g) {
-                var opt = document.createElement('option');
-                opt.value = g.gl_id;
-                opt.textContent = g.nama_golongan;
-                golonganSelect.appendChild(opt);
-            });
-        })
-        .catch(function() {
-            golonganSelect.innerHTML = '<option value="">-- Tidak Ada --</option>';
-        });
+function initRuanganSelect2() {
+    var $ruangan = $('#ruangan_id');
+    if (!$ruangan.length || $ruangan.data('select2')) return;
+    $ruangan.select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Pilih Ruangan atau ketik minimal 3 huruf (Gedung / Lantai / Ruangan)',
+        allowClear: true,
+        width: '100%',
+        matcher: function(params, data) {
+            if ($.trim(params.term) === '') {
+                return data;
+            }
+            if (typeof data.text === 'undefined') {
+                return null;
+            }
+            var term = params.term.toLowerCase();
+            var text = data.text.toLowerCase();
+            if (term.length < 3) {
+                return data;
+            }
+            if (text.indexOf(term) > -1) {
+                return data;
+            }
+            return null;
+        }
+    });
 }
 
 function initSelect2() {
@@ -491,6 +576,8 @@ function initSelect2() {
             allowClear: true
         });
     }
+
+    initRuanganSelect2();
 }
 </script>
 <?php $this->endSection(); ?>

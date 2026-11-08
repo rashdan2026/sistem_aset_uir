@@ -33,7 +33,7 @@ class AsetController extends Controller
     protected $unitKerjaModel;
     protected $assetNumberService;
 
-public function __construct()
+    public function __construct()
     {
         $this->asetModel = new AsetModel();
         $this->kategoriModel = new KategoriModel();
@@ -131,6 +131,7 @@ public function __construct()
         }
         if (in_array('nama_kondisi', $visibleColumns) || $searchCol === 'nama_kondisi' || $sortCol === 'nama_kondisi') {
             $selectFields[] = 'akb.nama_kondisi';
+            $selectFields[] = 'akb.warna as kondisi_warna';
         }
 
         $selectFields = array_unique($selectFields);
@@ -232,7 +233,7 @@ public function __construct()
             'status' => $status,
             'inputMode' => $inputMode,
             'kategoriFilter' => $kategori,
-            'kategoriOptions' => $this->kategoriModel->where('is_active', 1)->orderBy('nama_kategori', 'ASC')->findAll(),
+            'kategoriOptions' => $this->kategoriModel->where('is_active', 1)->where('deleted_at', null)->orderBy('nama_kategori', 'ASC')->findAll(),
             'visibleColumns' => $visibleColumns,
             'allColumns' => $allColumns,
             'searchableColumns' => $searchableColumns,
@@ -269,15 +270,28 @@ public function __construct()
 
     public function new()
     {
+        $golonganId = (int) $this->request->getGet('golongan_id');
         $kategoriId = (int) $this->request->getGet('kategori_id');
         $subKategoriId = (int) $this->request->getGet('sub_kategori_id');
+
+        $golonganOptions = $this->golonganModel->where('is_active', 1)->orderBy('nama_golongan', 'ASC')->findAll();
+
+        $kategoriOptions = [];
+        if ($golonganId) {
+            $kategoriOptions = $this->kategoriModel->getByGolonganId($golonganId);
+        }
+
+        $subKategoriOptions = [];
+        if ($kategoriId) {
+            $subKategoriOptions = $this->subKategoriModel->where('kategori_id', $kategoriId)->where('is_active', 1)->orderBy('nama_sub_kategori', 'ASC')->findAll();
+        }
 
         $data = [
             'title' => 'Registrasi Aset Baru',
             'record' => null,
-            'kategori' => $this->kategoriModel->where('is_active', 1)->orderBy('nama_kategori', 'ASC')->findAll(),
-            'subKategori' => $kategoriId ? $this->subKategoriModel->where('kategori_id', $kategoriId)->where('is_active', 1)->orderBy('nama_sub_kategori', 'ASC')->findAll() : [],
-            'golongan' => $kategoriId ? $this->golonganModel->getByKategoriId($kategoriId) : [],
+            'golonganOptions' => $golonganOptions,
+            'kategoriOptions' => $kategoriOptions,
+            'subKategoriOptions' => $subKategoriOptions,
             'merk' => $this->merkModel->where('is_active', 1)->orderBy('nama_merk', 'ASC')->findAll(),
             'type' => [],
             'kondisi' => $this->kondisiModel->where('is_active', 1)->orderBy('level_kondisi', 'ASC')->findAll(),
@@ -285,6 +299,7 @@ public function __construct()
             'unitKerja' => $this->unitKerjaModel->getActiveOptions(),
             'subUnit' => [],
             'ruangan' => [],
+            'selectedGolonganId' => $golonganId,
             'selectedKategoriId' => $kategoriId,
             'selectedSubKategoriId' => $subKategoriId,
         ];
@@ -294,6 +309,7 @@ public function __construct()
 
     public function create()
     {
+        $golonganId = (int) $this->request->getPost('golongan_id');
         $kategoriId = (int) $this->request->getPost('kategori_id');
         $subKategoriId = (int) $this->request->getPost('sub_kategori_id');
         $unitKerjaId = (int) $this->request->getPost('unit_kerja_id');
@@ -313,6 +329,7 @@ public function __construct()
         $namaAset = $namaSubKategori . ' / ' . $namaUnitKerja;
 
         $rules = [
+            'golongan_id' => 'required|integer',
             'kategori_id' => 'required|integer',
             'sub_kategori_id' => 'required|integer',
             'unit_kerja_id' => 'required|integer',
@@ -334,13 +351,14 @@ public function __construct()
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $golonganId = $this->request->getPost('golongan_id');
-        if (!empty($golonganId)) {
-            $golongan = $this->golonganModel->find($golonganId);
-            $kategori = $this->kategoriModel->find($kategoriId);
-            if ($golongan && $kategori && $golongan['kelompok'] !== $kategori['jenis_aset']) {
-                return redirect()->back()->withInput()->with('error', 'Golongan tidak sesuai dengan Kategori yang dipilih. Golongan "' . $golongan['nama_golongan'] . '" hanya berlaku untuk kategori jenis "' . ucfirst(str_replace('_', ' ', $kategori['jenis_aset'])) . '".');
-            }
+        $golongan = $this->golonganModel->find($golonganId);
+        if (!$golongan) {
+            return redirect()->back()->withInput()->with('error', 'Golongan tidak ditemukan. Golongan harus diinput terlebih dahulu.');
+        }
+
+        $kategori = $this->kategoriModel->find($kategoriId);
+        if ($kategori && (int) $kategori['gl_id'] !== $golonganId) {
+            return redirect()->back()->withInput()->with('error', 'Kategori "' . $kategori['nama_kategori'] . '" tidak termasuk dalam Golongan "' . $golongan['nama_golongan'] . '". Pilih kategori yang sesuai dengan golongan.');
         }
 
         $allId = $this->assetNumberService->generateAllId($subKategoriId);
@@ -350,9 +368,9 @@ public function __construct()
             'all_id' => $allId,
             'nomor_aset_lama' => $this->request->getPost('nomor_aset_lama') ?: null,
             'nama_aset' => $namaAset,
+            'golongan_id' => $golonganId,
             'kategori_id' => $kategoriId,
             'sub_kategori_id' => $subKategoriId,
-            'golongan_id' => $this->request->getPost('golongan_id') ?: null,
             'merk_id' => $this->request->getPost('merk_id') ?: null,
             'type_id' => $this->request->getPost('type_id') ?: null,
             'kondisi_id' => $this->request->getPost('kondisi_id'),
@@ -407,15 +425,31 @@ public function __construct()
             return redirect()->to(base_url('/master/aset'))->with('error', 'Data tidak ditemukan.');
         }
 
+        $golonganId = (int) ($record['golongan_id'] ?? 0);
         $kategoriId = (int) ($record['kategori_id'] ?? 0);
         $merkId = (int) ($record['merk_id'] ?? 0);
+
+        $golonganOptions = $this->golonganModel->where('is_active', 1)->orderBy('nama_golongan', 'ASC')->findAll();
+
+        $kategoriOptions = [];
+        if ($golonganId) {
+            $kategoriOptions = $this->kategoriModel->getByGolonganId($golonganId);
+        }
+        if (empty($kategoriOptions)) {
+            $kategoriOptions = $this->kategoriModel->where('is_active', 1)->where('deleted_at', null)->orderBy('nama_kategori', 'ASC')->findAll();
+        }
+
+        $subKategoriOptions = [];
+        if ($kategoriId) {
+            $subKategoriOptions = $this->subKategoriModel->where('kategori_id', $kategoriId)->where('is_active', 1)->orderBy('nama_sub_kategori', 'ASC')->findAll();
+        }
 
         $data = [
             'title' => 'Edit Aset',
             'record' => $record,
-            'kategori' => $this->kategoriModel->where('is_active', 1)->orderBy('nama_kategori', 'ASC')->findAll(),
-            'subKategori' => $kategoriId ? $this->subKategoriModel->where('kategori_id', $kategoriId)->where('is_active', 1)->orderBy('nama_sub_kategori', 'ASC')->findAll() : [],
-            'golongan' => $kategoriId ? $this->golonganModel->getByKategoriId($kategoriId) : [],
+            'golonganOptions' => $golonganOptions,
+            'kategoriOptions' => $kategoriOptions,
+            'subKategoriOptions' => $subKategoriOptions,
             'merk' => $this->merkModel->where('is_active', 1)->orderBy('nama_merk', 'ASC')->findAll(),
             'type' => $merkId ? $this->typeModel->where('merk_id', $merkId)->where('is_active', 1)->orderBy('nama_type', 'ASC')->findAll() : [],
             'kondisi' => $this->kondisiModel->where('is_active', 1)->orderBy('level_kondisi', 'ASC')->findAll(),
@@ -423,6 +457,7 @@ public function __construct()
             'unitKerja' => $this->unitKerjaModel->getActiveOptions(),
             'subUnit' => $record['unit_kerja_id'] ? $this->subUnitModel->where('unit_kerja_id', $record['unit_kerja_id'])->where('is_active', 1)->orderBy('nama_sub_unit', 'ASC')->findAll() : [],
             'ruangan' => $record['sub_unit_id'] ? $this->getRuanganBySubUnit($record['sub_unit_id']) : [],
+            'selectedGolonganId' => $golonganId,
             'selectedKategoriId' => $kategoriId,
             'selectedSubKategoriId' => (int) ($record['sub_kategori_id'] ?? 0),
         ];
@@ -437,6 +472,8 @@ public function __construct()
             return redirect()->to(base_url('/master/aset'))->with('error', 'Data tidak ditemukan.');
         }
 
+        $golonganId = (int) $this->request->getPost('golongan_id');
+        $kategoriId = (int) $this->request->getPost('kategori_id');
         $subKategoriId = (int) $this->request->getPost('sub_kategori_id');
         $unitKerjaId = (int) $this->request->getPost('unit_kerja_id');
 
@@ -455,6 +492,7 @@ public function __construct()
         $namaAset = $namaSubKategori . ' / ' . $namaUnitKerja;
 
         $rules = [
+            'golongan_id' => 'required|integer',
             'kategori_id' => 'required|integer',
             'sub_kategori_id' => 'required|integer',
             'unit_kerja_id' => 'required|integer',
@@ -476,23 +514,22 @@ public function __construct()
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $kategoriId = (int) $this->request->getPost('kategori_id');
+        $golongan = $this->golonganModel->find($golonganId);
+        if (!$golongan) {
+            return redirect()->back()->withInput()->with('error', 'Golongan tidak ditemukan. Golongan harus diinput terlebih dahulu.');
+        }
 
-        $golonganId = $this->request->getPost('golongan_id');
-        if (!empty($golonganId)) {
-            $golongan = $this->golonganModel->find($golonganId);
-            $kategori = $this->kategoriModel->find($kategoriId);
-            if ($golongan && $kategori && $golongan['kelompok'] !== $kategori['jenis_aset']) {
-                return redirect()->back()->withInput()->with('error', 'Golongan tidak sesuai dengan Kategori yang dipilih. Golongan "' . $golongan['nama_golongan'] . '" hanya berlaku untuk kategori jenis "' . ucfirst(str_replace('_', ' ', $kategori['jenis_aset'])) . '".');
-            }
+        $kategori = $this->kategoriModel->find($kategoriId);
+        if ($kategori && (int) $kategori['gl_id'] !== $golonganId) {
+            return redirect()->back()->withInput()->with('error', 'Kategori "' . $kategori['nama_kategori'] . '" tidak termasuk dalam Golongan "' . $golongan['nama_golongan'] . '". Pilih kategori yang sesuai dengan golongan.');
         }
 
         $updateData = [
             'nomor_aset_lama' => $this->request->getPost('nomor_aset_lama') ?: null,
             'nama_aset' => $namaAset,
+            'golongan_id' => $golonganId,
             'kategori_id' => $kategoriId,
             'sub_kategori_id' => $subKategoriId,
-            'golongan_id' => $this->request->getPost('golongan_id') ?: null,
             'merk_id' => $this->request->getPost('merk_id') ?: null,
             'type_id' => $this->request->getPost('type_id') ?: null,
             'kondisi_id' => (int) $this->request->getPost('kondisi_id'),
@@ -583,6 +620,16 @@ public function __construct()
         return $this->response->setJSON($subKategori);
     }
 
+    public function getKategoriByGolongan($golonganId)
+    {
+        if (empty($golonganId)) {
+            return $this->response->setJSON([]);
+        }
+
+        $kategori = $this->kategoriModel->getByGolonganId((int) $golonganId);
+        return $this->response->setJSON($kategori);
+    }
+
     public function getTypeByMerk($merkId)
     {
         $type = $this->typeModel
@@ -641,68 +688,10 @@ public function __construct()
         return $this->response->setJSON($golongan);
     }
 
-    /**
-     * Ambil records di-group per batch_id untuk mode "Grouped".
-     * Sort default: jumlah DESC (batch terbesar di atas), tiebreaker tanggal DESC.
-     */
-    private function getGroupedRecords($builder, int $perPage, int $currentPage): array
-    {
-        $offset = ($currentPage - 1) * $perPage;
-
-        $rows = $builder
-            ->select('
-                a.batch_id,
-                a.input_mode,
-                a.nama_aset,
-                a.kategori_id,
-                a.sub_kategori_id,
-                a.unit_kerja_id,
-                MIN(a.created_at) AS tanggal_pertama,
-                MAX(a.updated_at) AS tanggal_terakhir,
-                COUNT(*) AS jumlah,
-                MIN(a.nomor_aset_baru) AS nomor_awal,
-                MAX(a.nomor_aset_baru) AS nomor_akhir,
-                MIN(a.all_id) AS sample_all_id,
-                ak.nama_kategori,
-                ask.nama_sub_kategori,
-                tu.nama_unit,
-                SUM(CASE WHEN a.status_aset = "aktif" AND a.deleted_at IS NULL THEN 1 ELSE 0 END) AS count_aktif,
-                SUM(CASE WHEN a.status_aset != "aktif" OR a.deleted_at IS NOT NULL THEN 1 ELSE 0 END) AS count_nonaktif
-            ')
-            ->where('a.input_mode', 'bulk')
-            ->where('a.batch_id IS NOT NULL')
-            ->groupBy('a.batch_id, a.input_mode, a.nama_aset, a.kategori_id, a.sub_kategori_id, a.unit_kerja_id, ak.nama_kategori, ask.nama_sub_kategori, tu.nama_unit')
-            ->orderBy('jumlah', 'DESC')
-            ->orderBy('tanggal_pertama', 'DESC')
-            ->limit($perPage, $offset)
-            ->get()
-            ->getResultArray();
-
-        return $rows;
-    }
-
-    /**
-     * Hitung total batch unik untuk pagination di mode grouped.
-     */
-    private function getGroupedTotal($builder): int
-    {
-        $row = $builder
-            ->select('COUNT(DISTINCT a.batch_id) AS total')
-            ->where('a.input_mode', 'bulk')
-            ->where('a.batch_id IS NOT NULL')
-            ->get()
-            ->getRowArray();
-
-        return (int) ($row['total'] ?? 0);
-    }
-
-    /**
-     * AJAX: ambil daftar item dalam satu batch untuk ditampilkan di modal.
-     */
     public function getBatchItems($batchId)
     {
         $items = $this->asetModel
-            ->select('aset_all_uir.all_id, aset_all_uir.nomor_aset_baru, aset_all_uir.status_aset, aset_all_uir.kondisi_id, aset_all_uir.tahun_perolehan, aset_all_uir.deleted_at, aset_all_uir.created_at, ak.nama_kategori, ask.nama_sub_kategori, akb.nama_kondisi, tu.nama_unit')
+            ->select('aset_all_uir.all_id, aset_all_uir.nomor_aset_baru, aset_all_uir.status_aset, aset_all_uir.kondisi_id, aset_all_uir.tahun_perolehan, aset_all_uir.deleted_at, aset_all_uir.created_at, ak.nama_kategori, ask.nama_sub_kategori, akb.nama_kondisi, akb.warna as kondisi_warna, tu.nama_unit')
             ->join('aset_kategori ak', 'ak.kt_id = aset_all_uir.kategori_id', 'left')
             ->join('aset_sub_kategori ask', 'ask.sk_id = aset_all_uir.sub_kategori_id', 'left')
             ->join('aset_kondisi_barang akb', 'akb.kd_id = aset_all_uir.kondisi_id', 'left')
@@ -725,10 +714,6 @@ public function __construct()
         ]);
     }
 
-    /**
-     * AJAX: bulk update status & kondisi untuk item-item dalam satu batch.
-     * Menerima array all_ids + status_aset (optional) + kondisi_id (optional).
-     */
     public function bulkUpdateBatch()
     {
         $allIds = $this->request->getPost('all_ids');
@@ -776,15 +761,156 @@ public function __construct()
         ]);
     }
 
-    /**
-     * Deteksi error duplicate key (UNIQUE constraint violation)
-     * dari exception CodeIgniter / MySQLi.
-     */
+    private function getGroupedRecords($builder, int $perPage, int $currentPage): array
+    {
+        $offset = ($currentPage - 1) * $perPage;
+
+        $rows = $builder
+            ->select('
+                a.batch_id,
+                a.input_mode,
+                a.nama_aset,
+                a.kategori_id,
+                a.sub_kategori_id,
+                a.unit_kerja_id,
+                MIN(a.created_at) AS tanggal_pertama,
+                MAX(a.updated_at) AS tanggal_terakhir,
+                COUNT(*) AS jumlah,
+                MIN(a.nomor_aset_baru) AS nomor_awal,
+                MAX(a.nomor_aset_baru) AS nomor_akhir,
+                MIN(a.all_id) AS sample_all_id,
+                ak.nama_kategori,
+                ask.nama_sub_kategori,
+                tu.nama_unit,
+                SUM(CASE WHEN a.status_aset = "aktif" AND a.deleted_at IS NULL THEN 1 ELSE 0 END) AS count_aktif,
+                SUM(CASE WHEN a.status_aset != "aktif" OR a.deleted_at IS NOT NULL THEN 1 ELSE 0 END) AS count_nonaktif
+            ')
+            ->where('a.input_mode', 'bulk')
+            ->where('a.batch_id IS NOT NULL')
+            ->groupBy('a.batch_id, a.input_mode, a.nama_aset, a.kategori_id, a.sub_kategori_id, a.unit_kerja_id, ak.nama_kategori, ask.nama_sub_kategori, tu.nama_unit')
+            ->orderBy('jumlah', 'DESC')
+            ->orderBy('tanggal_pertama', 'DESC')
+            ->limit($perPage, $offset)
+            ->get()
+            ->getResultArray();
+
+        return $rows;
+    }
+
+    private function getGroupedTotal($builder): int
+    {
+        $row = $builder
+            ->select('COUNT(DISTINCT a.batch_id) AS total')
+            ->where('a.input_mode', 'bulk')
+            ->where('a.batch_id IS NOT NULL')
+            ->get()
+            ->getRowArray();
+
+        return (int) ($row['total'] ?? 0);
+    }
+
     private function isDuplicateKeyError(\Throwable $e): bool
     {
         $msg = $e->getMessage();
         return strpos($msg, 'Duplicate entry') !== false
             || strpos($msg, '1062') !== false
             || strpos($msg, 'UNIQUE constraint') !== false;
+    }
+
+    /**
+     * Print preview for QR asset labels.
+     * Accepts 1..20 asset all_id values via POST.
+     * Renders a stand-alone print-friendly view of 70x50mm labels.
+     */
+    public function printQrLabels()
+    {
+        helper(['qr']);
+
+        $raw = $this->request->getPost('all_ids');
+        $allIds = [];
+
+        if (is_array($raw)) {
+            $allIds = array_values(array_filter(array_map(function ($v) {
+                return is_string($v) ? trim($v) : '';
+            }, $raw), function ($v) {
+                return $v !== '';
+            }));
+        } elseif (is_string($raw) && $raw !== '') {
+            $allIds = [$raw];
+        }
+
+        if (count($allIds) === 0) {
+            return redirect()->to(base_url('/master/aset'))
+                ->with('error', 'Pilih minimal 1 aset untuk dicetak label QR-nya.');
+        }
+
+        if (count($allIds) > 20) {
+            return redirect()->to(base_url('/master/aset'))
+                ->with('error', 'Maksimal 20 aset per pencetakan. Anda memilih ' . count($allIds) . ' aset.');
+        }
+
+        foreach ($allIds as $id) {
+            if (!preg_match('/^all_[0-9]{3}-[a-z0-9]{1,15}$/', $id)) {
+                return redirect()->to(base_url('/master/aset'))
+                    ->with('error', 'Terdapat ID aset yang tidak valid pada pilihan Anda.');
+            }
+        }
+
+        $records = $this->asetModel
+            ->withDetails()
+            ->whereIn('aset_all_uir.all_id', $allIds)
+            ->where('aset_all_uir.deleted_at', null)
+            ->asArray()
+            ->orderBy('aset_all_uir.nama_aset', 'ASC')
+            ->findAll();
+
+        if (count($records) === 0) {
+            return redirect()->to(base_url('/master/aset'))
+                ->with('error', 'Tidak ada aset valid yang dapat dicetak dari pilihan Anda.');
+        }
+
+        $labels = array_map(function (array $r) {
+            $publicUrl = qr_public_url($r['all_id']);
+
+            $unitParts = array_filter([
+                $r['nama_unit']     ?? null,
+                $r['nama_sub_unit'] ?? null,
+            ], function ($v) { return is_string($v) ? trim($v) !== '' : !empty($v); });
+            $unitKerjaText = strtoupper(implode(' / ', $unitParts));
+
+            $lokasiParts = array_filter([
+                $r['nama_gedung']  ?? null,
+                $r['nama_lantai']  ?? null,
+                $r['nama_ruangan'] ?? null,
+            ], function ($v) { return is_string($v) ? trim($v) !== '' : !empty($v); });
+            $lokasiText = strtoupper(implode(' / ', $lokasiParts));
+            if ($lokasiText === '') {
+                $lokasiText = '-';
+            }
+
+            $asetParts = array_filter([
+                $r['nama_sub_kategori'] ?? null,
+                $r['nama_merk']         ?? null,
+                $r['nama_type']         ?? null,
+            ], function ($v) { return is_string($v) ? trim($v) !== '' : !empty($v); });
+            $asetText = strtoupper(implode(' | ', $asetParts));
+            if ($asetText === '') {
+                $asetText = strtoupper((string) ($r['nama_aset'] ?? '-'));
+            }
+
+            return [
+                'record'        => $r,
+                'publicUrl'     => $publicUrl,
+                'qrSrc'         => qr_image_src($publicUrl, 320),
+                'unitKerjaText' => $unitKerjaText !== '' ? $unitKerjaText : '-',
+                'lokasiText'    => $lokasiText,
+                'asetText'      => $asetText,
+            ];
+        }, $records);
+
+        return view('master/aset/qr_label_print', [
+            'title'   => 'Cetak Label QR — ' . count($labels) . ' Aset',
+            'labels'  => $labels,
+        ]);
     }
 }

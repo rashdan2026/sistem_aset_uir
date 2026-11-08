@@ -110,6 +110,21 @@
                 </div>
             </form>
 
+            <form id="printQrForm" method="post" action="<?= base_url('/master/aset/print-qr-labels') ?>" style="display:none;">
+                <?= csrf_field() ?>
+                <div id="printQrInputs"></div>
+            </form>
+            <div id="qrBulkBar" class="qr-bulk-bar" aria-live="polite">
+                <div class="qr-bulk-info">
+                    <span class="qr-bulk-count" id="qrBulkCount">0</span>
+                    <span class="qr-bulk-label">aset dipilih</span>
+                    <button type="button" id="clearQrSelection" class="qr-bulk-clear" aria-label="Batalkan pilihan">Batal</button>
+                </div>
+                <button type="button" id="submitPrintQr" class="qr-bulk-action" disabled>
+                    <i class="bi bi-qr-code"></i>
+                    <span>Cetak QRCode</span>
+                </button>
+            </div>
             <div class="table-responsive table-wrapper">
                 <table class="table table-bordered table-sm" width="100%" cellspacing="0">
                     <thead>
@@ -127,6 +142,9 @@
                             </tr>
                         <?php else: ?>
                             <tr id="asetHeaderRow">
+                                <th width="40" class="text-center" style="background: #f3f7f4;">
+                                    <input type="checkbox" id="selectAllAset" title="Pilih semua di halaman ini" <?= (($viewMode ?? 'detail') === 'detail') ? '' : 'disabled' ?>>
+                                </th>
                                 <?php foreach ($visibleColumns as $col): ?>
                                     <?php
                                         $isSorted = ($sortCol === $col);
@@ -193,6 +211,9 @@
                             <?php else: ?>
                                 <?php foreach ($records as $row): ?>
                                     <tr>
+                                        <td class="text-center" style="background: #fafcfb;">
+                                            <input type="checkbox" class="aset-pick-cb" value="<?= esc($row['all_id'], 'attr') ?>" data-nomor="<?= esc($row['nomor_aset_baru'] ?? '', 'attr') ?>" data-name="<?= esc($row['nama_aset'] ?? '', 'attr') ?>" title="<?= esc($row['nomor_aset_baru'] ?? $row['all_id']) ?>">
+                                        </td>
                                         <?php foreach ($visibleColumns as $col): ?>
                                             <td>
                                                 <?php if ($col === 'input_mode'): ?>
@@ -203,6 +224,16 @@
                                                     <?php endif; ?>
                                                 <?php else: ?>
                                                     <span class="badge bg-info">Single</span>
+                                                <?php endif; ?>
+                                            <?php elseif ($col === 'nama_kondisi'): ?>
+                                                <?php
+                                                    $kondisiName = $row['nama_kondisi'] ?? null;
+                                                    $kondisiWarna = !empty($row['kondisi_warna']) ? $row['kondisi_warna'] : '#6c757d';
+                                                ?>
+                                                <?php if (!empty($kondisiName)): ?>
+                                                    <span class="badge kondisi-badge" style="background-color: <?= esc($kondisiWarna) ?>; color: #fff; font-weight: 500;"><?= esc($kondisiName) ?></span>
+                                                <?php else: ?>
+                                                    <span class="text-muted">-</span>
                                                 <?php endif; ?>
                                             <?php elseif ($col === 'status_aset'): ?>
                                                 <?php
@@ -396,6 +427,107 @@
 #batchColumnDropdown { position: relative; z-index: 3000; }
 #batchColumnDropdown .dropdown-menu { z-index: 3001 !important; }
 .table-responsive { position: relative; z-index: 1; }
+.kondisi-badge { padding: 0.4em 0.65em; font-size: 0.85em; letter-spacing: 0.2px; }
+
+/* ── QR Bulk Action Bar ── */
+.qr-bulk-bar {
+    position: sticky;
+    top: 64px;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px 10px 16px;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, #1f5f4a 0%, #2f7a5f 100%);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(31, 95, 74, 0.22);
+    font-size: 13.5px;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.qr-bulk-bar.is-visible {
+    display: flex;
+    animation: qr-bar-in 0.18s ease-out;
+}
+@keyframes qr-bar-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.qr-bulk-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+.qr-bulk-count {
+    background: rgba(255,255,255,0.22);
+    color: #fff;
+    font-weight: 800;
+    font-size: 12.5px;
+    padding: 3px 11px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+    min-width: 28px;
+    text-align: center;
+}
+.qr-bulk-label {
+    font-weight: 500;
+    opacity: 0.92;
+}
+.qr-bulk-clear {
+    background: transparent;
+    color: rgba(255,255,255,0.88);
+    border: 1px solid rgba(255,255,255,0.28);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    margin-left: 4px;
+}
+.qr-bulk-clear:hover {
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    border-color: rgba(255,255,255,0.5);
+}
+.qr-bulk-action {
+    background: #ffffff;
+    color: #1f5f4a;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    flex-shrink: 0;
+}
+.qr-bulk-action i { font-size: 16px; }
+.qr-bulk-action:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+}
+.qr-bulk-action:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+@media (max-width: 540px) {
+    .qr-bulk-bar {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+    .qr-bulk-info { flex: 1 1 100%; justify-content: space-between; }
+    .qr-bulk-action { width: 100%; justify-content: center; }
+}
 </style>
 
 <script src="<?= base_url('assets/vendor/sortablejs/Sortable.min.js') ?>"></script>
@@ -432,7 +564,7 @@ function showDetail(id) {
             html += '<tr><td class="text-muted">Sub Kategori</td><td>' + escHtml(data.nama_sub_kategori || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Merk</td><td>' + escHtml(data.nama_merk || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Type</td><td>' + escHtml(data.nama_type || '-') + '</td></tr>';
-            html += '<tr><td class="text-muted">Kondisi</td><td>' + escHtml(data.nama_kondisi || '-') + '</td></tr>';
+            html += '<tr><td class="text-muted">Kondisi</td><td>' + renderKondisiBadge(data) + '</td></tr>';
             html += '<tr><td class="text-muted">Sumber Dana</td><td>' + escHtml(data.nama_sumber_dana || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Unit Kerja</td><td>' + escHtml(data.nama_unit || '-') + '</td></tr>';
             html += '<tr><td class="text-muted">Sub Unit</td><td>' + escHtml(data.nama_sub_unit || '-') + '</td></tr>';
@@ -456,6 +588,22 @@ function escHtml(str) {
     var d = document.createElement('div');
     d.appendChild(document.createTextNode(str));
     return d.innerHTML;
+}
+
+function resolveKondisiWarna(raw) {
+    var fallback = '#6c757d';
+    if (!raw) return fallback;
+    var s = String(raw).trim();
+    if (s.charAt(0) !== '#') s = '#' + s;
+    return /^#[0-9a-fA-F]{6}$/.test(s) ? s : fallback;
+}
+
+function renderKondisiBadge(data) {
+    if (!data) return '<span class="text-muted">-</span>';
+    var nama = data.nama_kondisi;
+    if (!nama) return '<span class="text-muted">-</span>';
+    var warna = resolveKondisiWarna(data.kondisi_warna);
+    return '<span class="badge kondisi-badge" style="background-color: ' + warna + '; color: #fff; font-weight: 500;">' + escHtml(nama) + '</span>';
 }
 
 function formatTanggalIndonesia(dateStr) {
@@ -630,7 +778,7 @@ function showBatchItems(batchId) {
                     html += '<br><small class="text-muted">' + escHtml(item.nama_sub_kategori) + '</small>';
                 }
                 html += '</td>';
-                html += '<td data-col-key="kondisi">' + escHtml(item.nama_kondisi || '-') + '</td>';
+                html += '<td data-col-key="kondisi">' + renderKondisiBadge(item) + '</td>';
                 html += '<td data-col-key="status">' + statusBadge + '</td>';
                 html += '<td data-col-key="aksi">';
                 if (!isDeleted) {
@@ -790,7 +938,95 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     initColumnDragReorder();
+    initQrBulkBar();
 });
+
+function initQrBulkBar() {
+    var maxPick = 20;
+    var selectAllCb = document.getElementById('selectAllAset');
+    var itemCbs = document.querySelectorAll('.aset-pick-cb');
+    var bar = document.getElementById('qrBulkBar');
+    var countEl = document.getElementById('qrBulkCount');
+    var submitBtn = document.getElementById('submitPrintQr');
+    var clearBtn = document.getElementById('clearQrSelection');
+    var form = document.getElementById('printQrForm');
+    var inputs = document.getElementById('printQrInputs');
+
+    if (!bar || !submitBtn || !form || !inputs) return;
+
+    function updateBar() {
+        var checked = Array.from(itemCbs).filter(function(cb) { return cb.checked; });
+        var count = checked.length;
+        countEl.textContent = count;
+        bar.classList.toggle('is-visible', count > 0);
+        submitBtn.disabled = (count < 1 || count > maxPick);
+
+        if (selectAllCb && itemCbs.length > 0) {
+            var allChecked = Array.from(itemCbs).every(function(c) { return c.checked; });
+            var noneChecked = Array.from(itemCbs).every(function(c) { return !c.checked; });
+            selectAllCb.checked = allChecked;
+            selectAllCb.indeterminate = !allChecked && !noneChecked;
+        }
+    }
+
+    function syncInputs() {
+        var checked = Array.from(itemCbs).filter(function(cb) { return cb.checked; });
+        inputs.innerHTML = '';
+        checked.forEach(function(cb) {
+            var inp = document.createElement('input');
+            inp.type = 'hidden';
+            inp.name = 'all_ids[]';
+            inp.value = cb.value;
+            inputs.appendChild(inp);
+        });
+    }
+
+    if (selectAllCb) {
+        selectAllCb.addEventListener('change', function() {
+            itemCbs.forEach(function(cb) {
+                if (cb.disabled) return;
+                cb.checked = selectAllCb.checked;
+            });
+            updateBar();
+        });
+    }
+
+    itemCbs.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            if (cb.checked) {
+                var checked = Array.from(itemCbs).filter(function(c) { return c.checked; });
+                if (checked.length > maxPick) {
+                    cb.checked = false;
+                    alert('Maksimal ' + maxPick + ' aset per pencetakan. Kurangi pilihan Anda.');
+                    return;
+                }
+            }
+            updateBar();
+        });
+    });
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            itemCbs.forEach(function(cb) { cb.checked = false; });
+            updateBar();
+        });
+    }
+
+    submitBtn.addEventListener('click', function() {
+        syncInputs();
+        if (inputs.children.length < 1) {
+            alert('Pilih minimal 1 aset untuk dicetak.');
+            return;
+        }
+        if (inputs.children.length > maxPick) {
+            alert('Maksimal ' + maxPick + ' aset per pencetakan.');
+            return;
+        }
+        form.submit();
+    });
+
+    updateBar();
+}
 
 function initBatchColumnVisibility() {
     var panel = document.getElementById('batchColumnCheckboxes');

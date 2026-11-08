@@ -23,22 +23,24 @@
                             <input type="hidden" name="kode_kategori" value="">
                         <?php endif; ?>
 
-                        <div class="mb-3" style="position: relative;">
-                            <label for="nama_kategori" class="form-label">Nama Kategori *</label>
-                            <input type="text" name="nama_kategori" id="nama_kategori" class="form-control" 
-                                   value="<?= old('nama_kategori', $kategori['nama_kategori'] ?? '') ?>" required maxlength="150" autocomplete="off">
-                            <div id="suggestions" class="suggestions-box" style="display: none;"></div>
+                        <div class="mb-3">
+                            <label for="gl_id" class="form-label">Golongan *</label>
+                            <select name="gl_id" id="gl_id" class="form-select" required>
+                                <option value="">-- Pilih Golongan --</option>
+                                <?php if (!empty($golonganOptions)): ?>
+                                    <?php foreach ($golonganOptions as $g): ?>
+                                        <option value="<?= $g['gl_id'] ?>" <?= old('gl_id', $kategori['gl_id'] ?? '') == $g['gl_id'] ? 'selected' : '' ?>><?= esc($g['nama_golongan']) ?> (<?= esc($g['kode_golongan']) ?>)</option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </select>
+                            <small class="form-text text-muted">Pilih golongan terlebih dahulu. Golongan induk harus sudah ada.</small>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="jenis_aset" class="form-label">Jenis Aset *</label>
-                            <select name="jenis_aset" id="jenis_aset" class="form-select" required>
-                                <option value="">Pilih Jenis Aset</option>
-                                <option value="bangunan" <?= old('jenis_aset', $kategori['jenis_aset'] ?? '') == 'bangunan' ? 'selected' : '' ?>>Bangunan</option>
-                                <option value="ruangan" <?= old('jenis_aset', $kategori['jenis_aset'] ?? '') == 'ruangan' ? 'selected' : '' ?>>Ruangan</option>
-                                <option value="non_bangunan" <?= old('jenis_aset', $kategori['jenis_aset'] ?? '') == 'non_bangunan' ? 'selected' : '' ?>>Non Bangunan</option>
-                                <option value="lainnya" <?= old('jenis_aset', $kategori['jenis_aset'] ?? '') == 'lainnya' ? 'selected' : '' ?>>Lainnya</option>
-                            </select>
+                        <div class="mb-3" style="position: relative;">
+                            <label for="nama_kategori" class="form-label">Nama Kategori *</label>
+                            <input type="text" name="nama_kategori" id="nama_kategori" class="form-control"
+                                   value="<?= old('nama_kategori', $kategori['nama_kategori'] ?? '') ?>" required maxlength="150" autocomplete="off">
+                            <div id="suggestions" class="suggestions-box" style="display: none;"></div>
                         </div>
 
                         <div class="mb-3">
@@ -117,7 +119,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         timeout = setTimeout(function() {
-            fetch('<?= base_url("/master/kategori/search") ?>?q=' + encodeURIComponent(keyword))
+            var golonganId = document.getElementById('gl_id').value;
+            var url = '<?= base_url("/master/kategori/search") ?>?q=' + encodeURIComponent(keyword);
+            if (golonganId) {
+                url += '&gl_id=' + encodeURIComponent(golonganId);
+            }
+
+            fetch(url)
                 .then(function(response) { return response.json(); })
                 .then(function(data) {
                     suggestionsBox.innerHTML = '';

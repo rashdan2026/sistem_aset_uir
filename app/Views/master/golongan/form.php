@@ -32,17 +32,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="kelompok" class="form-label">Kelompok</label>
-                            <select name="kelompok" id="kelompok" class="form-select">
-                                <option value="">Pilih Kelompok</option>
-                                <option value="bangunan" <?= old('kelompok', $record['kelompok'] ?? '') == 'bangunan' ? 'selected' : '' ?>>Bangunan</option>
-                                <option value="ruangan" <?= old('kelompok', $record['kelompok'] ?? '') == 'ruangan' ? 'selected' : '' ?>>Ruangan</option>
-                                <option value="non_bangunan" <?= old('kelompok', $record['kelompok'] ?? '') == 'non_bangunan' ? 'selected' : '' ?>>Non Bangunan</option>
-                                <option value="lainnya" <?= old('kelompok', $record['kelompok'] ?? '') == 'lainnya' ? 'selected' : '' ?>>Lainnya</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
                             <label for="keterangan" class="form-label">Keterangan</label>
                             <textarea name="keterangan" id="keterangan" class="form-control" rows="3"><?= old('keterangan', $record['keterangan'] ?? '') ?></textarea>
                         </div>

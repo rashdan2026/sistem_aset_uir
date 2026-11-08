@@ -47,20 +47,34 @@ class BulkAsetController extends Controller
 
     public function new()
     {
+        $golonganId = (int) ($this->request->getGet('golongan_id') ?? 0);
         $kategoriId = (int) ($this->request->getGet('kategori_id') ?? 0);
         $subKategoriId = (int) ($this->request->getGet('sub_kategori_id') ?? 0);
 
+        $golonganOptions = $this->golonganModel->where('is_active', 1)->orderBy('nama_golongan', 'ASC')->findAll();
+
+        $kategoriOptions = [];
+        if ($golonganId) {
+            $kategoriOptions = $this->kategoriModel->getByGolonganId($golonganId);
+        }
+
+        $subKategoriOptions = [];
+        if ($kategoriId) {
+            $subKategoriOptions = $this->subKategoriModel->where('kategori_id', $kategoriId)->where('is_active', 1)->orderBy('nama_sub_kategori', 'ASC')->findAll();
+        }
+
         $data = [
             'title' => 'Registrasi Aset Massal (Bulk)',
-            'kategori' => $this->kategoriModel->where('is_active', 1)->orderBy('nama_kategori', 'ASC')->findAll(),
-            'subKategori' => $kategoriId ? $this->subKategoriModel->where('kategori_id', $kategoriId)->where('is_active', 1)->orderBy('nama_sub_kategori', 'ASC')->findAll() : [],
-            'golongan' => $kategoriId ? $this->golonganModel->getByKategoriId($kategoriId) : [],
+            'golonganOptions' => $golonganOptions,
+            'kategoriOptions' => $kategoriOptions,
+            'subKategoriOptions' => $subKategoriOptions,
             'merk' => $this->merkModel->where('is_active', 1)->orderBy('nama_merk', 'ASC')->findAll(),
             'type' => [],
             'kondisi' => $this->kondisiModel->where('is_active', 1)->orderBy('level_kondisi', 'ASC')->findAll(),
             'sumberDana' => $this->sumberDanaModel->where('is_active', 1)->orderBy('nama_sumber_dana', 'ASC')->findAll(),
             'unitKerja' => $this->unitKerjaModel->getActiveOptions(),
             'subUnit' => [],
+            'selectedGolonganId' => $golonganId,
             'selectedKategoriId' => $kategoriId,
             'selectedSubKategoriId' => $subKategoriId,
         ];
@@ -70,6 +84,8 @@ class BulkAsetController extends Controller
 
     public function create()
     {
+        $golonganId = (int) $this->request->getPost('golongan_id');
+        $kategoriId = (int) $this->request->getPost('kategori_id');
         $subKategoriId = (int) $this->request->getPost('sub_kategori_id');
         $unitKerjaId = (int) $this->request->getPost('unit_kerja_id');
 
@@ -88,12 +104,14 @@ class BulkAsetController extends Controller
         $namaAset = $namaSubKategori . ' / ' . $namaUnitKerja;
 
         $rules = [
+            'golongan_id' => 'required|integer',
             'kategori_id' => 'required|integer',
             'sub_kategori_id' => 'required|integer',
             'jumlah' => 'required|integer|greater_than[0]|less_than[101]',
             'kondisi_id' => 'required|integer',
             'sumber_dana_id' => 'required|integer',
             'unit_kerja_id' => 'required|integer',
+            'status_aset' => 'permit_empty|in_list[draft,aktif,nonaktif,hilang]',
         ];
 
         if (!empty($subKategori['wajib_merk'])) {
@@ -110,7 +128,16 @@ class BulkAsetController extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $kategoriId = (int) $this->request->getPost('kategori_id');
+        $golongan = $this->golonganModel->find($golonganId);
+        if (!$golongan) {
+            return redirect()->back()->withInput()->with('error', 'Golongan tidak ditemukan. Golongan harus diinput terlebih dahulu.');
+        }
+
+        $kategori = $this->kategoriModel->find($kategoriId);
+        if ($kategori && (int) $kategori['gl_id'] !== $golonganId) {
+            return redirect()->back()->withInput()->with('error', 'Kategori "' . $kategori['nama_kategori'] . '" tidak termasuk dalam Golongan "' . $golongan['nama_golongan'] . '". Pilih kategori yang sesuai dengan golongan.');
+        }
+
         $jumlah = (int) $this->request->getPost('jumlah');
 
         $batchId = 'BULK-' . date('Ymd') . '-' . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
@@ -138,9 +165,9 @@ class BulkAsetController extends Controller
                     'nomor_aset_baru' => $nomorAsetBaru,
                     'nomor_aset_lama' => $this->request->getPost('nomor_aset_lama') ?: null,
                     'nama_aset' => $namaAset,
+                    'golongan_id' => $golonganId,
                     'kategori_id' => $kategoriId,
                     'sub_kategori_id' => $subKategoriId,
-                    'golongan_id' => $this->request->getPost('golongan_id') ?: null,
                     'merk_id' => $this->request->getPost('merk_id') ?: null,
                     'type_id' => $this->request->getPost('type_id') ?: null,
                     'kondisi_id' => (int) $this->request->getPost('kondisi_id'),
@@ -183,6 +210,16 @@ class BulkAsetController extends Controller
             ->orderBy('nama_sub_kategori', 'ASC')
             ->findAll();
         return $this->response->setJSON($subKategori);
+    }
+
+    public function getKategoriByGolongan($golonganId)
+    {
+        if (empty($golonganId)) {
+            return $this->response->setJSON([]);
+        }
+
+        $kategori = $this->kategoriModel->getByGolonganId((int) $golonganId);
+        return $this->response->setJSON($kategori);
     }
 
     public function getSubUnitByUnitKerja($unitKerjaId)
