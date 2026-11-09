@@ -23,6 +23,8 @@ if [ -n "$DB_PASSWORD" ] || [ -n "$DATABASE_URL" ]; then
     DB_PASSWORD_EFF="${DB_PASSWORD:-}"
 
     # DATABASE_URL format: mysql://user:password@host:port/dbname
+    # Nama DB TIDAK diambil dari DATABASE_URL (mariadb:link menunjuk ke
+    # /DBku, bukan database aplikasi) — dikunci via DB_NAME / uir_aset.
     if [ -n "$DATABASE_URL" ]; then
         URL="${DATABASE_URL#mysql://}"
         CRED="${URL%%@*}"
@@ -32,7 +34,6 @@ if [ -n "$DB_PASSWORD" ] || [ -n "$DATABASE_URL" ]; then
         DB_HOST_EFF="${REST%%:*}"
         REST="${REST#*:}"
         DB_PORT_EFF="${REST%%/*}"
-        DB_NAME_EFF="${REST#*/}"
         echo "entrypoint: using DATABASE_URL from mariadb:link (host=$DB_HOST_EFF)"
     fi
 
