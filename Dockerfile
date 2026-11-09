@@ -27,10 +27,11 @@ RUN mkdir -p \
     /app/public/uploads \
     /run/nginx
 
-# Gunakan production env saat build jika tersedia
-RUN if [ -f /app/.env.production ]; then cp /app/.env.production /app/.env; fi
-
-# Jangan biarkan .env localhost ikut dipakai kalau sudah ada .env.production
+# Kredensial TIDAK lagi disalin dari repository (.env.production sudah
+# di-untrack). Konfigurasi produksi disuplai via Dokku config vars:
+#   dokku config:set phpaset CI_ENVIRONMENT=production app.baseURL=... \
+#     database.default.hostname=... database.default.password=...
+# CI4 BaseConfig membaca override dot-notation dari environment variables.
 RUN chown -R www-data:www-data /app
 
 RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader --no-interaction --no-progress --ignore-platform-reqs; fi

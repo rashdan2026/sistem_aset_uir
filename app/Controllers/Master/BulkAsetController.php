@@ -13,6 +13,7 @@ use App\Models\Master\SumberDanaModel;
 use App\Models\SubUnitModel;
 use App\Models\Reference\UnitKerjaAllowedModel;
 use App\Services\AssetNumberService;
+use App\Libraries\UnitScope;
 use CodeIgniter\Controller;
 
 class BulkAsetController extends Controller
@@ -28,6 +29,7 @@ class BulkAsetController extends Controller
     protected $subUnitModel;
     protected $unitKerjaModel;
     protected $assetNumberService;
+    protected $unitScope;
 
     public function __construct()
     {
@@ -42,6 +44,7 @@ class BulkAsetController extends Controller
         $this->subUnitModel = new SubUnitModel();
         $this->unitKerjaModel = new UnitKerjaAllowedModel();
         $this->assetNumberService = new AssetNumberService();
+        $this->unitScope = new UnitScope();
         helper(['form', 'url', 'pj']);
     }
 
@@ -97,6 +100,29 @@ class BulkAsetController extends Controller
         $unitKerja = $this->unitKerjaModel->getById($unitKerjaId);
         if (!$unitKerja) {
             return redirect()->back()->withInput()->with('error', 'Unit Kerja tidak ditemukan atau tidak valid.');
+        }
+
+        if (!$this->unitScope->canAccessUnit($unitKerjaId)) {
+            return redirect()->back()->withInput()->with('error', 'Anda tidak memiliki akses ke Unit Kerja tersebut.');
+        }
+
+        $subUnitId = $this->request->getPost('sub_unit_id') ?: null;
+        $ruanganId = $this->request->getPost('ruangan_id') ?: null;
+
+        if ($subUnitId) {
+            $subUnit = $this->subUnitModel->find((int) $subUnitId);
+            if (!$subUnit || (int) $subUnit['unit_kerja_id'] !== $unitKerjaId) {
+                return redirect()->back()->withInput()->with('error', 'Sub Unit tidak valid untuk Unit Kerja yang dipilih.');
+            }
+        }
+        if ($ruanganId) {
+            $ruangan = db_connect()->table('aset_ruangan')->where('rg_id', (int) $ruanganId)->get()->getRowArray();
+            if (!$ruangan) {
+                return redirect()->back()->withInput()->with('error', 'Ruangan tidak ditemukan.');
+            }
+            if (!empty($ruangan['sub_unit_id']) && $subUnitId && (int) $ruangan['sub_unit_id'] !== (int) $subUnitId) {
+                return redirect()->back()->withInput()->with('error', 'Ruangan tidak valid untuk Sub Unit yang dipilih.');
+            }
         }
 
         $namaSubKategori = $subKategori['nama_sub_kategori'];
@@ -224,6 +250,10 @@ class BulkAsetController extends Controller
 
     public function getSubUnitByUnitKerja($unitKerjaId)
     {
+        if (!$this->unitScope->canAccessUnit($unitKerjaId)) {
+            return $this->response->setJSON([]);
+        }
+
         $subUnit = $this->subUnitModel
             ->where('unit_kerja_id', $unitKerjaId)
             ->where('is_active', 1)
@@ -250,6 +280,11 @@ class BulkAsetController extends Controller
 
     public function getRuanganBySubUnitJson($subUnitId)
     {
+        $subUnit = $this->subUnitModel->find((int) $subUnitId);
+        if (!$subUnit || !$this->unitScope->canAccessUnit($subUnit['unit_kerja_id'])) {
+            return $this->response->setJSON([]);
+        }
+
         $db = db_connect();
         $ruangan = $db->table('aset_ruangan r')
             ->select('r.rg_id, r.kode_ruangan, r.nama_ruangan, l.nama_lantai, g.nama_gedung')

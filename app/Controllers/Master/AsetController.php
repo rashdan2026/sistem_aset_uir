@@ -16,6 +16,7 @@ use App\Models\GedungModel;
 use App\Models\Master\LantaiModel;
 use App\Models\Master\RuanganModel;
 use App\Services\AssetNumberService;
+use App\Libraries\UnitScope;
 use CodeIgniter\Controller;
 use CodeIgniter\Database\Exceptions\DatabaseException;
 
@@ -32,6 +33,7 @@ class AsetController extends Controller
     protected $subUnitModel;
     protected $unitKerjaModel;
     protected $assetNumberService;
+    protected $unitScope;
 
     public function __construct()
     {
@@ -49,6 +51,7 @@ class AsetController extends Controller
         $this->lantaiModel = new LantaiModel();
         $this->ruanganModel = new RuanganModel();
         $this->assetNumberService = new AssetNumberService();
+        $this->unitScope = new UnitScope();
         helper(['form', 'url', 'pj', 'aset_column']);
     }
 
@@ -176,6 +179,8 @@ class AsetController extends Controller
         }
 
         $builder->where('a.deleted_at', null);
+
+        $this->unitScope->applyToBuilder($builder, 'a.unit_kerja_id');
 
         foreach ($joinTables as $table => $on) {
             $builder->join($table, $on, 'left');
@@ -324,6 +329,15 @@ class AsetController extends Controller
             return redirect()->back()->withInput()->with('error', 'Unit Kerja tidak ditemukan atau tidak valid.');
         }
 
+        if (!$this->unitScope->canAccessUnit($unitKerjaId)) {
+            return redirect()->back()->withInput()->with('error', 'Anda tidak memiliki akses ke Unit Kerja tersebut.');
+        }
+
+        $ownershipError = $this->validateUnitOwnership($unitKerjaId, $this->request->getPost('sub_unit_id') ?: null, $this->request->getPost('ruangan_id') ?: null);
+        if ($ownershipError !== null) {
+            return redirect()->back()->withInput()->with('error', $ownershipError);
+        }
+
         $namaSubKategori = $subKategori['nama_sub_kategori'];
         $namaUnitKerja = $unitKerja['nama_unit'];
         $namaAset = $namaSubKategori . ' / ' . $namaUnitKerja;
@@ -425,6 +439,10 @@ class AsetController extends Controller
             return redirect()->to(base_url('/master/aset'))->with('error', 'Data tidak ditemukan.');
         }
 
+        if (!$this->unitScope->canAccessUnit($record['unit_kerja_id'])) {
+            return redirect()->to(base_url('/master/aset'))->with('error', 'Anda tidak memiliki akses ke aset pada Unit Kerja tersebut.');
+        }
+
         $golonganId = (int) ($record['golongan_id'] ?? 0);
         $kategoriId = (int) ($record['kategori_id'] ?? 0);
         $merkId = (int) ($record['merk_id'] ?? 0);
@@ -472,6 +490,10 @@ class AsetController extends Controller
             return redirect()->to(base_url('/master/aset'))->with('error', 'Data tidak ditemukan.');
         }
 
+        if (!$this->unitScope->canAccessUnit($record['unit_kerja_id'])) {
+            return redirect()->to(base_url('/master/aset'))->with('error', 'Anda tidak memiliki akses ke aset pada Unit Kerja tersebut.');
+        }
+
         $golonganId = (int) $this->request->getPost('golongan_id');
         $kategoriId = (int) $this->request->getPost('kategori_id');
         $subKategoriId = (int) $this->request->getPost('sub_kategori_id');
@@ -485,6 +507,15 @@ class AsetController extends Controller
         $unitKerja = $this->unitKerjaModel->getById($unitKerjaId);
         if (!$unitKerja) {
             return redirect()->back()->withInput()->with('error', 'Unit Kerja tidak ditemukan atau tidak valid.');
+        }
+
+        if (!$this->unitScope->canAccessUnit($unitKerjaId)) {
+            return redirect()->back()->withInput()->with('error', 'Anda tidak memiliki akses ke Unit Kerja tersebut.');
+        }
+
+        $ownershipError = $this->validateUnitOwnership($unitKerjaId, $this->request->getPost('sub_unit_id') ?: null, $this->request->getPost('ruangan_id') ?: null);
+        if ($ownershipError !== null) {
+            return redirect()->back()->withInput()->with('error', $ownershipError);
         }
 
         $namaSubKategori = $subKategori['nama_sub_kategori'];
@@ -559,6 +590,10 @@ class AsetController extends Controller
             return redirect()->to(base_url('/master/aset'))->with('error', 'Data tidak ditemukan.');
         }
 
+        if (!$this->unitScope->canAccessUnit($record['unit_kerja_id'])) {
+            return redirect()->to(base_url('/master/aset'))->with('error', 'Anda tidak memiliki akses ke aset pada Unit Kerja tersebut.');
+        }
+
         if ($record['is_active'] == 0 && $record['deleted_at'] !== null) {
             return redirect()->to(base_url('/master/aset'))->with('error', 'Data sudah tidak aktif.');
         }
@@ -582,11 +617,15 @@ class AsetController extends Controller
             return $this->response->setJSON([]);
         }
 
-        $results = $this->asetModel
+        $query = $this->asetModel
             ->select('all_id, nama_aset, nomor_aset_baru')
             ->like('nama_aset', $q, 'both')
             ->where('is_active', 1)
-            ->where('kategori_id', (int) $kategoriId)
+            ->where('kategori_id', (int) $kategoriId);
+
+        $this->unitScope->applyToBuilder($query, 'unit_kerja_id');
+
+        $results = $query
             ->orderBy('nama_aset', 'ASC')
             ->findAll(10);
 
@@ -602,6 +641,10 @@ class AsetController extends Controller
 
         if (!$record) {
             return $this->response->setJSON(['error' => 'Data tidak ditemukan.'])->setStatusCode(404);
+        }
+
+        if (!$this->unitScope->canAccessUnit($record['unit_kerja_id'])) {
+            return $this->response->setJSON(['error' => 'Anda tidak memiliki akses ke aset ini.'])->setStatusCode(403);
         }
 
         unset($record['nomor_aset_lama']);
@@ -643,6 +686,10 @@ class AsetController extends Controller
 
     public function getSubUnitByUnitKerja($unitKerjaId)
     {
+        if (!$this->unitScope->canAccessUnit($unitKerjaId)) {
+            return $this->response->setJSON([]);
+        }
+
         $subUnit = $this->subUnitModel
             ->where('unit_kerja_id', $unitKerjaId)
             ->where('is_active', 1)
@@ -670,6 +717,10 @@ class AsetController extends Controller
 
     public function getRuanganBySubUnitJson($subUnitId)
     {
+        if (!$this->canAccessSubUnit($subUnitId)) {
+            return $this->response->setJSON([]);
+        }
+
         return $this->response->setJSON($this->getRuanganBySubUnit($subUnitId));
     }
 
@@ -690,14 +741,18 @@ class AsetController extends Controller
 
     public function getBatchItems($batchId)
     {
-        $items = $this->asetModel
+        $query = $this->asetModel
             ->select('aset_all_uir.all_id, aset_all_uir.nomor_aset_baru, aset_all_uir.status_aset, aset_all_uir.kondisi_id, aset_all_uir.tahun_perolehan, aset_all_uir.deleted_at, aset_all_uir.created_at, ak.nama_kategori, ask.nama_sub_kategori, akb.nama_kondisi, akb.warna as kondisi_warna, tu.nama_unit')
             ->join('aset_kategori ak', 'ak.kt_id = aset_all_uir.kategori_id', 'left')
             ->join('aset_sub_kategori ask', 'ask.sk_id = aset_all_uir.sub_kategori_id', 'left')
             ->join('aset_kondisi_barang akb', 'akb.kd_id = aset_all_uir.kondisi_id', 'left')
             ->join('tbl_unit_kerja tu', 'tu.id_unit_kerja = aset_all_uir.unit_kerja_id', 'left')
             ->where('aset_all_uir.batch_id', $batchId)
-            ->where('aset_all_uir.input_mode', 'bulk')
+            ->where('aset_all_uir.input_mode', 'bulk');
+
+        $this->unitScope->applyToBuilder($query, 'aset_all_uir.unit_kerja_id');
+
+        $items = $query
             ->orderBy('aset_all_uir.nomor_aset_baru', 'ASC')
             ->findAll();
 
@@ -750,6 +805,8 @@ class AsetController extends Controller
             ->where('input_mode', 'bulk')
             ->where('batch_id', $batchId)
             ->whereIn('all_id', $allIds);
+
+        $this->unitScope->applyToBuilder($builder, 'unit_kerja_id');
 
         $count = count($allIds);
         $builder->update($updateData);
@@ -818,6 +875,54 @@ class AsetController extends Controller
     }
 
     /**
+     * Validasi bahwa sub_unit dan ruangan benar-benar berada di bawah
+     * unit kerja yang dipilih (mencegah manipulasi parameter form).
+     */
+    private function validateUnitOwnership($unitKerjaId, $subUnitId, $ruanganId): ?string
+    {
+        $subUnitId = (int) $subUnitId;
+        $ruanganId = (int) $ruanganId;
+
+        if ($subUnitId > 0) {
+            $subUnit = $this->subUnitModel->find($subUnitId);
+            if (!$subUnit || (int) $subUnit['unit_kerja_id'] !== (int) $unitKerjaId) {
+                return 'Sub Unit tidak valid untuk Unit Kerja yang dipilih.';
+            }
+        }
+
+        if ($ruanganId > 0) {
+            $ruangan = $this->ruanganModel->find($ruanganId);
+            if (!$ruangan) {
+                return 'Ruangan tidak ditemukan.';
+            }
+            if (!empty($ruangan['sub_unit_id'])) {
+                if ($subUnitId > 0 && (int) $ruangan['sub_unit_id'] !== $subUnitId) {
+                    return 'Ruangan tidak valid untuk Sub Unit yang dipilih.';
+                }
+                $ruanganUnit = $this->subUnitModel->find((int) $ruangan['sub_unit_id']);
+                if ($ruanganUnit && (int) $ruanganUnit['unit_kerja_id'] !== (int) $unitKerjaId) {
+                    return 'Ruangan tidak valid untuk Unit Kerja yang dipilih.';
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Cek scope unit untuk sebuah sub unit (dipakai endpoint JSON ruangan).
+     */
+    private function canAccessSubUnit($subUnitId): bool
+    {
+        $subUnit = $this->subUnitModel->find((int) $subUnitId);
+        if (!$subUnit) {
+            return false;
+        }
+
+        return $this->unitScope->canAccessUnit($subUnit['unit_kerja_id']);
+    }
+
+    /**
      * Print preview for QR asset labels.
      * Accepts 1..20 asset all_id values via POST.
      * Renders a stand-alone print-friendly view of 70x50mm labels.
@@ -856,10 +961,14 @@ class AsetController extends Controller
             }
         }
 
-        $records = $this->asetModel
+        $query = $this->asetModel
             ->withDetails()
             ->whereIn('aset_all_uir.all_id', $allIds)
-            ->where('aset_all_uir.deleted_at', null)
+            ->where('aset_all_uir.deleted_at', null);
+
+        $this->unitScope->applyToBuilder($query, 'aset_all_uir.unit_kerja_id');
+
+        $records = $query
             ->asArray()
             ->orderBy('aset_all_uir.nama_aset', 'ASC')
             ->findAll();

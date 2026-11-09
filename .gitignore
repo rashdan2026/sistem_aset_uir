@@ -4,6 +4,8 @@ doc/
 # Environment
 .env
 .env.example
+.env.production
+.env.*
 # Dependencies
 vendor/
 node_modules/
