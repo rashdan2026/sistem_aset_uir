@@ -37,7 +37,11 @@ RUN chown -R www-data:www-data /app
 RUN if [ -f composer.json ]; then composer install --no-dev --optimize-autoloader --no-interaction --no-progress --ignore-platform-reqs; fi
 
 COPY .dokku/nginx.conf /etc/nginx/http.d/default.conf
+COPY .dokku/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8181
 
-CMD sh -c "php-fpm -D && nginx -g 'daemon off;' -c /etc/nginx/nginx.conf"
+# entrypoint.sh men-generate /app/.env dari Dokku config vars
+# (DB_PASSWORD dsb.) sebelum menyalakan php-fpm + nginx.
+CMD ["/usr/local/bin/entrypoint.sh"]
